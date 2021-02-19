@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Icicles
+  m_Shader: {fileID: 4800000, guid: a9733fe69e4186840bfd60f0d016f560, type: 3}
+  m_ShaderKeywords: USE_FRESNEL USE_REFRACTIVE _BLENDMODE_BLEND _FADING_ON
+  m_LightmapFlags: 5
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: 2157832aa670e3e4597b8d6bfbad0374, type: 3}
+        m_Scale: {x: 0.3, y: 0.3}
+        m_Offset: {x: 0, y: 0}
+    - _BumpMapGlass:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cube:
+        m_Texture: {fileID: 8900000, guid: c1ad01f33e5dc4d40ae09cf74ba9d47f, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CutoutTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 88ff7575bffeb7e498b8c4ee156fe11a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTex:
+        m_Texture: {fileID: 2800000, guid: 2157832aa670e3e4597b8d6bfbad0374, type: 3}
+        m_Scale: {x: 0.3, y: 0.3}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AlphaClip: 100
+    - _BlendMode: 1
+    - _BumpAmt: 500
+    - _ColorStrB: 1
+    - _ColorStrG: 1
+    - _ColorStrR: 1
+    - _ColorStrength: 1
+    - _CullMode: 2
+    - _Cutoff: 0
+    - _Cutout: 1
+    - _CutoutThreshold: 0.015
+    - _Distortion: 500
+    - _DstMode: 10
+    - _FPOW: 1
+    - _FresnelDistort: 1500
+    - _FresnelFadeFactor: 3
+    - _FresnelInvert: 1
+    - _FresnelPow: 1.5
+    - _FresnelR0: 0.1
+    - _Height: 0.1
+    - _InvFade: 3
+    - _LightStr: 1
+    - _MainTexAlpha: 1
+    - _Metallic: 0.486
+    - _OffsetXHeightMap: 0
+    - _OffsetYHeightMap: 0
+    - _Opacity: 1
+    - _R0: 0.8
+    - _ReflectionStrength: 2.3571427
+    - _RefractiveStrength: -1
+    - _Shininess: 0.145
+    - _Smoothness: 0.746
+    - _SoftInverted: 0
+    - _SrcMode: 5
+    - _TintDistortion: 1
+    - _UseAlphaCliping: 0
+    - _UseBlending: 0
+    - _UseCutout: 0
+    - _UseCutoutTex: 0
+    - _UseCutoutThreshold: 0
+    - _UseFrameBlending: 0
+    - _UseFresnel: 1
+    - _UseFresnelFading: 0
+    - _UseHeight: 0
+    - _UseMainTex: 0
+    - _UseNoiseDistortion: 0
+    - _UseParticlesAlphaCutout: 0
+    - _UseRefractive: 1
+    - _UseSoft: 1
+    - _UseSoftCutout: 0
+    - _UseVertexStreamRandom: 0
+    - _ZWriteMode: 0
+    m_Colors:
+    - _Color: {r: 0.9505283, g: 1.0090784, b: 1.1048877, a: 1}
+    - _CutoutColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DistortionSpeedScale: {r: 1, g: -1, b: 0.15, a: 0.15}
+    - _FogColorMultiplier: {r: 0, g: 0, b: 0, a: 0}
+    - _FresnelColor: {r: 1.5294118, g: 1.7079114, b: 2, a: 1}
+    - _HeightUVScrollDistort: {r: 8, g: 12, b: 0, a: 0}
+    - _MainColor: {r: 0.9996616, g: 1.0612383, b: 1.1619998, a: 1}
+    - _ReflectColor: {r: 0.44723186, g: 0.52302814, b: 0.64705884, a: 1}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 0.5916955, g: 0.63500756, b: 0.7058823, a: 1}
+    - _TintColorB: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _TintColorG: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    - _TintColorR: {r: 0.39782843, g: 0.53516626, b: 0.5660378, a: 1}

@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Map
+  - Scope
+  - Enemy
+  - Portal
+  - Trigger
+  - BasicAttack
+  - BlockWall
+  - AOE
+  - AllyProjTag
+  - PlayerTrigger
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Player
+  - Obstacle
+  - BloomMobileEffect
+  - Map
+  - Scope
+  - L_Enemy
+  - Trigger
+  - Trigger_Check
+  - Ally_Projectile
+  - Enemy_Projectile
+  - PlayerTakeDamage
+  - FallingRocks
+  - BlockPlayer
+  - PlayerPhasingTrigger
+  - Glow
+  - DenizExample
+  - BossLaser
+  - HitMeHere
+  - AvatarBind
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: TopDmgSplat
+    uniqueID: 1471734303
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
