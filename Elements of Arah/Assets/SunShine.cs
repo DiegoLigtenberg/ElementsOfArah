@@ -53,16 +53,22 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
 
-            if (dash.isactivated  && spawned)
+            try
             {
-                Debug.Log(sunShineObj);
-                sunShineObj.SetActive(false);
+                if (dash.isactivated && spawned)
+                {
+                    Debug.Log(sunShineObj);
+                    sunShineObj.SetActive(false);
+                }
+                if (!dash.isactivated && spawned)
+                {
+                    sunShineObj.SetActive(true);
+                }
             }
-            if (!dash.isactivated && spawned)
+            catch
             {
-                sunShineObj.SetActive(true);
+                Debug.Log("CATCH Sunshine: first update: sunshine particles not yet spawned");
             }
-
             if (Ability.energy < 90 && abilityCooldownLeft <= 0)
             {
                 nomana.SetActive(true);

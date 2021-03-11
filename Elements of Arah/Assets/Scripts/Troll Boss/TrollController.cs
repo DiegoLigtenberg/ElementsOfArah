@@ -92,7 +92,7 @@ public class TrollController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         //SetWalkDirection("walkMiddle");
         agent.stoppingDistance = 10;
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.FindGameObjectWithTag("PlayerTrigger").transform;// ("heraklios_a_dizon@Jumping (2)").transform;
         IdleOnPlace();
 
         stopdistplayer = 10;
@@ -404,6 +404,8 @@ public class TrollController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //target player
+        player = GameObject.FindGameObjectWithTag("PlayerTrigger").transform;
 
         //otherwise outrange
         if (!CheckRangeArea1.OutRange)

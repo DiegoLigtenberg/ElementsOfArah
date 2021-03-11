@@ -34,8 +34,10 @@ namespace CreatingCharacters.Abilities
         {
             dashability = GetComponent<DashAbility>();
             cdr = GetComponent<CooldownReducer>();
+            /* this did nothing but caused error in inspector
             setdmg = coldmg.GetComponent<RFX1_TransformMotion>();        
             setdmg.damage = AbilityDamage;
+            */
         }
 
         // Update is called once per frame

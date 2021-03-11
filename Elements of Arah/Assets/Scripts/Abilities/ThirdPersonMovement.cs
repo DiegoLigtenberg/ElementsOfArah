@@ -34,7 +34,7 @@ namespace CreatingCharacters.Player
         public bool chargeDelay;
 
         private Vector3 movementInput;
-        private Vector3 velocity;
+        public Vector3 velocity;
         private float e;
         public static bool canmovecamera;
 

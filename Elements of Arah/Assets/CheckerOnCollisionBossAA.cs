@@ -21,9 +21,6 @@ public class CheckerOnCollisionBossAA : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-
-       
-        
         var sub = ps.subEmitters;
         sub.collision0.Play();
     }

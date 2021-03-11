@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Keybindings", menuName = "Keybindings" )]
 public class KeyBindings : ScriptableObject 

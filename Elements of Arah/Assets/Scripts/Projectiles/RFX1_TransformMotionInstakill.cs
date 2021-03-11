@@ -167,6 +167,7 @@ public class RFX1_TransformMotionInstakill : MonoBehaviour
             {
                 //this if statement is ADDED!
                 {
+
                     var forwardVec = (targetT.position - t.position).normalized;
                     var currentForwardVector = (forwardVec + randomOffset) * Speed * Time.deltaTime;
                     frameMoveOffset = currentForwardVector;

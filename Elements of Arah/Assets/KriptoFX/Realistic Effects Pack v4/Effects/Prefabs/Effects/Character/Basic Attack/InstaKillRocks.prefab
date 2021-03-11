@@ -16692,7 +16692,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1295378800372261918}
-  - component: {fileID: 5299256038547262297}
   - component: {fileID: 1748118072505250727}
   - component: {fileID: 7366590532346407171}
   - component: {fileID: 2963801757470557556}
@@ -16719,44 +16718,6 @@ Transform:
   m_Father: {fileID: 4168081841791658}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5299256038547262297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3889557407245622107}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 151e5fb4355af6c4ab88423606b59ab8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Distance: 100
-  Speed: 10
-  TimeDelay: 0
-  RandomMoveRadius: 0
-  RandomMoveSpeedScale: 0
-  Target: {fileID: 0}
-  CollidesWith:
-    serializedVersion: 2
-    m_Bits: 146999
-  EffectsOnCollision:
-  - {fileID: 1960994969320768, guid: bed7c20893039f44d981d6e536936b51, type: 3}
-  - {fileID: 1058059420912542, guid: 0c3def07da29c684ba14ecbe8d41fd34, type: 3}
-  CollisionOffset: 0
-  DestroyTimeDelay: 2
-  CollisionEffectInWorldSpace: 1
-  DeactivatedObjectsOnCollision:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  HUE: -1
-  CollidedInstances: []
-  damage: 3
-  damageType: 0
-  dashability: {fileID: 0}
 --- !u!114 &1748118072505250727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49180,7 +49141,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 9ad468171827ba2479d6e6f416495b9f, type: 2}
-  - {fileID: 2100000, guid: 9ad468171827ba2479d6e6f416495b9f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -49236,6 +49196,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9ef2143558b1d849a07307b7502014e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  source: {fileID: 0}
+  source2: []
+  part: {fileID: 0}
 --- !u!114 &6347356185055481197
 MonoBehaviour:
   m_ObjectHideFlags: 0

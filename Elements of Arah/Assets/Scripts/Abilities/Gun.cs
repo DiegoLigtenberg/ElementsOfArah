@@ -70,6 +70,7 @@ public class Gun : MonoBehaviour
 
 
         FireGun();
+
         timer += Time.deltaTime;
         if (timer >= firerate)
         {
@@ -114,7 +115,7 @@ public class Gun : MonoBehaviour
 
         if (Physics.Raycast(ray2, out hitinfo, 2700, CollidesWith))
         {
-            fromCenterPLayerDistance = hitinfo.distance;
+            fromCenterPLayerDistance = hitinfo.distance;  //this one doesnt actually work./ should use truedistance with ray instead of ray2
           
         }
 
@@ -178,7 +179,9 @@ public class Gun : MonoBehaviour
              //Debug.Log(cloneTransform2.position);
              cloneTransform2.localScale = new Vector3(.5f * distanceOfCrosshair, .5f * distanceOfCrosshair, .5f * distanceOfCrosshair); //5 meters above
 
-
+             //delete clones       
+             Destroy(clone2.gameObject);
+             Destroy(clone.gameObject);
 
             //the image ( The crosshair image that goes bigger and smaller)
             //hold value between 0 and 1.5 -> 0 is low range, 1.5 is max range of distance crosshair;
