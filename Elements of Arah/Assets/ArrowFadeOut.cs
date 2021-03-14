@@ -28,7 +28,7 @@ public class ArrowFadeOut : MonoBehaviour
         delaytimer -= Time.deltaTime;
         float t = timeElapsed / lerpDuration;
 
- 
+
         if (delaytimer <= 0)
         {
             actualcolor = Color.Lerp(begincolor, endcolor, t);
@@ -40,5 +40,5 @@ public class ArrowFadeOut : MonoBehaviour
 
         rend.material.SetColor("_TintColor", actualcolor);
     }
-    
+
 }

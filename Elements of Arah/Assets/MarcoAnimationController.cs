@@ -9,7 +9,7 @@ public class MarcoAnimationController : MonoBehaviour
     public Animator animator;
     private string currentState;
     public MarcoMovementController movement;
-    
+
     private float velocity;
 
     // Start is called before the first frame update
@@ -21,14 +21,14 @@ public class MarcoAnimationController : MonoBehaviour
 
     public IEnumerator castTime()
     {
-       
+
         animator.SetBool("castTime", true);
         yield return new WaitForSeconds(0.1f);
         animator.SetBool("casted", true);
         yield return new WaitForSeconds(0.2f);
         animator.SetBool("castTime", false);
         animator.SetBool("casted", false);
-     
+
 
     }
 
@@ -55,13 +55,14 @@ public class MarcoAnimationController : MonoBehaviour
     void Update()
     {
         velocity = new Vector3(movement.velocity.x, 0 * movement.velocity.y, movement.velocity.z).magnitude;
-        
-        animator.SetFloat("velocityZ",  Input.GetAxisRaw("Vertical"), 0.1f, Time.deltaTime);
+
+        animator.SetFloat("velocityZ", Input.GetAxisRaw("Vertical"), 0.1f, Time.deltaTime);
         animator.SetFloat("velocityX", Input.GetAxisRaw("Horizontal"), 0.1f, Time.deltaTime);
 
-        if (Input.GetMouseButton(0)) {
+        if (Input.GetMouseButton(0))
+        {
             StartCoroutine(auto());
-           
+
         }
 
         if (Input.GetKey(KeyCode.T))

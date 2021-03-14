@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviour
 
     #endregion
 
-    public GameObject player;
+    public GameObject player; //not used since we have multiple players
     public GameObject middle;
     public GameObject north;
     public GameObject south;
@@ -23,6 +23,6 @@ public class PlayerManager : MonoBehaviour
     public GameObject southwest;
     public GameObject northwest;
 
-    
 
+     
 }

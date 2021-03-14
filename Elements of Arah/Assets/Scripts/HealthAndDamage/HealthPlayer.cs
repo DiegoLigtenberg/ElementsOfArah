@@ -15,36 +15,24 @@ public class HealthPlayer : MonoBehaviour
     [HideInInspector] public int currentHealth;
     [HideInInspector] public float currentHealthPCT = 1;
     public CharacterController cc;
-    public DashAbility da;
-    public BeamAbility ba;
-    public Avalanche aa;
-    public BasicAttack bat;
-    public SunShine sa;
+    public Ability[] arahAbilityArray;
+    public Ability[] marcoAbilityArray;
     public Cinemachine.CinemachineBrain cb;
     public GameObject deathanimation;
     public GameObject takedamagepanel;
     private bool takedmgonce;
     public static bool playerisdeath;
-   
+    private bool cantdie;
 
     private void OnEnable()
     {
         currentHealth = startingHealth;
-       
+
     }
 
-    private bool cantdie;
     private void Update()
     {
-        /*
-        if (Input.GetKey(KeyCode.P))
-        {
-            cantdie = true;
-        }
-        */
 
-    
-    
     }
 
     private void Awake()
@@ -66,7 +54,7 @@ public class HealthPlayer : MonoBehaviour
                 takedmgonce = true;
                 StartCoroutine(TakedmgPanel());
             }
-            
+
             currentHealth -= damageResistance.CalculateDamageWithResistance(damageAmount, damageType);
 
             //procentueel hp
@@ -103,20 +91,16 @@ public class HealthPlayer : MonoBehaviour
             takedamagepanel.SetActive(false);
             takedmgonce = false;
         }
-  
     }
 
     public IEnumerator delaycamera()
     {
         yield return new WaitForSeconds(DashAbility.Beamready + 0.2f);
-        da.enabled = false;
         cb.enabled = false;
     }
 
     public IEnumerator Die()
     {
-        //  Debug.Log("should be dying");
-        //zorgt ervoor dat warrior niet gaat sliden
         if (!cantdie)
         {
             deathanimation.SetActive(true);
@@ -125,31 +109,24 @@ public class HealthPlayer : MonoBehaviour
             P2_Troll_EnterP2WalkMiddle.dodgedIntakill = false;
             P3_Troll_EnterP3WalkMiddle.dodgedIntakill = false;
             Ability.globalCooldown = 0;
-            //cc.enabled = false;
 
-            Debug.Log(DashAbility.Beamready);
-            if (! (DashAbility.Beamready > 0.1f))
+            //working with arah abilities when dead
+            foreach (Ability ability in arahAbilityArray)
             {
-                da.enabled = false;
-                cb.enabled = false;
-                StartCoroutine(delaycamera());
+                if (ability.AbilityName != "Dash Ability") { ability.enabled = false; }
+                else
+                {
+                    if (!(DashAbility.Beamready > 0.1f))
+                    {
+                        ability.enabled = false;
+                        cb.enabled = false;
+                        StartCoroutine(delaycamera());
+                    }
+                }
             }
-           
-            ba.enabled = false;
-            aa.enabled = false;
-            bat.enabled = false;
-            sa.enabled = false;
-           
-           
-           
+            //working with Marco Abilities
+            foreach (Ability ability in marcoAbilityArray) { ability.enabled = false; cb.enabled = false; }
 
-            if (anim.GetInteger("Phase") > 0)
-            {
-                anim.SetInteger("Phase", 0);
-                P1_Troll_Walk.fixbug = true;
-            }
-            else { P1_Troll_Walk.fixbug = false; }
-           
 
             anim.SetTrigger("isDeath");
             yield return new WaitForSeconds(2.15f);
@@ -158,8 +135,6 @@ public class HealthPlayer : MonoBehaviour
             //play animation
 
         }
-
-
     }
 
 }

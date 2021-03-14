@@ -30,11 +30,13 @@ namespace CreatingCharacters.Abilities
 
         public int AbilityDamage { get { return abilityDamage; } }
 
+        
+
         // public int AbilityType { get { return abilityType; } }
 
-
+            
         //prevent double cast
-        public bool onlyonce;
+        [HideInInspector] public bool onlyonce;
         private bool alreadyglobal;
 
         private int basicAttackManaGain = 10;
@@ -42,17 +44,14 @@ namespace CreatingCharacters.Abilities
         private int thresholdAbilManaCost = 50;
         private int ultimateAbilManaCost = 90;
 
-        public int basicrequirement = 30;
-        public int thresholdrequirement = 70;
-        public int ultimaterequirement = 90;
-
-  
-
+        [HideInInspector] public int basicrequirement = 30;
+        [HideInInspector] public int thresholdrequirement = 70;
+        [HideInInspector] public int ultimaterequirement = 90;
 
         private string furioushitabil = "Furious Hit";
         private string avalancheabil = "Avalanche";
 
-    
+
         private int abilityCountType;
         private bool manaproblem = false;
 
@@ -68,36 +67,30 @@ namespace CreatingCharacters.Abilities
             manaonce = true;
         }
 
+
         //abilities
         public abstract void Cast();
 
         protected virtual void Update()
         {
-
+            //check how long it takes before ability is on cd
             abilityCooldownLeft = CooldownHandler.Instance.CooldownSeconds(this);
 
-
-            if (energy > 100)
-            {
-                energy = 100;
-            }
-            if (energy < 0)
-            {
-                energy = 0;
-            }
+            //manage out of bound energy
+            if (energy > 100) { energy = 100; }
+            if (energy < 0) { energy = 0; }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             if (Input.GetKeyDown(abilityKey) && !PauseMenu.GameIsPaused)
             {
-               
                 //cast zonder gcd
                 if (this.abilityType == 0)
                 {
                     if (!AvatarMoveLocalPosUp.isRooted)
                     {
                         Cast();
-                    }
 
+                    }
                 }
                 Debug.Log(onlyonce);
 
@@ -127,7 +120,7 @@ namespace CreatingCharacters.Abilities
                 else if (globalCooldown > 0 && globalCooldown < 0.8f && !onlyonce)
                 {
                     //    if (this.abilityName != "Basic attack")
-                    if (true)//!alreadyglobal)// &&!GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>().aabugActivate)
+                    if (true)  //!alreadyglobal)// &&!GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>().aabugActivate)
                     {
                         StartCoroutine(RecastGlobal());
                     }
@@ -177,9 +170,6 @@ namespace CreatingCharacters.Abilities
                                 onlyonce = false;
                                 alreadyglobal = false;
                             }
-
-
-
                         }
 
                         else
@@ -189,19 +179,14 @@ namespace CreatingCharacters.Abilities
                             CooldownHandler.alreadyCasting = 1f;
                             // return;
                         }
-
-
                     }
                     if (this.abilityType == 3)
                     {
-                                                                // implicatie
+                        // implicatie
                         if (energy >= thresholdrequirement && (!(this.AbilityName == avalancheabil) || Gun.fromCenterPLayerDistance < 80))
                         {
-                            
-                            
                             Cast();
-                          
-                             
+
                             energy -= thresholdAbilManaCost;
                             //na casten gaat die op cooldown
                             CooldownHandler.Instance.PutOnCooldown(this);
@@ -237,25 +222,12 @@ namespace CreatingCharacters.Abilities
                             onlyonce = false;
                             alreadyglobal = false;
                         }
-
-
                     }
-
-
-
-
-
-
-
-
 
                     if (!onlyonce)
                     {
                         // globalCooldown = 0.1f;
                     }
-
-
-
                 }
 
             }
@@ -265,7 +237,7 @@ namespace CreatingCharacters.Abilities
         public IEnumerator manaproblemStop()
         {
             yield return new WaitForSeconds(1.6f);
-            manaonce = true;          
+            manaonce = true;
         }
         //global cooldown
         public IEnumerator RecastGlobal()
@@ -277,19 +249,15 @@ namespace CreatingCharacters.Abilities
 
             //de + 0.01f is zodat je energy goed registered en  (anders is het te laag bij recasten!)
             yield return new WaitForSeconds(globalCooldown + 0.01f);
-
             Debug.Log("casted2");
 
-            if ( true)//!GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>().isactivated)
+            if (true)//!GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>().isactivated)
             {
                 if (this.abilityType == 1)
                 {
 
                     if (globalCooldown <= 0.3f)
                     {
-
-
-
                         //yield return new WaitForSeconds(globalCooldown + 0.1f);
                         Cast();
                         energy += basicAttackManaGain;
@@ -428,7 +396,7 @@ namespace CreatingCharacters.Abilities
             Debug.Log(" this is probably also true -,- " + alreadyglobal);
 
 
-            if (GetComponent<BeamAbility>().usingBeamP == true)
+            if (GetComponent<BeamAbility>() != null && GetComponent<BeamAbility>().usingBeamP == true || GetComponent<BeamAbility>() == null)
             {
                 onlyonce = false;
                 alreadyglobal = false;
@@ -436,12 +404,12 @@ namespace CreatingCharacters.Abilities
             }
 
             //de + 0.01f is zodat je energy goed registered en  (anders is het te laag bij recasten!)
-             yield return new WaitForSeconds(CooldownHandler.alreadyCasting + 0.01f);
-            
+            yield return new WaitForSeconds(CooldownHandler.alreadyCasting + 0.01f);
 
-            if (!alreadyglobal && GetComponent<BeamAbility>().usingBeamP == false)
+
+            if (!alreadyglobal && (GetComponent<BeamAbility>() != null && GetComponent<BeamAbility>().usingBeamP == false || GetComponent<BeamAbility>() == null))
             {
-                
+
                 if (globalCooldown > 0 && globalCooldown < 0.8f)
                 {
                     //kan niet casten want abil is nog op cooldown
@@ -623,7 +591,7 @@ namespace CreatingCharacters.Abilities
                     }
                     if (this.abilityType == 3)
                     {
-                                                                // implicatie
+                        // implicatie
                         if (energy >= thresholdrequirement && (!(this.AbilityName == avalancheabil) || Gun.fromCenterPLayerDistance < 80))
                         {
                             Cast();
@@ -669,7 +637,7 @@ namespace CreatingCharacters.Abilities
 
             }
 
-            else if (GetComponent<BeamAbility>().usingBeamP)
+            else if (GetComponent<BeamAbility>() != null && GetComponent<BeamAbility>().usingBeamP || GetComponent<BeamAbility>() == null)
             {
                 onlyonce = false;
                 alreadyglobal = false;

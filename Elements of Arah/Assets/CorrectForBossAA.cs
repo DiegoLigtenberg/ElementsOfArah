@@ -9,7 +9,7 @@ public class CorrectForBossAA : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -17,21 +17,36 @@ public class CorrectForBossAA : MonoBehaviour
     {
         standardizedDistance = (TrollController.distToAgent / 30);
         standardizedDistance = 1.3f - standardizedDistance;
-        
+
         standardizedDistance = Mathf.Clamp(standardizedDistance, 0.01f, 1);
-        if(standardizedDistance <= 0.5f)
+        if (standardizedDistance <= 0.5f)
         {
             standardizedDistance = 0.5f;
         }
-       
-       // Debug.Log(standardizedDistance);
-        if (Input.GetKey(KeyCode.A) && !(Input.GetKey(KeyCode.D) &&TrollController.distToAgent < 10))
+
+        // Debug.Log(standardizedDistance);
+        if (ActivePlayerManager.ActivePlayerName.Contains("heraklios"))
         {
-            this.transform.localPosition = new Vector3(offset.x * standardizedDistance, offset.y,offset.z);
+            if (Input.GetKey(KeyCode.A) && !(Input.GetKey(KeyCode.D) && TrollController.distToAgent < 10))
+            {
+                this.transform.localPosition = new Vector3(offset.x * standardizedDistance, offset.y, offset.z);
+            }
+            else
+            {
+                this.transform.localPosition = new Vector3(0, 0.866f, 0);
+            }
         }
         else
         {
-            this.transform.localPosition = new Vector3(0, 0.866f, 0);
+            if (Input.GetKey(KeyCode.A) && !(Input.GetKey(KeyCode.D) && TrollController.distToAgent < 10))
+            {
+                this.transform.localPosition = 100 * new Vector3(offset.x * standardizedDistance, offset.y, offset.z);
+            }
+            else
+            {
+                this.transform.localPosition = 100 * new Vector3(0, 0.866f, 0);
+            }
         }
     }
+
 }

@@ -22,46 +22,47 @@ namespace CreatingCharacters.Abilities
 
         [SerializeField] private float dashRechargeTime;
         [SerializeField] private int maxDashes = 3;
-        public int remainingDashes = 1;
+        [HideInInspector] public int remainingDashes = 1;
         private float currentDashRechargeTime;
         private float currentDashRechargeTime2;
 
         public CinemachineFreeLook fl;
-        public bool quickfix = false;
-        public bool isactivated = false;
-        public bool aabugActivate = false; //free var- not used - is when dash is activated
+        [HideInInspector] public bool quickfix = false;
+        [HideInInspector] public bool isactivated = false;
+        [HideInInspector] public bool aabugActivate = false; //free var- not used - is when dash is activated
 
         public CapsuleCollider cc;
-        public BeamAbility beam;
+        [HideInInspector] public BeamAbility beam;
 
-        public TextMeshProUGUI text;
         public Image abilityImage; //the hidden image in canvas
 
         float lastStep, timeBetweenSteps = 0.2f;
 
         public GameObject playerPathFindHitBox;
-        
+
         /// <summary>
         ///Animator control
         /// </summary>
         static Animator anim;
         public GameObject[] effect;
         public Transform[] effectTransform;
-         
-        
+
+
         public static float Beamready;
         public static float AACorrection;
 
         public GameObject[] circlingBalls;
 
-        public GameObject nomana;
+        [HideInInspector] public GameObject nomana;
 
         private float outofcombatmultiplier;
         public static bool PhasingBugFixAA;
 
+   
+
         private void Awake()
         {
-    
+
             abilityImage.fillAmount = 0;
             remainingDashes = 1;
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
@@ -77,10 +78,10 @@ namespace CreatingCharacters.Abilities
         private void Start()
         {
             abilityKey = InputManager.instance.getKeyCode("dash");
-      
+
         }
 
-        private bool onlyonce;
+        private bool onlyonce_dash;
 
         //dont run this, because you get dmg before it resets
         public void ResetDashes()
@@ -93,26 +94,26 @@ namespace CreatingCharacters.Abilities
 
         private void CooldownData()
         {
-         
-            
 
-            if ( !onlyonce )
+
+
+            if (!onlyonce_dash)
             {
-             
+
                 abilityImage.fillAmount = 1;
-                onlyonce = true;
+                onlyonce_dash = true;
             }
 
             if (remainingDashes < maxDashes)
             {
-                abilityImage.fillAmount -= 1 / (dashRechargeTime/outofcombatmultiplier ) * Time.deltaTime;
+                abilityImage.fillAmount -= 1 / (dashRechargeTime / outofcombatmultiplier) * Time.deltaTime;
                 if (abilityImage.fillAmount <= 0)
                 {
                     abilityImage.fillAmount = 0;
-                  
+
                     if (remainingDashes < maxDashes)
                     {
-                        onlyonce = false;
+                        onlyonce_dash = false;
                     }
                     if (CooldownHandler.outOfCombat) { outofcombatmultiplier = 2f; }
                     else { outofcombatmultiplier = 1f; }
@@ -123,12 +124,12 @@ namespace CreatingCharacters.Abilities
             else
             {
                 abilityImage.fillAmount = 0;
-                onlyonce = true;
+                onlyonce_dash = true;
             }
         }
 
         private bool shortBuff;
-        public int orbCount;
+        [HideInInspector] public int orbCount;
         public IEnumerator DashBuff()
         {
             shortBuff = true;
@@ -137,9 +138,9 @@ namespace CreatingCharacters.Abilities
         }
         protected override void Update()
         {
-           
+
             CooldownData();
-          //  Debug.Log(remainingDashes);
+            //  Debug.Log(remainingDashes);
 
             //runt ook base update
             base.Update();
@@ -168,12 +169,12 @@ namespace CreatingCharacters.Abilities
 
             if (remainingDashes < maxDashes)
             {
-                currentDashRechargeTime += Time.deltaTime *outofcombatmultiplier;
+                currentDashRechargeTime += Time.deltaTime * outofcombatmultiplier;
                 if (currentDashRechargeTime >= dashRechargeTime)
                 {
                     remainingDashes++;
                     currentDashRechargeTime = 0f;
-                    
+
                 }
             }
             if (remainingDashes == maxDashes)
@@ -193,7 +194,7 @@ namespace CreatingCharacters.Abilities
 
 
 
-            if (GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>().isactivated)
+            if (GameObject.Find(ActivePlayerManager.ActivePlayerName).GetComponent<DashAbility>().isactivated)
             {
                 circlingBalls[0].SetActive(false);
                 circlingBalls[1].SetActive(false);
@@ -249,47 +250,47 @@ namespace CreatingCharacters.Abilities
                 // }
 
 
-          
-                
+
+
 
             }
-        
 
-        
 
-           
+
+
+
 
         }
 
 
 
         public override void Cast()
-        {                    
-                //  if (Input.GetKeyDown(KeyCode.B) && quickfix == false)
-                if (quickfix == false)
-                {
-                    StartCoroutine(Dash());
+        {
+            //  if (Input.GetKeyDown(KeyCode.B) && quickfix == false)
+            if (quickfix == false)
+            {
+                StartCoroutine(Dash());
                 beam.canceldash = true;
                 StartCoroutine(DashBuff());
 
                 if (currentDashRechargeTime == maxDashes)
                 {
-                    onlyonce = false;
+                    onlyonce_dash = false;
                 }
-              
-             
-             
-                
-            }   
+
+
+
+
+            }
         }
 
 
- 
+
 
         public virtual IEnumerator Dash()
         {
             if (remainingDashes <= 0) { yield break; }
-          
+
 
             //the whole actions of ability
             if (isactivated == false)
@@ -297,7 +298,7 @@ namespace CreatingCharacters.Abilities
                 ThirdPersonMovement.canmovecamera = true;
                 cc.enabled = false; //of  cilinder ollision
 
-           
+
                 charController.enabled = false;
 
                 Instantiate(effect[0], effectTransform[0].position, effectTransform[0].rotation);
@@ -320,7 +321,7 @@ namespace CreatingCharacters.Abilities
                 remainingDashes--;
                 fl.m_Priority = 11;
                 quickfix = true;
-              
+
 
 
                 mr.enabled = false;
@@ -333,14 +334,14 @@ namespace CreatingCharacters.Abilities
                 aabugActivate = true;
 
                 yield return new WaitForSeconds(0.24f);
-               
+
                 charController.enabled = true;
                 //////////////////////////////////////////////
 
                 isactivated = false;
                 isactivated = true;
                 ThirdPersonMovement.canmovecamera = false;
-            
+
                 yield return new WaitForSeconds(0.1f);
                 //////////////////////////////////////////////
 
@@ -351,7 +352,7 @@ namespace CreatingCharacters.Abilities
 
                 thirdPersonPlayer.chargeDelay = true;
                 thirdPersonPlayer.gravity = 0;
-              
+
                 yield return new WaitForSeconds(0.2f);
                 Instantiate(effect[1], effectTransform[1].position, effectTransform[1].rotation);
                 yield return new WaitForSeconds(0.2f);
@@ -365,8 +366,8 @@ namespace CreatingCharacters.Abilities
                 thirdPersonPlayer.AddForce(Camera.main.transform.up * dashForce, 20 + Mathf.Clamp(50f * Mathf.Abs(ThirdPersonMovement.velocityY), 0, 5f) * Time.deltaTime);
 
                 ThirdPersonMovement.velocityY = 0f;
-               ThirdPersonMovement.canmovecamera = true;
-            
+                ThirdPersonMovement.canmovecamera = true;
+
                 yield return new WaitForSeconds(dashDuration);
                 //////////////////////////////////////////////
 

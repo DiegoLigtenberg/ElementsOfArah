@@ -4648,6 +4648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4439874536844998}
   - component: {fileID: 114504314701750860}
+  - component: {fileID: 5540579555293838600}
   m_Layer: 16
   m_Name: TransformMotion
   m_TagString: Untagged
@@ -4705,6 +4706,21 @@ MonoBehaviour:
   CollisionEffectDestroyAfter: 5
   DeactivateObjectsAfterCollision: []
   HUE: -1
+  damage: 1
+  damageType: 1
+--- !u!114 &5540579555293838600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795664805227462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4eacf56ac49d734d8e7f96590412fa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setdmg: {fileID: 114504314701750860}
 --- !u!1 &1831572337280484
 GameObject:
   m_ObjectHideFlags: 0

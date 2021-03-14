@@ -39,18 +39,21 @@ public class AE_PhysicsMotion : MonoBehaviour
     bool isInitializedForce;
     float currentSpeedOffset;
 
-    void OnEnable ()
+    [SerializeField] public int damage = 1;
+    [SerializeField] private DamageTypes damageType;
+
+    void OnEnable()
     {
         foreach (var obj in DeactivateObjectsAfterCollision)
         {
             if (obj != null)
             {
-                if(obj.GetComponent<ParticleSystem>() != null) obj.SetActive(false);
+                if (obj.GetComponent<ParticleSystem>() != null) obj.SetActive(false);
                 obj.SetActive(true);
             }
         }
         currentSpeedOffset = Random.Range(-RandomSpeedOffset * 10000f, RandomSpeedOffset * 10000f) / 10000f;
-	    InitializeRigid();
+        InitializeRigid();
     }
 
     void InitializeRigid()
@@ -62,8 +65,8 @@ public class AE_PhysicsMotion : MonoBehaviour
         }
 
         isInitializedForce = false;
-        
-       
+
+
     }
 
     void InitializeForce()
@@ -84,8 +87,8 @@ public class AE_PhysicsMotion : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         //Checkforlayermask
-       // if ((CollidesWith & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
-       if(collision.collider.tag != "Player")
+        // if ((CollidesWith & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
+        if (collision.collider.tag != "Player")
         {
 
             if (isCollided && !UseCollisionDetect) return;
@@ -108,6 +111,59 @@ public class AE_PhysicsMotion : MonoBehaviour
                         targetAnchor.transform.rotation = transform.rotation;
                         //targetAnchor.transform.LookAt(contact.normal);
                     }
+                }
+
+                if (collision.collider.GetComponent<Health>() != null)
+                {
+                    var health = collision.collider.GetComponent<Health>();
+
+                    if (health != null)
+                    {
+                        Debug.Log("dealt " + damage + " damage");
+
+
+                        if (!this.gameObject.name.Contains("CollisionAvalanche"))
+                        {
+
+                            if (this.gameObject.name.Contains("Collision basicattack"))
+                            {
+                                health.takeDamage(damage, damageType);
+
+                                if (!this.gameObject.name.Contains("Collision NODAMAGE"))
+                                {
+
+                                    /*
+                                        if (dashability.orbCount == 0) { health.takeDamage(damage, damageType); }
+                                        if (dashability.orbCount == 1) { health.takeDamage(damage, damageType); }
+                                        if (dashability.orbCount == 2) { health.takeDamage(damage, damageType); }
+                                        if (dashability.orbCount == 3) { health.takeDamage(damage, damageType); }
+                                    */
+                                }
+
+                            }
+
+                            if (!this.gameObject.name.Contains("Collision basicattack"))
+                            {
+                                health.takeDamage(damage, damageType);
+                            }
+
+                        }
+
+                        if (this.gameObject.name.Contains("Collision basicattack"))
+                        {
+                            //   if (dashability.orbCount == 0) { health.takeDamage(0, DamageTypes.Fire); }
+                            /*
+                            if (SunShine.SunShineActive)
+                            {
+                                if (dashability.orbCount == 1) { health.takeDamage(10, DamageTypes.Elemental); }
+                                if (dashability.orbCount == 2) { health.takeDamage(20, DamageTypes.Elemental); }
+                                if (dashability.orbCount == 3) { health.takeDamage(30, DamageTypes.Elemental); }
+                            }
+                            */
+                        }
+
+                    }
+
 
                 }
                 var handler = CollisionEnter;
@@ -177,8 +233,8 @@ public class AE_PhysicsMotion : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = new Quaternion();
         isCollided = false;
-        if(rigid!=null) Destroy(rigid);
-        if(collid!=null) Destroy(collid);
+        if (rigid != null) Destroy(rigid);
+        if (collid != null) Destroy(collid);
     }
 
     void OnDrawGizmosSelected()

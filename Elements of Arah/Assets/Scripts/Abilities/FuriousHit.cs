@@ -57,7 +57,7 @@ namespace CreatingCharacters.Abilities
         public GameObject tickcircle;
 
         public GameObject nomana;
-        
+
 
         public void SetAnim(int value)
         {
@@ -129,8 +129,8 @@ namespace CreatingCharacters.Abilities
         */
         private void CooldownData()
         {
-           if (showImageNumber < 3) {tickcircle.SetActive(true);}
-           else  { tickcircle.SetActive(false); }
+            if (showImageNumber < 3) { tickcircle.SetActive(true); }
+            else { tickcircle.SetActive(false); }
 
             if (!PauseMenu.GameIsPaused)
             {
@@ -150,8 +150,8 @@ namespace CreatingCharacters.Abilities
                 {
                     textobjectcd.SetActive(true);
                     //+0.0001f zorgt ervoor dat je geen zwart vlakje erover krijgt als je game paused
-                    abilityImage.fillAmount -= 1 / (maxcooldownFireBreath +0.0001f) * Time.deltaTime;
-                   
+                    abilityImage.fillAmount -= 1 / (maxcooldownFireBreath + 0.0001f) * Time.deltaTime;
+
                     if (cooldownFireBreath < 0.05f)
                     {
                         textobjectcd.SetActive(false);
@@ -161,7 +161,7 @@ namespace CreatingCharacters.Abilities
                     {
                         abilityImage.fillAmount = 0;
                         test = false;
-                       
+
                     }
                 }
             }
@@ -236,13 +236,13 @@ namespace CreatingCharacters.Abilities
                 reducestateonce = true;
 
                 textobject.SetActive(false);
-                yield return new WaitForSeconds(setMaxCooldownFinalCharge -0.1f);
+                yield return new WaitForSeconds(setMaxCooldownFinalCharge - 0.1f);
                 allowChargeChange = false;
 
-               // GetComponent<Ability>().onlyonce = false;
-               // yield return new WaitForSeconds(0.1f);
+                // GetComponent<Ability>().onlyonce = false;
+                // yield return new WaitForSeconds(0.1f);
                 Debug.Log("set only once false");
-               // GetComponent<Ability>().onlyonce = false;
+                // GetComponent<Ability>().onlyonce = false;
                 cooldownFireBreath = 0f;
                 textobject.SetActive(true);
                 stateOfAbil = 1;
@@ -298,7 +298,7 @@ namespace CreatingCharacters.Abilities
             {
 
 
-                if (cooldownFireBreath <= 0 )
+                if (cooldownFireBreath <= 0)
                 {
 
                     ChargeRemover();
@@ -308,15 +308,15 @@ namespace CreatingCharacters.Abilities
                     tickCooldown = setTickCooldown;
                     GetComponent<Ability>().onlyonce = false;
 
-                   // StartCoroutine(GetComponent<CooldownReducer>().ShortBuff(abilityType));
+                    // StartCoroutine(GetComponent<CooldownReducer>().ShortBuff(abilityType));
                 }
 
-                else if (cooldownFireBreath > 0 && cooldownFireBreath < 0.4f )
+                else if (cooldownFireBreath > 0 && cooldownFireBreath < 0.4f)
                 {
                     if (!coroutineonce)
                     {
                         StartCoroutine(RecastFireBreath());
-                    
+
                     }
                 }
             }
@@ -328,7 +328,7 @@ namespace CreatingCharacters.Abilities
         {
             coroutineonce = true;
 
-           // if (GetComponent<BeamAbility>().usingbeamF == true)
+            // if (GetComponent<BeamAbility>().usingbeamF == true)
             yield return new WaitForSeconds(cooldownFireBreath + .01f);
             Debug.Log("we actually recasted abil");
             Cast();
@@ -347,13 +347,13 @@ namespace CreatingCharacters.Abilities
             for (int i = 2; i < 7; i++)
             {
                 newobj[i] = Instantiate(effect[2], effectTransform[i].position, effectTransform[i].rotation);
-         
+
 
                 //zodat je niet door targets heen schiet
-                if (Gun.fromCenterPLayerDistance > 1.5f)
+                if (Gun.TrueDistanceOfCrosshair > 1.5f)
                 {
 
-                    if (!ThirdPersonMovement.isLevitating && Ability.animationCooldown < 0.5f) 
+                    if (!ThirdPersonMovement.isLevitating && Ability.animationCooldown < 0.5f)
                     {
                         if (Input.GetKey(KeyCode.W) && (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))))
                         {
@@ -466,8 +466,8 @@ namespace CreatingCharacters.Abilities
                     }
 
                 }
-            
-             
+
+
                 yield return null;
             }
         }
@@ -475,25 +475,25 @@ namespace CreatingCharacters.Abilities
         private IEnumerator imageNumbReducer()
         {
             yield return new WaitForSeconds(setMaxCooldownFinalCharge);
-            
-                showImageNumber = 3;
-        
+
+            showImageNumber = 3;
+
         }
 
         protected override void Update()
-        {            
+        {
             //Debug.Log(curChargeDuration);
             base.Update();
             CooldownData();
             ChargeCooldown();
             //TickCooldownData();
             //  Debug.Log(stateOfAbil);         
-           // text.text = showImageNumber.ToString();
+            // text.text = showImageNumber.ToString();
 
             if (stateOfAbil >= 4)
             {
-               // stateOfAbil = 1;
-           
+                // stateOfAbil = 1;
+
             }
 
             if (showImageNumber <= 0)
@@ -504,14 +504,14 @@ namespace CreatingCharacters.Abilities
 
             if (stateOfAbil == 1)
             {
-                if (cooldownFireBreath >= -0-0.01)
+                if (cooldownFireBreath >= -0 - 0.01)
                 {
                     cooldownFireBreath -= Time.deltaTime;
                 }
             }
             if (stateOfAbil == 2)
             {
-                if (cooldownFireBreath >= -0-0.01)
+                if (cooldownFireBreath >= -0 - 0.01)
                 {
                     cooldownFireBreath -= Time.deltaTime;
                 }
@@ -546,44 +546,44 @@ namespace CreatingCharacters.Abilities
                 }
             }
 
-           // Debug.Log(Ability.energy);
-           // Debug.Log(stateOfAbil);
+            // Debug.Log(Ability.energy);
+            // Debug.Log(stateOfAbil);
 
             if (Ability.energy < 30 && cooldownFireBreath <= 0 && stateOfAbil != 4)
             {
-            
+
                 nomana.SetActive(true);
             }
-            if ((Ability.energy >= 30 ) )
+            if ((Ability.energy >= 30))
             {
                 nomana.SetActive(false);
             }
 
-            if(stateOfAbil <=3 && cooldownFireBreath <= 1f && cooldownFireBreath >0.01f)
+            if (stateOfAbil <= 3 && cooldownFireBreath <= 1f && cooldownFireBreath > 0.01f)
             {
                 nomana.SetActive(false);
             }
 
 
-            if(stateOfAbil >=3 && cooldownFireBreath >=0)
+            if (stateOfAbil >= 3 && cooldownFireBreath >= 0)
             {
                 nomana.SetActive(false);
             }
         }
 
 
-   //     private bool onlyonce;
+        //     private bool onlyonce;
 
         public virtual IEnumerator AoeActive()
         {
-      
+
             if (cooldownFireBreath <= 0)
             {
-           
-                if (stateOfAbil == 1 )//&& //!onlyonce)
+
+                if (stateOfAbil == 1)//&& //!onlyonce)
                 {
 
-                 
+
                     rb.velocity = Vector3.zero;
                     rb.transform.position = beginningPoint.transform.position;
                     if (characterController.isGrounded)
@@ -592,7 +592,7 @@ namespace CreatingCharacters.Abilities
                         showImageNumber--;
                         SetAnim(0);
                         maxcooldownFireBreath = setMaxCooldownCharges;
-             
+
                         //set iteration & rotation of visual
                         psa.castIteration = 1;
                         psa.XrotationAbil = 0; //300
@@ -600,7 +600,7 @@ namespace CreatingCharacters.Abilities
                         beginningPoint.localRotation = Quaternion.EulerAngles(0, 0, 0);
 
                         //play animation
-                     
+
                         if (Ability.animationCooldown <= 0f)
                         {
                             Ability.animationCooldown = 0.3f;
@@ -609,7 +609,7 @@ namespace CreatingCharacters.Abilities
                         {
                             Ability.globalCooldown = .2f;
                         }
-                    
+
 
                         //global and animation cooldown
                         yield return new WaitForSeconds(0.1f);
@@ -620,19 +620,19 @@ namespace CreatingCharacters.Abilities
                         {
                             Ability.globalCooldown = .7f;
                         }
-                        
 
-                      
 
-                            cooldownFireBreath = maxcooldownFireBreath;
-                  
+
+
+                        cooldownFireBreath = maxcooldownFireBreath;
+
 
                         //Sound effect on
                         yield return new WaitForSeconds(0.1f);
                         Instantiate(effect[1], effectTransform[1].position, effectTransform[1].rotation);
 
                         yield return new WaitForSeconds(0.1f);
-                      
+
                         //delayed animation cooldown
                         //Ability.animationCooldown = .4f;
                         yield return new WaitForSeconds(.2f); //USED TO BE 0.2f
@@ -643,7 +643,7 @@ namespace CreatingCharacters.Abilities
 
                         //Delay for actual visual 
                         yield return new WaitForSeconds(0.01f);
-                        abilIsActive = true;                    
+                        abilIsActive = true;
                         //instantiating the ability
                         StartCoroutine(InstantiateEffect());
 
@@ -654,7 +654,7 @@ namespace CreatingCharacters.Abilities
                         go.SetActive(false);
                         stateOfAbil++;
                         //onlyonce = false;
-                        
+
                     }
 
                     else if (!characterController.isGrounded)
@@ -671,7 +671,7 @@ namespace CreatingCharacters.Abilities
                         beginningPoint.localRotation = Quaternion.EulerAngles(0, 0, 0);
 
                         //play animation
-                  
+
 
                         if (Ability.animationCooldown <= 0f)
                         {
@@ -691,7 +691,7 @@ namespace CreatingCharacters.Abilities
                         yield return new WaitForSeconds(0.1f);
 
                         //delayed animation cooldown
-                       // Ability.animationCooldown = .4f;
+                        // Ability.animationCooldown = .4f;
                         yield return new WaitForSeconds(.2f); //USED TO BE 0.2f
 
                         //reset the rotation
@@ -717,10 +717,10 @@ namespace CreatingCharacters.Abilities
                     }
                 }
 
-                else if (stateOfAbil == 2 )//&& !onlyonce)
+                else if (stateOfAbil == 2)//&& !onlyonce)
                 {
 
-                  
+
                     rb.velocity = Vector3.zero;
                     rb.transform.position = beginningPoint.transform.position;
                     if (characterController.isGrounded)
@@ -737,8 +737,8 @@ namespace CreatingCharacters.Abilities
                         beginningPoint.localRotation = Quaternion.EulerAngles(0, 45.5f, 0);
                         psa.ZrotationAbil = 0;
 
-                     
-                        
+
+
                         if (Ability.animationCooldown <= 0f)
                         {
                             Ability.animationCooldown = 0.3f;
@@ -747,7 +747,7 @@ namespace CreatingCharacters.Abilities
                         {
                             Ability.globalCooldown = .2f;
                         }
-                       
+
 
                         //global and animation cooldown
                         yield return new WaitForSeconds(0.1f);
@@ -766,7 +766,7 @@ namespace CreatingCharacters.Abilities
                         yield return new WaitForSeconds(0.1f);
 
                         //delayed animation cooldown 
-                     //   Ability.animationCooldown = .4f;
+                        //   Ability.animationCooldown = .4f;
                         yield return new WaitForSeconds(.2f);//USED TO BE 0.2f
 
                         //reset the rotation
@@ -784,18 +784,18 @@ namespace CreatingCharacters.Abilities
                         abilIsActive = false;
                         go.SetActive(false);
                         stateOfAbil++;
-                       // onlyonce = false;
+                        // onlyonce = false;
 
 
                     }
 
                     else if (!characterController.isGrounded)
                     {
-                    
+
                         showImageNumber--;
                         // onlyonce = true;
                         SetAnim(1);
-                        maxcooldownFireBreath =setMaxCooldownCharges;
+                        maxcooldownFireBreath = setMaxCooldownCharges;
                         //set iteration & rotation of visual
 
                         psa.castIteration = 2;
@@ -806,7 +806,7 @@ namespace CreatingCharacters.Abilities
                         psa.ZrotationAbil = 0;
 
                         //play animation
-                 
+
 
                         if (Ability.animationCooldown <= 0f)
                         {
@@ -827,7 +827,7 @@ namespace CreatingCharacters.Abilities
                         yield return new WaitForSeconds(0.1f);
 
                         //delayed animation cooldown 
-                     //   Ability.animationCooldown = .4f;
+                        //   Ability.animationCooldown = .4f;
                         yield return new WaitForSeconds(.2f);//USED TO BE 0.2f
 
                         //reset the rotation
@@ -846,7 +846,7 @@ namespace CreatingCharacters.Abilities
                         abilIsActive = false;
                         go.SetActive(false);
                         stateOfAbil++;
-                     //   onlyonce = false;
+                        //   onlyonce = false;
 
                     }
                 }
@@ -870,7 +870,7 @@ namespace CreatingCharacters.Abilities
                         psa.XrotationAbil = 0;
                         psa.YrotationAbil = 1000;
                         psa.ZrotationAbil = 0;
-        
+
 
                         if (Ability.animationCooldown <= 0f)
                         {
@@ -895,7 +895,7 @@ namespace CreatingCharacters.Abilities
                         yield return new WaitForSeconds(0.1f);
 
                         //delayed animation cooldown
-                       // Ability.animationCooldown = .4f;
+                        // Ability.animationCooldown = .4f;
                         yield return new WaitForSeconds(.2f); //USED TO BE 0.2f
 
                         //reset the rotation
@@ -914,7 +914,7 @@ namespace CreatingCharacters.Abilities
                         abilIsActive = false;
                         go.SetActive(false);
                         stateOfAbil++;
-                      //  onlyonce = false;
+                        //  onlyonce = false;
 
                     }
 
@@ -932,7 +932,7 @@ namespace CreatingCharacters.Abilities
                         psa.XrotationAbil = 0;
                         psa.YrotationAbil = 1000;
                         psa.ZrotationAbil = 0;
-                   
+
 
                         if (Ability.animationCooldown <= 0f)
                         {
@@ -970,7 +970,7 @@ namespace CreatingCharacters.Abilities
                         abilIsActive = false;
                         go.SetActive(false);
                         stateOfAbil++;
-                       // onlyonce = false;
+                        // onlyonce = false;
 
                     }
                 }

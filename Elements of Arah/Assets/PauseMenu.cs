@@ -38,7 +38,7 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu() //this is actually back to main menu
     {
-      //  Debug.Log("loading menu...");
+        //  Debug.Log("loading menu...");
         SceneManager.LoadScene(0);
     }
 
@@ -50,13 +50,13 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        for (int i = 0; i < putoff.Length ; i++)
+        for (int i = 0; i < putoff.Length; i++)
         {
             putoff[i].SetActive(true);
         }
         pauseMenuUI.SetActive(false);
         keybindMenuUI.SetActive(false);
-   
+
     }
 
     public void Pause()

@@ -20,14 +20,14 @@ namespace CreatingCharacters.Abilities
 
         ThirdPersonMovement thirdPersonPlayer;
 
-        float lastStep, timeBetweenSteps = 0.1f;
+        private float lastStepa, timeBetweenStepsa = 0.1f;
 
         void onground()
         {
             jumpCount = 0;
         }
 
-       
+
         private void Start()
         {
             dash = GetComponent<DashAbility>();
@@ -45,8 +45,10 @@ namespace CreatingCharacters.Abilities
             gravity = -19.81f;
         }
 
+
         protected override void Update()
         {
+
 
             if (!PauseMenu.GameIsPaused)
             {
@@ -78,11 +80,11 @@ namespace CreatingCharacters.Abilities
                 {
                     fireJetPack.SetActive(true);
 
-                    if (Time.time - lastStep > timeBetweenSteps)
+                    if (Time.time - lastStepa > timeBetweenStepsa)
                     {
-                        lastStep = Time.time;
+                        lastStepa = Time.time;
 
-                        if (CooldownHandler.outOfCombat) { Ability.energy -= (energyCostLevitating/2); }
+                        if (CooldownHandler.outOfCombat) { Ability.energy -= (energyCostLevitating / 2); }
                         else { Ability.energy -= energyCostLevitating; }
 
                         if (Ability.energy <= 0)
@@ -108,35 +110,35 @@ namespace CreatingCharacters.Abilities
         }
 
 
-            public IEnumerator getBigger()
+        public IEnumerator getBigger()
+        {
+            if (GetComponent<DashAbility>().isactivated == false)
             {
-                if (GetComponent<DashAbility>().isactivated == false)
+
+                if (!characterController.isGrounded)
                 {
+                    characterController.height = 1.6f;
+                    yield return new WaitForSeconds(0.1f);
+                    characterController.height = 1.7f;
+                    yield return new WaitForSeconds(0.1f);
+                    characterController.height = 1.8f;
+                    yield return new WaitForSeconds(0.1f);
+                    characterController.height = 1.9f;
+                    yield return new WaitForSeconds(0.1f);
+                    characterController.height = 2f;
 
-                    if (!characterController.isGrounded)
-                    {
-                        characterController.height = 1.6f;
-                        yield return new WaitForSeconds(0.1f);
-                        characterController.height = 1.7f;
-                        yield return new WaitForSeconds(0.1f);
-                        characterController.height = 1.8f;
-                        yield return new WaitForSeconds(0.1f);
-                        characterController.height = 1.9f;
-                        yield return new WaitForSeconds(0.1f);
-                        characterController.height = 2f;
-
-                    }
-                    else
-                    {
-                        characterController.height = 2f;
-                    }
-
-
-                    yield return null;
+                }
+                else
+                {
+                    characterController.height = 2f;
                 }
 
+
+                yield return null;
             }
-        
+
+        }
+
 
         protected override void Jump()
         {
@@ -165,14 +167,14 @@ namespace CreatingCharacters.Abilities
 
                     if (Ability.energy > 0)
                     {
-                        if (characterController.isGrounded )
+                        if (characterController.isGrounded)
                         {
                             if (Ability.energy >= 30)
                             {
                                 anim.SetTrigger("isJumping");
                                 AddForce(Vector3.up, 2.5f * jumpForce);
                                 if (CooldownHandler.outOfCombat) { Ability.energy -= (energyCostJump / 2); }
-                                else { Ability.energy -= energyCostJump; } ;
+                                else { Ability.energy -= energyCostJump; };
                                 jumpCount = 1;
                             }
                         }

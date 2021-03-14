@@ -23,7 +23,7 @@ public class ReadPathFindingPosition : MonoBehaviour
 
 
 
-    private Vector3 lastpos1 = new Vector3(0,0,0);
+    private Vector3 lastpos1 = new Vector3(0, 0, 0);
 
     private Vector3 lastpos2 = new Vector3(0, 0, 0);
 
@@ -31,7 +31,7 @@ public class ReadPathFindingPosition : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss PathFind").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName + "/targetforBoss PathFind").transform;
 
         pathFindPos = new Vector3(transform.position.x, 65f, transform.position.z);
 
@@ -43,7 +43,7 @@ public class ReadPathFindingPosition : MonoBehaviour
         {
             lastStep_1 = Time.time;
 
-       
+
             lastpos2 = lastpos1;
 
 
@@ -69,7 +69,7 @@ public class ReadPathFindingPosition : MonoBehaviour
         //was voor oude maar nu wil je niet dat weg gaat als je over jumped;
         if (ReadPathFindingPosition.distancetoPlayer < 0.52 && ReadPathFindingPosition.distancetoPlayer != 0)
         {
-         //   pfd.destroyme();
+            //   pfd.destroyme();
         }
         else if (Ability.animationCooldown >= .8f && ReadPathFindingPosition.distancetoPlayer < 0.8f && ReadPathFindingPosition.distancetoPlayer != 0)
         {
@@ -77,7 +77,7 @@ public class ReadPathFindingPosition : MonoBehaviour
         }
 
 
-      //  Debug.Log(distancetoPlayer);
+        //  Debug.Log(distancetoPlayer);
 
     }
 }

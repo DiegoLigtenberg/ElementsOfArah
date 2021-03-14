@@ -30,7 +30,7 @@ public class ArrowSpawnLocChanger : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-      //  if ()
+        //  if ()
         {
 
             if (Ability.animationCooldown < 0.2f)
@@ -159,37 +159,37 @@ public class ArrowSpawnLocChanger : MonoBehaviour
                 */
 
                 if (tf.localPosition.x < -5f)
+                {
+                    if (wasrunningleft)
                     {
-                        if (wasrunningleft)
-                        {
 
-                            onlyonce = true;
-                            tf.localPosition = new Vector3(tf.localPosition.x - smoothing + temp + 1, tf.localPosition.y, tf.localPosition.z);
-                        }
+                        onlyonce = true;
+                        tf.localPosition = new Vector3(tf.localPosition.x - smoothing + temp + 1, tf.localPosition.y, tf.localPosition.z);
+                    }
+                }
+
+
+                if (tf.localPosition.x > 0.45)
+                {
+                    if (wasrunningright)
+                    {
+
+                        onlyonce = true;
+                        tf.localPosition = new Vector3(tf.localPosition.x - smoothing + temp - .025f, tf.localPosition.y, tf.localPosition.z);
                     }
 
-
-                    if (tf.localPosition.x > 0.45)
-                    {
-                        if (wasrunningright)
-                        {
-
-                            onlyonce = true;
-                            tf.localPosition = new Vector3(tf.localPosition.x - smoothing + temp - .025f, tf.localPosition.y, tf.localPosition.z);
-                        }
-
-
-                    }
 
                 }
-                Debug.Log(tf.localPosition);
-                smoothing = smoothing + 0.00002f;
-                timer = 0;
 
             }
-
-
+            Debug.Log(tf.localPosition);
+            smoothing = smoothing + 0.00002f;
+            timer = 0;
 
         }
+
+
+
     }
+}
 //}

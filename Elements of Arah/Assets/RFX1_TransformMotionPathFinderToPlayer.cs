@@ -60,9 +60,9 @@ public class RFX1_TransformMotionPathFinderToPlayer : MonoBehaviour
     //[SerializeField]  private BasicAttack basicAttackDamage;
     private void Awake()
     {
-      //  Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss PathFind");
-        
-      rootTimeSmoke  = setRootTimeSmoke;
+        //  Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss PathFind");
+
+        rootTimeSmoke = setRootTimeSmoke;
 
 
         // DeactivatedObjectsOnCollision[0] = GameObject.Find("Enemy (1)");
@@ -71,9 +71,9 @@ public class RFX1_TransformMotionPathFinderToPlayer : MonoBehaviour
     }
 
 
-void Start()
+    void Start()
     {
-       // Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss01");
+        // Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss01");
         Debug.Log(Target);
 
 
@@ -116,9 +116,9 @@ void Start()
 
     void Update()
     {
-      
 
-        if (ReadPathFindingPosition.distancetoPlayer < 0.52 && ReadPathFindingPosition.distancetoPlayer !=0)
+
+        if (ReadPathFindingPosition.distancetoPlayer < 0.52 && ReadPathFindingPosition.distancetoPlayer != 0)
         {
             Debug.Log(ReadPathFindingPosition.distancetoPlayer);
             Destroy(this);
@@ -153,7 +153,7 @@ void Start()
 
         var frameMoveOffset = Vector3.zero;
         var frameMoveOffsetWorld = Vector3.zero;
-  
+
         if (!isCollided && !isOutDistance)
         {
             //currentSpeed = Mathf.Clamp(currentSpeed - Speed*Dampeen*Time.deltaTime, MinSpeed, Speed);
@@ -168,13 +168,13 @@ void Start()
 
                 if (Time.time - lastStep > timeBetweenSteps)
                 {
-                
-                  //  if (i <3)
+
+                    //  if (i <3)
                     {
                         timeBetweenSteps = timeBetweenSteps;//+ 0.2f; //;  + 5.41f;
                         lastStep = Time.time;
                         forwardVec = (new Vector3(targetT.position.x, 64.7f, targetT.position.z) - t.position).normalized;
-                       // i++;
+                        // i++;
                     }
                     /*
                     if (i >=3)
@@ -225,7 +225,7 @@ void Start()
                 ///////////////////////////////////////////////////////////////////////
                 timeBetweenSteps = 0.1f;
                 Debug.Log("woot");
-             
+
                 isCollided = true;
                 t.position = hit.point;
                 oldPos = t.position;
@@ -269,24 +269,25 @@ void Start()
 
         return new Vector3(vecX, vecY, vecZ);
     }
-
+  
     void OnCollisionBehaviour(RaycastHit hit)
     {
         if (!AvatarMoveLocalPosUp.isRooted && hit.collider.gameObject.layer != LayerMask.NameToLayer("BlockPlayer"))
         {
 
-   
-        var handler = CollisionEnter;
-        if (handler != null)
-            handler(this, new RFX1_CollisionInfo { Hit = hit });
-        CollidedInstances.Clear();
+
+            var handler = CollisionEnter;
+            if (handler != null)
+                handler(this, new RFX1_CollisionInfo { Hit = hit });
+            CollidedInstances.Clear();
             foreach (var effect in EffectsOnCollision)
             {
-                Debug.Log(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position.y + "this is the position we need");
+                Debug.Log(GameObject.Find(ActivePlayerManager.ActivePlayerName).transform.position.y + "this is the position we need");
                 // var instance = Instantiate(effect, hit.point + hit.normal * CollisionOffset, new Quaternion()) as GameObject;
 
-                if (GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<Animator>().GetBool("isGrounded")) {
-                    var instance = Instantiate(effect, new Vector3(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position.x, 64.35f, GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position.z), GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.rotation) as GameObject;
+                if (GameObject.Find(ActivePlayerManager.ActivePlayerName).GetComponent<Animator>().GetBool("isGrounded"))
+                {
+                    var instance = Instantiate(effect, new Vector3(GameObject.Find(ActivePlayerManager.ActivePlayerName).transform.position.x, 64.35f, GameObject.Find(ActivePlayerManager.ActivePlayerName).transform.position.z), GameObject.Find(ActivePlayerManager.ActivePlayerName).transform.rotation) as GameObject;
                     Ability.animationCooldown = rootTimeSmoke;
                     CollidedInstances.Add(instance);
                     if (HUE > -0.9f)

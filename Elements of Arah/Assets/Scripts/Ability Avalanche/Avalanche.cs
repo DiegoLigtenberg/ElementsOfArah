@@ -47,16 +47,16 @@ namespace CreatingCharacters.Abilities
             tickImage.fillAmount = 0;
 
             abilityKey = InputManager.instance.getKeyCode("avalanche");
-            
+
         }
 
-        
+
 
         private void CooldownData()
         {
             //text that shows when ability from cd
             textcdleft = abilityCooldownLeft;
-        
+
             // if (Input.GetKeyDown(abilityKey) && abilityCooldownLeft == 0&& Gun.TrueDistanceOfCrosshair < 50 || latecast)
             if (latecast)
             {
@@ -73,19 +73,19 @@ namespace CreatingCharacters.Abilities
                 {
                     abilityImage.fillAmount = 0;
                 }
-               
+
             }
             else
             {
                 textobjectcd.SetActive(false);
             }
 
-        
+
 
 
 
         }
-        
+
         private bool tickcooldownswitch;
         private void TickCooldownData()
         {
@@ -101,7 +101,7 @@ namespace CreatingCharacters.Abilities
              */
 
             //////////////version of global cd
-            
+
             /*
             if (Ability.globalCooldown > 0 && !tickcooldownswitch && abilityCooldownLeft <= 0)//&& abilityImage.fillAmount < 0.1f)
             {
@@ -148,24 +148,24 @@ namespace CreatingCharacters.Abilities
                 nomana.SetActive(false);
                 outrange.SetActive(false);
             }
-          
+
             //outrange AND from cd
-            if (Gun.fromCenterPLayerDistance > 60 &&abilityCooldownLeft <= 0)
+            if (Gun.fromCenterPLayerDistance > 60 && abilityCooldownLeft <= 0)
             {
                 if (manaactive == false)
                 {
                     outrange.SetActive(true);
                 }
-               
-                
+
+
             }
             else
             {
                 outrange.SetActive(false);
             }
 
-            avalancheSpawnPosition =  Gun.clonePosition2;
-        
+            avalancheSpawnPosition = Gun.clonePosition2;
+
         }
 
         //eingelijk moet ik wel range hebben
@@ -173,19 +173,19 @@ namespace CreatingCharacters.Abilities
         {
             //if (Ability.tickCooldown <= 0)
             {
-               
-                    //  if (Gun.TrueDistanceOfCrosshair < 50 && Ability.globalCooldown <= 0)
-                    {
-                        latecast = true;
-                        RFX1_TransformMotion.turnoff = false;
-                        oldSpawnPosition = avalancheSpawnPosition;
-                        oldSpawnRotation = effectTransform[0].rotation;
 
-                        StartCoroutine(AvalancheAttack());
+                //  if (Gun.TrueDistanceOfCrosshair < 50 && Ability.globalCooldown <= 0)
+                {
+                    latecast = true;
+                    RFX1_TransformMotion.turnoff = false;
+                    oldSpawnPosition = avalancheSpawnPosition;
+                    oldSpawnRotation = effectTransform[0].rotation;
 
-                        // StartCoroutine(GetComponent<CooldownReducer>().ShortBuff(abilityType));
-                    }
-                
+                    StartCoroutine(AvalancheAttack());
+
+                    // StartCoroutine(GetComponent<CooldownReducer>().ShortBuff(abilityType));
+                }
+
             }
         }
 
@@ -195,17 +195,17 @@ namespace CreatingCharacters.Abilities
             Ability.tickCooldown = setTickCooldown;
             yield return new WaitForSeconds(0.001f);
             Ability.animationCooldown = 0.6f;
-              Ability.globalCooldown = .5f;
+            Ability.globalCooldown = .5f;
 
             // Instantiate(effect[4], oldSpawnPosition , new Quaternion(.71f, 0, 0, .71f));  //schijnbaar hoeft niet hahaha
             anim.SetInteger("skillNumber", 4);
             anim.SetTrigger("playSkill");
             anim.SetBool("isAvalanching", true);
             //portal
-            Instantiate(effect[0], oldSpawnPosition, effectTransform[0].rotation);                    
-            
+            Instantiate(effect[0], oldSpawnPosition, effectTransform[0].rotation);
+
             //rockets
-            Instantiate(effect[3], oldSpawnPosition , new Quaternion(.71f, 0, 0, .71f));
+            Instantiate(effect[3], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             Instantiate(effect[4], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             yield return new WaitForSeconds(.5f);
 
@@ -219,14 +219,14 @@ namespace CreatingCharacters.Abilities
             Instantiate(effect[4], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             yield return new WaitForSeconds(.5f);
 
-            Instantiate(effect[3], oldSpawnPosition , new Quaternion(.71f, 0, 0, .71f));
+            Instantiate(effect[3], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             Instantiate(effect[4], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             yield return new WaitForSeconds(.5f);
 
             Instantiate(effect[3], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             Instantiate(effect[4], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             yield return new WaitForSeconds(.5f);
-           
+
             Instantiate(effect[3], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
             Instantiate(effect[4], oldSpawnPosition, new Quaternion(.71f, 0, 0, .71f));
 

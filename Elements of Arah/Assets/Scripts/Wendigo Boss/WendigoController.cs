@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class WendigoController : MonoBehaviour
 {
-    
+
     NavMeshAgent agent;
     Transform player;
 
@@ -17,7 +17,7 @@ public class WendigoController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = 8;
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
         // target =   GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
 
     }
@@ -25,10 +25,10 @@ public class WendigoController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
 
         SetTargetPosition(targetPlayer);
-      //  agent.SetDestination(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position);
+        //  agent.SetDestination(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position);
         targetPlayer = PlayerManager.instance.player.transform;
 
         FaceTarget();

@@ -51,7 +51,7 @@ public class RootSpawner : MonoBehaviour
     float lastStep, timeBetweenSteps = .001f;
     Vector3 forwardVec;
     public PathFindDestroy pfd;
-    
+
     public static float rootTimeSmoke;
     public float setRootTimeSmoke;
 
@@ -64,7 +64,7 @@ public class RootSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private bool onlyonce;
@@ -76,7 +76,7 @@ public class RootSpawner : MonoBehaviour
         foreach (var effect in EffectsOnCollision)
         {
             // var instance = Instantiate(effect, hit.point + hit.normal * CollisionOffset, new Quaternion()) as GameObject;
-            var instance = Instantiate(effect, GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position, GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.rotation) as GameObject;
+            var instance = Instantiate(effect, GameObject.Find(ActivePlayerManager.ActivePlayerName).transform.position, GameObject.Find(ActivePlayerManager.ActivePlayerName).transform.rotation) as GameObject;
             Ability.animationCooldown = rootTimeSmoke;
             pfd.destroyme();
             CollidedInstances.Add(instance);
@@ -88,7 +88,8 @@ public class RootSpawner : MonoBehaviour
                 color.Color = RFX1_ColorHelper.HSVToColor(hsv);
             }
             //  instance.transform.LookAt(hit.point + hit.normal + hit.normal * CollisionOffset);
-            instance.transform.LookAt(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform);
+
+            instance.transform.LookAt(GameObject.Find(ActivePlayerManager.ActivePlayerName).transform);
             if (!CollisionEffectInWorldSpace) instance.transform.parent = transform;
             Destroy(instance, DestroyTimeDelay);
         }
@@ -97,14 +98,14 @@ public class RootSpawner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-   
+
         if (other.gameObject.layer == LayerMask.NameToLayer("PlayerPhasingTrigger") && !AvatarMoveLocalPosUp.isRooted && !onlyonce)
         {
-  
- 
+
+
 
             StartCoroutine(delayedAnimation());
-        
+
         }
     }
 

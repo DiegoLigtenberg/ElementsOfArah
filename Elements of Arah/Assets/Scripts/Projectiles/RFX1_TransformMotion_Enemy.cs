@@ -56,10 +56,10 @@ public class RFX1_TransformMotion_Enemy : MonoBehaviour
     //[SerializeField]  private BasicAttack basicAttackDamage;
     private void Awake()
     {
-        Target = GameObject.Find("heraklios_a_dizon@Jumping (2)");
-    //    Debug.Log(Target);
-     
-       // DeactivatedObjectsOnCollision[0] = GameObject.Find("Enemy (1)");
+        Target = GameObject.Find(ActivePlayerManager.ActivePlayerName);
+        //    Debug.Log(Target);
+
+        // DeactivatedObjectsOnCollision[0] = GameObject.Find("Enemy (1)");
         //DeactivatedObjectsOnCollision[1] = GameObject.Find("Cube(1)");
 
     }
@@ -109,11 +109,11 @@ public class RFX1_TransformMotion_Enemy : MonoBehaviour
 
     void Update()
     {
-     
+
 
         if (!dropFirstFrameForFixUnityBugWithParticles)
         {
-             UpdateWorldPosition();
+            UpdateWorldPosition();
         }
         else dropFirstFrameForFixUnityBugWithParticles = false;
     }
@@ -150,22 +150,22 @@ public class RFX1_TransformMotion_Enemy : MonoBehaviour
             }
             else
             {
-             
+
                 if (Time.time - lastStep > timeBetweenSteps)
-                    {
+                {
                     timeBetweenSteps = timeBetweenSteps + 5.41f;
-                        lastStep =  Time.time;
-                        forwardVec = (targetT.position -  t.position).normalized;
-                    }
-                     
-                    var currentForwardVector = (forwardVec + randomOffset) * Speed * Time.deltaTime;
+                    lastStep = Time.time;
+                    forwardVec = (targetT.position - t.position).normalized;
+                }
+
+                var currentForwardVector = (forwardVec + randomOffset) * Speed * Time.deltaTime;
 
                 //richt meer omhoog
                 currentForwardVector = new Vector3(currentForwardVector.x, currentForwardVector.y + 0.002f, currentForwardVector.z);
-                    
-                    frameMoveOffset = currentForwardVector;
-                    frameMoveOffsetWorld = currentForwardVector;
-                
+
+                frameMoveOffset = currentForwardVector;
+                frameMoveOffsetWorld = currentForwardVector;
+
             }
         }
 
@@ -178,7 +178,7 @@ public class RFX1_TransformMotion_Enemy : MonoBehaviour
         RaycastHit hit;
         if (!isCollided && Physics.Raycast(t.position, frameMoveOffsetWorld.normalized, out hit, Distance, CollidesWith))
         {
-           
+
 
             if (frameMoveOffset.magnitude + RayCastTolerance > hit.distance)
             {
@@ -194,7 +194,7 @@ public class RFX1_TransformMotion_Enemy : MonoBehaviour
                 }
 
                 ///////////////////////////////////////////////////////////////////////
-                 timeBetweenSteps = 0.1f;
+                timeBetweenSteps = 0.1f;
                 Debug.Log("woot");
                 isCollided = true;
                 t.position = hit.point;

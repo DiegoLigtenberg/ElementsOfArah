@@ -9,15 +9,13 @@ public class TextMeshProPlayerStats : MonoBehaviour
 {
 
     public TMP_Text text;
-    public HealthPlayer healthplayer;
-  
+    private HealthPlayer healthplayer;
+
 
     void Start()
     {
-
+        healthplayer = GameObject.Find("hp check").GetComponent<HealthPlayer>();
         text = GetComponent<TMP_Text>();
-
-
     }
 
 

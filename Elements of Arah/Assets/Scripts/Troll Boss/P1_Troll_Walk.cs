@@ -14,7 +14,6 @@ public class P1_Troll_Walk : StateMachineBehaviour
     float lastStep, timeBetweenSteps = 10.5f;
 
     public static int sortOfAbility = 1;
-
     //fixes bug that he only aa twice after being past first phase and dieing or restarting
     public static bool fixbug = true;
     public static int stoneattacks;
@@ -22,14 +21,14 @@ public class P1_Troll_Walk : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
         tc = animator.GetComponent<TrollController>();
         TrollController.stopdistplayer = 10f;
 
         P1_Troll_Ranged_AutoAttack.onlyonece = true;
         if (!tc.startwalkingPlayer)
         {
-            
+
             tc.startwalkingPlayer = true;
         }
 
@@ -40,13 +39,13 @@ public class P1_Troll_Walk : StateMachineBehaviour
         Phase01AA.onlyonceInstaKill = false;
 
     }
-    
+
     private bool stop;
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-       
+
 
         if (TrollController.distToAgent > 6) //16.8
         {
@@ -69,19 +68,19 @@ public class P1_Troll_Walk : StateMachineBehaviour
 
         }
 
-        if ( stoneattacks <3) //sortOfAbility == 1 )
+        if (stoneattacks < 3) //sortOfAbility == 1 )
         {
 
             #region
             //aa ing is false dus loop naar speler
             //  if (!TrollController.isaaing)
             {
-               // if (TrollController.distToAgent < 10) { TrollController.movespeed = 5; }
+                // if (TrollController.distToAgent < 10) { TrollController.movespeed = 5; }
                 //else if (TrollController.distToAgent >= 10 && TrollController.distToAgent < 25) { TrollController.movespeed = 8; }
                 //else { TrollController.movespeed = 10; }
                 // TrollController.CooldownBetweenAttack = 5.5f; //was 4
-            //    tc.startwalkingPlayer = true;
-             //   animator.SetBool("Attack", false);
+                //    tc.startwalkingPlayer = true;
+                //   animator.SetBool("Attack", false);
             }
 
             //val aan voor 3 seconden tot isaaing weer false is
@@ -93,42 +92,42 @@ public class P1_Troll_Walk : StateMachineBehaviour
                 TrollController.CooldownBetweenAttack = 5.5f;
                 animator.SetBool("Attack", true);
                 animator.SetBool("JumpAttack", false);
-                
+
             }
         }
-  
-        if (stoneattacks ==3)  //sortOfAbility == 2)
+
+        if (stoneattacks == 3)  //sortOfAbility == 2)
         {
             animator.SetBool("Attack", false);
-        //   if (!TrollController.isaaing)
-        {
-            if (TrollController.distToAgent < 10) { TrollController.movespeed = 5; }
-            else if (TrollController.distToAgent >= 10 && TrollController.distToAgent < 25) { TrollController.movespeed = 8; }
-            else { TrollController.movespeed = 10; }
+            //   if (!TrollController.isaaing)
+            {
+                if (TrollController.distToAgent < 10) { TrollController.movespeed = 5; }
+                else if (TrollController.distToAgent >= 10 && TrollController.distToAgent < 25) { TrollController.movespeed = 8; }
+                else { TrollController.movespeed = 10; }
 
                 tc.startwalkingPlayer = true;
 
-             #region old stuff
+                #region old stuff
                 //    animator.SetBool("JumpAttack", false);        
 
             }
             // if (TrollController.isaaing)
             #endregion
             {
-            tc.stopwalkingIdle = true;
-            // tc.startwalkingPlayer = false;
-            TrollController.CooldownBetweenAttack = .3f;
-            animator.SetBool("JumpAttack", true);
-            //stoneattacks = 0;
+                tc.stopwalkingIdle = true;
+                // tc.startwalkingPlayer = false;
+                TrollController.CooldownBetweenAttack = .3f;
+                animator.SetBool("JumpAttack", true);
+                //stoneattacks = 0;
             }
         }
-        
+
         if (sortOfAbility > 2)
         {
             sortOfAbility = 1;
         }
     }
-    
+
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

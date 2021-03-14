@@ -39,7 +39,7 @@ public class Phase01AA : MonoBehaviour
 
     public static bool isaaing = false;
 
-    public HealthPlayer hp;
+    [HideInInspector] public HealthPlayer hp;
     public Health hpm;
     public static int amntMinions;
     private bool minionhasspawned;
@@ -49,14 +49,18 @@ public class Phase01AA : MonoBehaviour
     {
         trollMovement = GetComponent<TrollController>();
         ParticleSystem ps = GetComponent<ParticleSystem>();
-        
+
         qbdspawned = false;
 
         startcolorchange = false;
         TrollPhasingLaser.isbeaming = false;
-        alreadygot = new List<int> ();
+        alreadygot = new List<int>();
         alreadygot.Clear();
         dontadd = false;
+
+        //active player specific
+        hp = GameObject.Find("hp check").GetComponent<HealthPlayer>();
+        effectTransformP3[0] = GameObject.Find(ActivePlayerManager.ActivePlayerName + "HitAbove StoneEdge").gameObject.transform;
     }
 
     /////////////////////////////////////////////////////////////////
@@ -150,15 +154,15 @@ public class Phase01AA : MonoBehaviour
 
     private float lastStep_1, timeBetweenSteps_1 = .1f;
 
-   
+
 
     GameObject pathfind;
     public static bool startcolorchange;
-    private float timerlampdelay =1f;
+    private float timerlampdelay = 1f;
     private void Update()
     {
         //  Debug.Log(Phase01AA.amntMinions);
-       
+
         if (Time.time - lastStep_1 > timeBetweenSteps_1 && qbdspawned)
         {
             lastStep_1 = Time.time;
@@ -175,25 +179,25 @@ public class Phase01AA : MonoBehaviour
 
         if (startcolorlerp)
         {
-            for (int i = 0; i < p3ParticleFireColor.Length ; i++)
+            for (int i = 0; i < p3ParticleFireColor.Length; i++)
             {
                 ParticleSystem.MainModule settings = p3ParticleFireColor[i].GetComponent<ParticleSystem>().main;
-                settings.startColor = Color.Lerp(begincolor,firecolor, timeElapsed / lerpDuration);
+                settings.startColor = Color.Lerp(begincolor, firecolor, timeElapsed / lerpDuration);
                 timeElapsed += Time.deltaTime;
-                if (i >=0 && i <= 5)
+                if (i >= 0 && i <= 5)
                 {
                     p3ParticleFireColor[i].SetActive(false);
-                } 
+                }
             }
 
 
             //last 3 lights in p3
             for (int i = 0; i < p3LastShadowLights.Length; i++)
             {
-                
+
                 //intensity last lights
                 Light light = p3LastShadowLights[i].GetComponent<Light>();
-               
+
                 if (light.innerSpotAngle > 45)
                 {
                     light.innerSpotAngle -= 0.2f;
@@ -212,7 +216,7 @@ public class Phase01AA : MonoBehaviour
                         light.spotAngle -= 0.35f;
                     }
                 }
-             
+
 
                 //color last lights
                 if (i == 0)
@@ -223,7 +227,7 @@ public class Phase01AA : MonoBehaviour
                 {
                     light.color = Color.Lerp(beginshadowlightcolor, endshadowlightcolor, timeElapsed / lerpDuration);
                 }
-          
+
 
             }
 
@@ -248,9 +252,9 @@ public class Phase01AA : MonoBehaviour
                     }
                     timeElapsed2 += Time.deltaTime;
                 }
-            }          
+            }
         }
-    
+
 
         /*
         if (qbdspawned)
@@ -552,13 +556,14 @@ public class Phase01AA : MonoBehaviour
     {
         minionhasspawned = true;
 
-      //  anim.SetInteger("Phase",1);
+        //  anim.SetInteger("Phase",1);
         //phase 1
-        if (anim.GetInteger("Phase") == 1) {
+        if (anim.GetInteger("Phase") == 1)
+        {
             maxminions = 6;
             if (amntMinions >= maxminions) { anim.SetBool("P2BlockMinionSpawn", true); }
             bool spawned = false;
-            
+
             GameObject healminion1;
             GameObject healminion2;
             GameObject healminion3;
@@ -643,8 +648,8 @@ public class Phase01AA : MonoBehaviour
             else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; } //w
             else if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; } //se
             else if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; } //sw
-          
-        
+
+
 
         }
         //phase 2
@@ -661,7 +666,7 @@ public class Phase01AA : MonoBehaviour
 
 
             yield return new WaitForSeconds(1.65f);
-            Instantiate(effect[1], effectTransform[1].position+new Vector3(0,-0.00055f,0), effectTransform[1].rotation);
+            Instantiate(effect[1], effectTransform[1].position + new Vector3(0, -0.00055f, 0), effectTransform[1].rotation);
             Instantiate(effect[2], effectTransform[2].position, effectTransform[2].rotation);
 
             trollMovement.stopwalkingIdle = true;
@@ -775,7 +780,7 @@ public class Phase01AA : MonoBehaviour
     public void rollRandom()
     {
         //als waarde al in lijst zit, roll nieuwe waarde
-       // if (!dontadd)
+        // if (!dontadd)
         {
             if (alreadygot.Contains(isoff))
             {
@@ -796,7 +801,7 @@ public class Phase01AA : MonoBehaviour
     }
 
     private IEnumerator P2StoneFromAir()
-    {      
+    {
         //hij cast deze abil 3x dus moet met static   
         if (amntstones == 0)
         {
@@ -976,7 +981,7 @@ public class Phase01AA : MonoBehaviour
     public Color endlightcolor;
     public Color beginshadowlightcolor;
     public Color endshadowlightcolor;
-  
+
 
     public IEnumerator P3EnrageEffect()
     {
@@ -985,8 +990,8 @@ public class Phase01AA : MonoBehaviour
         startcolorlerp = true;
         startcolorchange = true;
         lightningp3.SetActive(true);
-    
-       
+
+
         yield return new WaitForSeconds(0.12f);
         p3LastShadowLights[3].SetActive(true);
         p3LastShadowLights[4].SetActive(false);
@@ -1012,6 +1017,6 @@ public class Phase01AA : MonoBehaviour
             dragonhead[3].SetActive(false); //bowl
             //dragonhead[4].SetActive(false); //bowl sound
         }
-         
+
     }
 }

@@ -17,7 +17,7 @@ public class P3_TrollHome : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
         tc = animator.GetComponent<TrollController>();
 
         P2_Troll_Idle.lookAtplayer = true;
@@ -26,7 +26,7 @@ public class P3_TrollHome : StateMachineBehaviour
         if (!firsttime)
         {
             animator.ResetTrigger("P3_Enter");
-            animator.ResetTrigger("P2_Enter");         
+            animator.ResetTrigger("P2_Enter");
             // tc.startwalkingSouth = true;
             P3_cur_Ability_Iteration = 1;
             //  tc.startwalkingMiddle = true;
@@ -54,7 +54,7 @@ public class P3_TrollHome : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
-     
+
         /*
         if (P3_cur_Ability_Iteration > 2)
         {
@@ -124,7 +124,7 @@ public class P3_TrollHome : StateMachineBehaviour
 
             if (!TrollController.isaaing)
             {
-                 animator.SetBool("P3QBD_Fire", false);
+                animator.SetBool("P3QBD_Fire", false);
                 TrollController.CooldownBetweenAttack = .4f;
 
                 //   animator.SetBool("P2StoneInAir", false);
@@ -135,7 +135,7 @@ public class P3_TrollHome : StateMachineBehaviour
             if (TrollController.isaaing)
             {
                 TrollController.CooldownBetweenAttack = 1f;
-                  animator.SetBool("P3QBD_Fire", true);
+                animator.SetBool("P3QBD_Fire", true);
                 // animator.SetBool("P2StoneInAir", true);
             }
 
@@ -144,7 +144,7 @@ public class P3_TrollHome : StateMachineBehaviour
         }
 
 
-        if (P3_cur_Ability_Iteration ==3 )
+        if (P3_cur_Ability_Iteration == 3)
         {
 
             if (!TrollController.isaaing)

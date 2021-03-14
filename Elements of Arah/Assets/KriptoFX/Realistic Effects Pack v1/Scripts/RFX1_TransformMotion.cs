@@ -65,15 +65,15 @@ public class RFX1_TransformMotion : MonoBehaviour
 
     private void Awake()
     {
-       
-        dashability = GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>();
-    
+
+        dashability = GameObject.Find(ActivePlayerManager.ActivePlayerName).GetComponent<DashAbility>();
+
     }
 
 
     void Start()
     {
-     
+
 
         t = transform;
         if (Target != null) targetT = Target.transform;
@@ -114,7 +114,7 @@ public class RFX1_TransformMotion : MonoBehaviour
 
     void Update()
     {
-        
+
 
         if (!dropFirstFrameForFixUnityBugWithParticles)
         {
@@ -167,22 +167,22 @@ public class RFX1_TransformMotion : MonoBehaviour
         // Debug.DrawLine(t.position, frameMoveOffsetWorld.normalized * (Distance - currentDistance) * 100,Color.red,Mathf.Infinity);
 
 
-       
+
         RaycastHit hit;
         if (!isCollided && Physics.Raycast(t.position, frameMoveOffsetWorld.normalized, out hit, Distance, CollidesWith))
         {
-       
+
 
             if (frameMoveOffset.magnitude + RayCastTolerance > hit.distance)
+            {
+                if (hit.collider.GetComponent<Health>() != null)
                 {
-                    if (hit.collider.GetComponent<Health>() != null)
-                    {
-                        var health = hit.collider.GetComponent<Health>();
+                    var health = hit.collider.GetComponent<Health>();
 
                     if (health != null)
                     {
                         Debug.Log("dealt " + damage + " damage");
-                       
+
 
                         if (!this.gameObject.name.Contains("CollisionAvalanche"))
                         {
@@ -190,16 +190,16 @@ public class RFX1_TransformMotion : MonoBehaviour
                             if (this.gameObject.name.Contains("Collision basicattack"))
                             {
 
-                                if(!this.gameObject.name.Contains("Collision NODAMAGE"))
+                                if (!this.gameObject.name.Contains("Collision NODAMAGE"))
                                 {
                                     if (dashability.orbCount == 0) { health.takeDamage(damage, damageType); }
                                     if (dashability.orbCount == 1) { health.takeDamage(damage, damageType); }
                                     if (dashability.orbCount == 2) { health.takeDamage(damage, damageType); }
                                     if (dashability.orbCount == 3) { health.takeDamage(damage, damageType); }
                                 }
-                       
-    
-                                
+
+
+
                             }
 
                             if (!this.gameObject.name.Contains("Collision basicattack"))
@@ -207,7 +207,7 @@ public class RFX1_TransformMotion : MonoBehaviour
                                 health.takeDamage(damage, damageType);
                             }
 
-                            }
+                        }
 
                         if (this.gameObject.name.Contains("Collision basicattack"))
                         {
@@ -225,23 +225,23 @@ public class RFX1_TransformMotion : MonoBehaviour
 
 
 
-                    ///////////////////////////////////////////////////////////////////////
-                    ///
-                    if (hit.collider.tag == "Trigger")
-                    {
-                        turnoff = true;
+                ///////////////////////////////////////////////////////////////////////
+                ///
+                if (hit.collider.tag == "Trigger")
+                {
+                    turnoff = true;
 
-                    }
-                    //////////////////////////////////////////////////////////////////////////////////////////
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////
 
-                    Debug.Log("woot");
-                    isCollided = true;
-                    t.position = hit.point;
-                    oldPos = t.position;
-                    OnCollisionBehaviour(hit);
-                    OnCollisionDeactivateBehaviour(false);
-                    return;
-                
+                Debug.Log("woot");
+                isCollided = true;
+                t.position = hit.point;
+                oldPos = t.position;
+                OnCollisionBehaviour(hit);
+                OnCollisionDeactivateBehaviour(false);
+                return;
+
             }
         }
         if (!isOutDistance && currentDistance + RayCastTolerance > Distance)

@@ -24,66 +24,64 @@ public class AE_BowString : MonoBehaviour
     const float tensionTime = 0.03f;
     float currentTensionTime;
     public Animator animator;
-	// Use this for initialization
-	void OnEnable ()
-	{
-	    lineRenderer = GetComponent<LineRenderer>();
+    // Use this for initialization
+    void OnEnable()
+    {
+        lineRenderer = GetComponent<LineRenderer>();
 
-         lineRenderer.widthMultiplier = StringTint;
+        lineRenderer.widthMultiplier = StringTint;
 
         if (Point1 == null || Point2 == null || HandBone == null) return;
 
         lineRenderer.positionCount = 3;
-	    prevHandPos = (Point1.position + Point2.position)/2;
+        prevHandPos = (Point1.position + Point2.position) / 2;
         lineRenderer.SetPosition(0, Point1.position);
         lineRenderer.SetPosition(1, prevHandPos);
         lineRenderer.SetPosition(2, Point2.position);
         animator = GetComponent<Animator>();
     }
-	
+
     public void BowEvent()
     {
         InHand = true;
-        Ability.animationCooldown = 0.3f;
-        Ability.globalCooldown = 0.6f;
+        //GENIUS MOVE TO RIVEN AA STYLE
+        // yield return new WaitForSeconds(0.2f);
+        if (Ability.globalCooldown <= 0.6f)
+        {
+
+            Ability.globalCooldown = 0.6f;
+        }
 
     }
 
     public void stopBowEvent()
     {
-        Instantiate(prefab[1], otherhand.transform.position , curCamTransform.transform.rotation);
+        Instantiate(prefab[1], otherhand.transform.position, curCamTransform.transform.rotation);
         animator.SetTrigger("fallBack");
         InHand = false;
     }
 
-    public IEnumerator delayaa()
-    { 
-
-        yield return new WaitForSeconds(0.2f);
-        Ability.animationCooldown = 0.3f;
-        Ability.globalCooldown = 0.6f;
-    }
 
     // Update is called once per frame
-    void Update ()
-	{
-	    if (Point1 == null || Point2 == null || HandBone == null) return;
+    void Update()
+    {
+        if (Point1 == null || Point2 == null || HandBone == null) return;
 
         lineRenderer.widthMultiplier = StringTint;
 
         if (InHand)
-	    {
-	        lineRenderer.positionCount = 3;
-	        lineRenderer.SetPosition(0, Point1.position);
-	        lineRenderer.SetPosition(1, HandBone.position);
-	        lineRenderer.SetPosition(2, Point2.position);
-	        currentTensionTime = 0;
-	        prevHandPos = HandBone.position;
+        {
+            lineRenderer.positionCount = 3;
+            lineRenderer.SetPosition(0, Point1.position);
+            lineRenderer.SetPosition(1, HandBone.position);
+            lineRenderer.SetPosition(2, Point2.position);
+            currentTensionTime = 0;
+            prevHandPos = HandBone.position;
 
-	    }
-	    else
-	    {
-	        currentTensionTime += Time.deltaTime;
+        }
+        else
+        {
+            currentTensionTime += Time.deltaTime;
             lineRenderer.positionCount = 3;
             var defaultPos = (Point1.position + Point2.position) / 2;
             lineRenderer.SetPosition(0, Point1.position);
@@ -93,11 +91,11 @@ public class AE_BowString : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(delayaa());
-          //   Instantiate(prefab[0], otherhand.transform.position, otherhand.transform.rotation); //curcamtransform for clones
+            //tartCoroutine(delayaa());
+            //   Instantiate(prefab[0], otherhand.transform.position, otherhand.transform.rotation); //curcamtransform for clones
 
         }
-	}
+    }
 
 
 
@@ -128,7 +126,7 @@ public class AE_BowString : MonoBehaviour
             lineRenderer.SetPosition(0, Point1.position);
             lineRenderer.SetPosition(1, Vector3.Lerp(prevHandPos, defaultPos, Mathf.Clamp01(currentTensionTime / tensionTime)));
             lineRenderer.SetPosition(2, Point2.position);
-        
+
         }
     }
 

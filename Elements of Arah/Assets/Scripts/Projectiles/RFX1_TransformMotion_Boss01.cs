@@ -56,7 +56,7 @@ public class RFX1_TransformMotion_Boss01 : MonoBehaviour
     //[SerializeField]  private BasicAttack basicAttackDamage;
     private void Awake()
     {
-        Target = GameObject.Find("heraklios_a_dizon@Jumping (2)");
+        Target = GameObject.Find(ActivePlayerManager.ActivePlayerName);
         Debug.Log(Target);
 
         // DeactivatedObjectsOnCollision[0] = GameObject.Find("Enemy (1)");

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AE_SetMeshToEffect : MonoBehaviour {
+public class AE_SetMeshToEffect : MonoBehaviour
+{
 
     public EffectMeshType MeshType = EffectMeshType.Bow;
     public GameObject Mesh;
@@ -25,7 +26,7 @@ public class AE_SetMeshToEffect : MonoBehaviour {
             Debug.Log(Mesh.gameObject.name);
         }
 
-            var meshRenderer = Mesh.GetComponent<MeshRenderer>();
+        var meshRenderer = Mesh.GetComponent<MeshRenderer>();
         if (meshRenderer == null)
         {
             Debug.Log("KriptoFX/ArcherEffects... Can't find a mesh with 'mesh renderer' for effect. You need set a bow/arrow mesh. Please read the readme");
@@ -33,7 +34,7 @@ public class AE_SetMeshToEffect : MonoBehaviour {
         }
         var meshName = MeshType.ToString();
         var particleScale = Mesh.GetComponent<Renderer>().bounds.size.magnitude;
-       // var particleScale = Mathf.Min((Mathf.Min(arrowScale.x, arrowScale.y)), arrowScale.z);
+        // var particleScale = Mathf.Min((Mathf.Min(arrowScale.x, arrowScale.y)), arrowScale.z);
 
         var allParticles = GetComponentsInChildren<ParticleSystem>();
         foreach (var ps in allParticles)

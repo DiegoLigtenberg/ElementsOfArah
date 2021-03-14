@@ -63,8 +63,8 @@ public class RFX1_TransformMotionInstakill : MonoBehaviour
 
 
 
-        Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss01 Insta");
-   
+        Target = GameObject.Find(ActivePlayerManager.ActivePlayerName);
+
 
         t = transform;
         if (Target != null) targetT = Target.transform;
@@ -79,11 +79,11 @@ public class RFX1_TransformMotionInstakill : MonoBehaviour
 
     void Start()
     {
-        
+
         Target = this.gameObject;
         StartCoroutine(fireontarget());
 
-      //  Speed = 25;
+        //  Speed = 25;
 
         // Target = GameObject.Find("heraklios_a_dizon@Jumping (2)");
         /*

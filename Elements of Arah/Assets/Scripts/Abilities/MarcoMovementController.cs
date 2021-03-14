@@ -10,19 +10,13 @@ namespace CreatingCharacters.Abilities
     public class MarcoMovementController : ThirdPersonMovement
     {
 
-        // protected float levitateDuration;
         public Animator anim;
         private int jumpCount = 0;
-        //GameObject fireJetPack;
-        private DashAbility dash;
-        private BeamAbility beam;
         public int energyCostJump;
         public float energyCostLevitating;
         public Animator animator;
-
         ThirdPersonMovement thirdPersonPlayer;
-
-        float lastStep, timeBetweenSteps = 0.1f;
+        private float lastStepm, timeBetweenStepsm = 0.1f;
 
         void onground()
         {
@@ -32,23 +26,20 @@ namespace CreatingCharacters.Abilities
 
         private void Start()
         {
-            dash = GetComponent<DashAbility>();
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
-            beam = GetComponent<BeamAbility>();
-        //    fireJetPack = GameObject.Find("FireSpawn");
-         //   fireJetPack.SetActive(false);
+            //    fireJetPack = GameObject.Find("FireSpawn");
+            //   fireJetPack.SetActive(false);
         }
 
-        public IEnumerator putOffLevitation()
+
+        public void movementAnimation()
         {
-            yield return new WaitForSeconds(0.3f);
-            isLevitating = false;
-          //  fireJetPack.SetActive(false);
-            gravity = -19.81f;
+            anim.SetFloat("velocityX", Input.GetAxisRaw("Horizontal"), 0.2f, Time.deltaTime);
+            anim.SetFloat("velocityZ", Input.GetAxisRaw("Vertical"), 0.2f, Time.deltaTime);
         }
-
         protected override void Update()
         {
+            movementAnimation();
 
             if (!PauseMenu.GameIsPaused)
             {
@@ -70,38 +61,8 @@ namespace CreatingCharacters.Abilities
                     anim.SetBool("IsGrounded", false);
                 }
 
-
-
-                if (isLevitating && dash.isactivated)
-                {
-                   // fireJetPack.SetActive(false);
-                }
-                if (isLevitating && !dash.isactivated)
-                {
-                //    fireJetPack.SetActive(true);
-
-                    if (Time.time - lastStep > timeBetweenSteps)
-                    {
-                        lastStep = Time.time;
-
-                        if (CooldownHandler.outOfCombat) { Ability.energy -= (energyCostLevitating / 2); }
-                        else { Ability.energy -= energyCostLevitating; }
-
-                        if (Ability.energy <= 0)
-                        {
-                            StartCoroutine(putOffLevitation());
-                        }
-                    }
-                }
-
-
-
                 if (characterController.isGrounded)
                 {
-
-                    isLevitating = false;
-                 //   fireJetPack.SetActive(false);
-
                     gravity = -19.81f;
                     Invoke("onground", 0.1f);
 
@@ -110,34 +71,7 @@ namespace CreatingCharacters.Abilities
         }
 
 
-        public IEnumerator getBigger()
-        {
-            if (GetComponent<DashAbility>().isactivated == false)
-            {
 
-                if (!characterController.isGrounded)
-                {
-                    characterController.height = 1.6f;
-                    yield return new WaitForSeconds(0.1f);
-                    characterController.height = 1.7f;
-                    yield return new WaitForSeconds(0.1f);
-                    characterController.height = 1.8f;
-                    yield return new WaitForSeconds(0.1f);
-                    characterController.height = 1.9f;
-                    yield return new WaitForSeconds(0.1f);
-                    characterController.height = 2f;
-
-                }
-                else
-                {
-                    characterController.height = 2f;
-                }
-
-
-                yield return null;
-            }
-
-        }
         public IEnumerator castTime()
         {
 
@@ -157,44 +91,10 @@ namespace CreatingCharacters.Abilities
         protected override void Jump()
         {
 
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !AvatarMoveLocalPosUp.isRooted)
             {
-                if (isLevitating)
-                {
-                    isLevitating = false;
-                //    fireJetPack.SetActive(false);
-                    gravity = -19.81f;
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                StartCoroutine(castTime());
-                ResetImpactY();
-                if (characterController.isGrounded && !isChargingDash)
-                {
-                    AddForce(Vector3.up, 2f*jumpForce);
-                    animator.SetTrigger("test1");
-                    animator.SetBool("jump",true);
-                }
-                else
-                {
-               
-                    AddForce(Vector3.up, 3f * jumpForce);
-                    animator.SetTrigger("test2");
-                   
-
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space) && !AvatarMoveLocalPosUp.isRooted && !beam.usingBeamP && !isChargingDash)
-            {
-                // characterController.height = 1.4f;
-                // StartCoroutine(getBigger());
-
                 if (jumpCount == 0)
                 {
-
                     ResetImpactY();
 
                     if (Ability.energy > 0)
@@ -215,14 +115,9 @@ namespace CreatingCharacters.Abilities
                             if (Ability.energy > 0)
                             {
                                 // Debug.Log("this WORKS");
-                                isLevitating = true;
+
                                 //levitating (levitate duration the higher the faster gravity drops!
-                                gravity = Mathf.Lerp(-1, -19.81f, Time.deltaTime * levitateDuration);
-
-
-                                //fire animation
-                             //   fireJetPack.SetActive(true);
-
+                                gravity = Mathf.Lerp(-10, -19.81f, Time.deltaTime * levitateDuration);
                                 ResetImpactY();
                                 AddForce(Vector3.up, 2f * jumpForce);
                                 jumpCount = 2;
@@ -237,17 +132,10 @@ namespace CreatingCharacters.Abilities
                 }
                 else if (jumpCount == 2)
                 {
-                    //isLevitating = false;
+
 
                 }
-                /*
-                     //hitting spacebar to quit levitate
-                     else if(jumpCount == 2)
-                     {
-                         isLevitating = false;
-                         gravity = -9.81f;
-                     }
-                */
+
 
             }
         }

@@ -5,6 +5,9 @@ using UnityEngine;
 public class SetBasicAttackDmg : MonoBehaviour
 {
     public RFX1_TransformMotion setdmg;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,6 +17,6 @@ public class SetBasicAttackDmg : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-   
+
     }
 }

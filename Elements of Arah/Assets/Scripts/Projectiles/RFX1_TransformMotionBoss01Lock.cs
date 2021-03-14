@@ -57,7 +57,7 @@ public class RFX1_TransformMotionBoss01Lock : MonoBehaviour
     private void Awake()
     {
         //Target = GameObject.Find("heraklios_a_dizon@Jumping (2)");
-        Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss01");
+        Target = GameObject.Find(ActivePlayerManager.ActivePlayerName + "/targetforBoss01");
 
 
         // DeactivatedObjectsOnCollision[0] = GameObject.Find("Enemy (1)");
@@ -177,7 +177,7 @@ public class RFX1_TransformMotionBoss01Lock : MonoBehaviour
 
 
         RaycastHit hit;
-        if (!isCollided && Physics.SphereCast(t.position, 0.375f,frameMoveOffsetWorld.normalized, out hit, Distance, CollidesWith))
+        if (!isCollided && Physics.SphereCast(t.position, 0.375f, frameMoveOffsetWorld.normalized, out hit, Distance, CollidesWith))
         {
 
 

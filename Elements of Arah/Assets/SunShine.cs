@@ -10,7 +10,7 @@ namespace CreatingCharacters.Abilities
     public class SunShine : Ability
     {
 
-            
+
         public Animator anim;
         public GameObject sunShineEffect;
 
@@ -26,7 +26,7 @@ namespace CreatingCharacters.Abilities
         private DashAbility dash;
 
 
-       private GameObject sunShineObj;
+        private GameObject sunShineObj;
 
         public GameObject nomana;
 
@@ -41,12 +41,12 @@ namespace CreatingCharacters.Abilities
             // abilityType = 4;
             abilityImage.fillAmount = 0;
             SunShineActive = false;
-            dash = GameObject.Find("heraklios_a_dizon@Jumping (2)").GetComponent<DashAbility>();
+            dash = GameObject.Find(ActivePlayerManager.ActivePlayerName).GetComponent<DashAbility>();
             //Debug.Log(dash);
 
             abilityKey = InputManager.instance.getKeyCode("sunshine");
         }
-
+        
         // Update is called once per frame
         protected override void Update()
         {
@@ -89,7 +89,7 @@ namespace CreatingCharacters.Abilities
             {
                 Ability.globalCooldown = .8f;
             }
-          
+
 
         }
 
@@ -104,10 +104,10 @@ namespace CreatingCharacters.Abilities
             if (Ability.animationCooldown <= 0.8f)
             {
                 Ability.animationCooldown = 0.8f;
-                
+
 
             }
-    
+
             if (Ability.globalCooldown <= 0.8f)
             {
                 Ability.globalCooldown = .8f;
@@ -122,7 +122,7 @@ namespace CreatingCharacters.Abilities
             Destroy(sunShineObj);
             spawned = false;
 
-          //  Instantiate(effect[0], effectTransform[0].position, effectTransform[0].rotation);
+            //  Instantiate(effect[0], effectTransform[0].position, effectTransform[0].rotation);
 
             yield return null;
         }

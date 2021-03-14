@@ -33,10 +33,10 @@ public class P2_Troll_Idle : StateMachineBehaviour
 
         animator.GetComponent<Health>().isinvulnerable = false;
 
-        player = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
         tc = animator.GetComponent<TrollController>();
         GameObject.Find("checkinplayrange").GetComponent<BoxCollider>().enabled = true;
-        GameObject.Find("cheatcube1").GetComponent<BoxCollider>().enabled=true;
+        GameObject.Find("cheatcube1").GetComponent<BoxCollider>().enabled = true;
         GameObject.Find("cheatcube2").GetComponent<BoxCollider>().enabled = true;
         GameObject.Find("cheatcube3").GetComponent<BoxCollider>().enabled = true;
         GameObject.Find("cheatcube4").GetComponent<BoxCollider>().enabled = true;
@@ -62,7 +62,7 @@ public class P2_Troll_Idle : StateMachineBehaviour
 
         onceficure = false;
 
-        
+
         if (P2_cur_Ability_Iteration_ == 3)
         {
 
@@ -70,7 +70,7 @@ public class P2_Troll_Idle : StateMachineBehaviour
 
         //resets instakill for next phase
         Phase01AA.onlyonceInstaKill = false;
-       // Debug.Log(Phase01AA.onlyonceInstaKill);
+        // Debug.Log(Phase01AA.onlyonceInstaKill);
 
     }
 
@@ -82,10 +82,10 @@ public class P2_Troll_Idle : StateMachineBehaviour
         tc.FaceTarget();
         P2_Troll_Idle.lookAtplayer = true;
         if (animator.GetInteger("Phase") != 2)
-            {
+        {
             animator.SetBool("Phasing", false);
         }
-      
+
         // Debug.Log(P2_cur_Ability_Iteration_);
 
 

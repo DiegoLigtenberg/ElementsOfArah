@@ -10,7 +10,7 @@ public class LookAtPlayerOnce : MonoBehaviour
     private float lastStep_1, timeBetweenSteps_1 = 1f;
     void Start()
     {
-        target = GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        target = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
     }
 
     private bool stop;
@@ -24,18 +24,18 @@ public class LookAtPlayerOnce : MonoBehaviour
             count++;
             Debug.Log("happened to early?");
             Debug.Log(count);
-            if ( count >= 2)
+            if (count >= 2)
             {
 
                 stop = true;
             }
-          
+
         }
 
 
         if (target != null && !stop)
         {
-          //  transform.LookAt(target);
+            //  transform.LookAt(target);
         }
     }
 }

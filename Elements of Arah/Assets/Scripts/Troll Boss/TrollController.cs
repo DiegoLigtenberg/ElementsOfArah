@@ -18,6 +18,7 @@ public class TrollController : MonoBehaviour
     public Animator anim;
     public GameObject checkrange;
 
+
     NavMeshAgent agent;
 
     //variables that determine behavior of boss
@@ -28,7 +29,9 @@ public class TrollController : MonoBehaviour
 
     private void InstantiateTargetPosition()
     {
-        targetPlayer = PlayerManager.instance.player.transform;
+
+        targetPlayer = GameObject.Find(ActivePlayerManager.ActivePlayerName + "/PlayerTarget_Singleton").gameObject.transform;  //used to be playermaneger.instance.player.transform
+
         targetMiddle = PlayerManager.instance.middle.transform;
         targetNorth = PlayerManager.instance.north.transform;
         targetSouth = PlayerManager.instance.south.transform;
@@ -53,7 +56,7 @@ public class TrollController : MonoBehaviour
     //how long the turnspeed is after walking
     [Range(0.5f, 5f)] public float keeplookinginDirection = .5f;
 
-    public static int movespeed =5;
+    public static int movespeed = 5;
 
 
     float lastStep, timeBetweenSteps = 3f;
@@ -80,7 +83,7 @@ public class TrollController : MonoBehaviour
 
             P1_Troll_Walk.sortOfAbility = 1;
             P1_Troll_Walk.fixbug = false;
-         
+
         }
 
         hasstartedcoroutine2 = false;
@@ -92,13 +95,13 @@ public class TrollController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         //SetWalkDirection("walkMiddle");
         agent.stoppingDistance = 10;
-        player = GameObject.FindGameObjectWithTag("PlayerTrigger").transform;// ("heraklios_a_dizon@Jumping (2)").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).gameObject.transform;
         IdleOnPlace();
 
         stopdistplayer = 10;
 
         AnimTriggerReset();
-     
+
 
     }
 
@@ -108,7 +111,7 @@ public class TrollController : MonoBehaviour
     {
         foreach (AnimatorControllerParameter p in anim.parameters)
             if (p.type == AnimatorControllerParameterType.Trigger)
-                anim.ResetTrigger(p.name);   
+                anim.ResetTrigger(p.name);
     }
 
 
@@ -161,7 +164,7 @@ public class TrollController : MonoBehaviour
             //   if (P1_Troll_Walk.sortOfAbility == 1)
             {
                 hasstartedcoroutine = true;
-               
+
                 //hoe lang je de tijd hebt voor auto attack   //dit getal is hoe lang attack aan staat
                 yield return new WaitForSeconds(CooldownBetweenAttack);
                 anim.SetBool("P2BasicAttack", false);
@@ -196,21 +199,21 @@ public class TrollController : MonoBehaviour
     {
         if (TrollController.isaaing && !hasstartedcoroutine)
         {
-         //   if (P1_Troll_Walk.sortOfAbility == 1)
+            //   if (P1_Troll_Walk.sortOfAbility == 1)
             {
                 hasstartedcoroutine = true;
-                
+
 
                 //hoe lang je de tijd hebt voor auto attack
                 yield return new WaitForSeconds(CooldownBetweenAttack);
-             //   anim.SetBool("Attack", false);
-               // anim.SetBool("JumpAttack", false);
-   
+                //   anim.SetBool("Attack", false);
+                // anim.SetBool("JumpAttack", false);
+
                 TrollController.isaaing = false;
 
                 P1_Troll_Walk.sortOfAbility++;
 
-        
+
                 hasstartedcoroutine = false;
             }
 
@@ -239,15 +242,15 @@ public class TrollController : MonoBehaviour
 
 
 
-        
+
             yield return new WaitForSeconds(7.0f + phasetwoextra); //was 5.5f
-            
+
 
 
             isTransitioned = true;
             anim.SetBool("P2CantPhaseToP3", false);
             phasetwoextra = 0f;
-         
+
             yield return new WaitForSeconds(0.7f);
 
             yield return new WaitForSeconds(0.5f);
@@ -264,10 +267,10 @@ public class TrollController : MonoBehaviour
 
     public static float stopdistplayer;
 
-        public void SetWalkDirection(string walkdirection)
+    public void SetWalkDirection(string walkdirection)
     {
         walkDirection = walkdirection;
-  
+
         switch (walkDirection)
         {
             case "walkPlayer":
@@ -285,15 +288,15 @@ public class TrollController : MonoBehaviour
 
                 agent.speed = movespeed;
                 target = targetMiddle;
-                
+
                 agent.stoppingDistance = 1;
 
                 startwalkingPlayer = false; //stop met achter speler aanlopen 
                 startwalkingMiddle = true;
                 WalkMiddle();
-               
-                 onMiddleFacingPlayer = false;
-                
+
+                onMiddleFacingPlayer = false;
+
                 break;
 
             case "walkNorth":
@@ -304,7 +307,7 @@ public class TrollController : MonoBehaviour
                 startwalkingPlayer = false;
                 startwalkingMiddle = false;
                 onMiddleFacingPlayer = false;
-              
+
                 WalkNorth();
                 break;
 
@@ -316,7 +319,7 @@ public class TrollController : MonoBehaviour
                 startwalkingPlayer = false;
                 startwalkingMiddle = false;
                 onMiddleFacingPlayer = false;
-          
+
                 WalkSouth();
                 break;
 
@@ -328,7 +331,7 @@ public class TrollController : MonoBehaviour
                 startwalkingPlayer = false;
                 startwalkingMiddle = false;
                 onMiddleFacingPlayer = false;
-               // Debug.Log(walkDirection);
+                // Debug.Log(walkDirection);
                 WalkSouthEast();
                 break;
 
@@ -357,14 +360,14 @@ public class TrollController : MonoBehaviour
                 break;
 
             default:
-                
+
                 Debug.Log("defaulting");
                 agent.stoppingDistance = 3;
                 // onMiddleFacingPlayer = false;
                 //startwalkingMiddle = false;
                 //startwalkingPlayer = false;
-                IdleOnPlace(); 
-                
+                IdleOnPlace();
+
                 break;
         }
     }
@@ -379,7 +382,7 @@ public class TrollController : MonoBehaviour
         highonce = true;
         lowonce = false;
         yield return new WaitForSeconds(7f);
-    
+
         anim.SetBool("P1TooHigh", true);
 
 
@@ -396,8 +399,8 @@ public class TrollController : MonoBehaviour
         {
             anim.SetBool("P1TooHigh", false);
         }
-  
-     
+
+
 
     }
 
@@ -405,12 +408,13 @@ public class TrollController : MonoBehaviour
     void Update()
     {
         //target player
-        player = GameObject.FindGameObjectWithTag("PlayerTrigger").transform;
+        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).gameObject.transform;
+        targetPlayer = GameObject.Find(ActivePlayerManager.ActivePlayerName + "/PlayerTarget_Singleton").gameObject.transform;  //used to be playermaneger.instance.player.transform
 
         //otherwise outrange
         if (!CheckRangeArea1.OutRange)
         {
-            OUTRANGE = false;           
+            OUTRANGE = false;
             anim.SetBool("outofrange", false);
             //  agent.speed = movespeed;
             distToAgent = (new Vector3(this.transform.position.x, 0, this.transform.position.z) - new Vector3(targetPlayer.transform.position.x, 0, targetPlayer.transform.position.z)).magnitude; //  agent.remainingDistance;
@@ -556,16 +560,16 @@ public class TrollController : MonoBehaviour
             {
                 outrangeonce = true;
                 anim.SetTrigger("Outrange");
-                
+
             }
-      
+
             anim.SetBool("outofrange", true);
 
         }
     }
     private bool outrangeonce;
 
-        public void SetTargetPosition(Transform newTarget)
+    public void SetTargetPosition(Transform newTarget)
     {
         target = newTarget;
     }
@@ -581,10 +585,10 @@ public class TrollController : MonoBehaviour
             agent.speed = 0;
 
         }
-    
 
 
-        startwalkingPlayer= false;
+
+        startwalkingPlayer = false;
         startwalkingMiddle = false;
         startwalkingNorth = false;
         startwalkingSouth = false;
@@ -593,7 +597,7 @@ public class TrollController : MonoBehaviour
         startwalkingNorthWest = false;
         stopwalkingIdle = false;
     }
-    
+
     public void WalkPlayer()
     {
         if (!anim.GetBool("Phasing"))
@@ -627,12 +631,12 @@ public class TrollController : MonoBehaviour
         {
             onMiddleFacingPlayer = true;
             if (!hasstartedcoroutine)
-           {
+            {
                 Debug.Log("started");
                 hasstartedcoroutine = true;
                 StartCoroutine(FacePlayer());
             }
-     
+
         }
     }
 
@@ -644,11 +648,11 @@ public class TrollController : MonoBehaviour
         float distance = Vector3.Distance(target.position, transform.position);
 
         if (distance <= agent.stoppingDistance)
-        {   
-            StartCoroutine(FacePlayer());       
+        {
+            StartCoroutine(FacePlayer());
         }
     }
-    
+
     public void WalkSouth()
     {
         SetTargetPosition(targetSouth);
@@ -699,9 +703,9 @@ public class TrollController : MonoBehaviour
 
 
     public IEnumerator FacePlayer()
-    {        
+    {
         yield return new WaitForSeconds(keeplookinginDirection); //hoe lang je blijf still staan voor je naar midden draait (hier kan je core dmg doen)
-        if (!startwalkingMiddle )
+        if (!startwalkingMiddle)
         {
             WalkMiddle();
             yield return new WaitForSeconds(0.7f); //hoe lang je erover doet voor het daadwerkelijk draaien en teruglopen naar midden -> lang = verder midden lopen -> wil je niet
@@ -736,14 +740,14 @@ public class TrollController : MonoBehaviour
 
         if (startwalkingMiddle)
         {
-           
+
 
             //target player and aa on 20 range   
             agent.stoppingDistance = 20;
-            
+
             Debug.Log("walking to player");
 
-          
+
             yield return new WaitForSeconds(.6f);
 
             startwalkingPlayer = false;
@@ -760,13 +764,13 @@ public class TrollController : MonoBehaviour
             //zet facetarget aan
             onMiddleFacingPlayer = true;
 
-           
+
             hasstartedcoroutine = false;
             stopwalkingIdle = false;
 
 
             yield return null;
-      
+
 
         }
         else
@@ -775,15 +779,15 @@ public class TrollController : MonoBehaviour
             startwalkingMiddle = false;
             yield return null;
         }
-        
 
-         
+
+
     }
 
     //deze method kunnen we uit zetten als we zn rug moeten raken!!!
     public void FaceTarget()
     {
-        
+
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5);
