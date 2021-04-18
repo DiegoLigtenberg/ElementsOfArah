@@ -17,6 +17,7 @@ namespace CreatingCharacters.Abilities
         public Animator animator;
         ThirdPersonMovement thirdPersonPlayer;
         private float lastStepm, timeBetweenStepsm = 0.1f;
+        public float jumptimer;
 
         void onground()
         {
@@ -29,6 +30,7 @@ namespace CreatingCharacters.Abilities
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
             //    fireJetPack = GameObject.Find("FireSpawn");
             //   fireJetPack.SetActive(false);
+          
         }
 
 
@@ -45,6 +47,10 @@ namespace CreatingCharacters.Abilities
             {
                 base.Update();
 
+                if (jumptimer > 0)
+                {
+                    jumptimer -= Time.deltaTime;
+                }
 
                 if (characterController.isGrounded)
                 {
@@ -90,6 +96,7 @@ namespace CreatingCharacters.Abilities
 
         protected override void Jump()
         {
+            jumptimer = 1.5f;
 
             if (Input.GetKeyDown(KeyCode.Space) && !AvatarMoveLocalPosUp.isRooted)
             {

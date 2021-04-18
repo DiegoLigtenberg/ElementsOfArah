@@ -12,18 +12,10 @@ public class AE_BowString : MonoBehaviour
     public Transform Point2;
     public Transform HandBone;
     public bool InHand;
-    public GameObject[] prefab;
-    public GameObject bow;
-    public GameObject arrow;
-    public GameObject bowhand;
-    public GameObject otherhand;
-    public Transform curCamTransform;
-
-    LineRenderer lineRenderer;
+    private LineRenderer lineRenderer;
     Vector3 prevHandPos;
     const float tensionTime = 0.03f;
     float currentTensionTime;
-    public Animator animator;
     // Use this for initialization
     void OnEnable()
     {
@@ -38,27 +30,6 @@ public class AE_BowString : MonoBehaviour
         lineRenderer.SetPosition(0, Point1.position);
         lineRenderer.SetPosition(1, prevHandPos);
         lineRenderer.SetPosition(2, Point2.position);
-        animator = GetComponent<Animator>();
-    }
-
-    public void BowEvent()
-    {
-        InHand = true;
-        //GENIUS MOVE TO RIVEN AA STYLE
-        // yield return new WaitForSeconds(0.2f);
-        if (Ability.globalCooldown <= 0.6f)
-        {
-
-            Ability.globalCooldown = 0.6f;
-        }
-
-    }
-
-    public void stopBowEvent()
-    {
-        Instantiate(prefab[1], otherhand.transform.position, curCamTransform.transform.rotation);
-        animator.SetTrigger("fallBack");
-        InHand = false;
     }
 
 
@@ -88,17 +59,9 @@ public class AE_BowString : MonoBehaviour
             lineRenderer.SetPosition(1, Vector3.Lerp(prevHandPos, defaultPos, Mathf.Clamp01(currentTensionTime / tensionTime)));
             lineRenderer.SetPosition(2, Point2.position);
         }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            //tartCoroutine(delayaa());
-            //   Instantiate(prefab[0], otherhand.transform.position, otherhand.transform.rotation); //curcamtransform for clones
-
-        }
+        
     }
-
-
-
+    
 
     #region //make smooth
     //make smooth line renderer

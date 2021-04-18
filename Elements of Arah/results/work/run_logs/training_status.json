@@ -1,0 +1,23 @@
+{
+    "Arah": {
+        "checkpoints": [
+            {
+                "steps": 48000,
+                "file_path": "results\\work\\Arah\\Arah-48000.onnx",
+                "reward": 525.8160110473633,
+                "creation_time": 1617201421.653284
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 48000,
+            "file_path": "results\\work\\Arah.onnx",
+            "reward": 525.8160110473633,
+            "creation_time": 1617201421.653284
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.25.0",
+        "torch_version": "1.7.0+cu110"
+    }
+}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CreatingCharacters.Player;
 
 namespace CreatingCharacters.Abilities
 {
@@ -14,25 +15,22 @@ namespace CreatingCharacters.Abilities
         public Transform[] effectTransform;
         public Transform curCamTransform;
         private Vector3 oldCamTransform;
+        private Vector3 jumpCamTransform;
         private Quaternion oldCamRotation;
-        public CooldownHandler ch;
-
-        public RFX1_TransformMotion setdmg;
-        private GameObject coldmg;
-        public Image abilityImage;  //the hidden image in canvas
-        private bool latecast; //puts dcd image on cd when latecasted
-        public CooldownReducer cdr;
+        public Image abilityImage;   //the hidden image in canvas
+        private bool latecast;       //puts dcd image on cd when latecasted
         [HideInInspector] public int getdmg;
         private bool pyramid; //fixes p1 bug when pyramid comes up
                               // Start is called before the first frame update
+        private ThirdPersonMovement thirdPersonPlayer;
+        public AudioSource[] aus;
+
+
         private void Awake()
         {
             abilityImage.fillAmount = 0;
             abilityType = 1;
-        }
-        private void Start()
-        {
-
+            thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
         }
 
         // Update is called once per frame
@@ -40,6 +38,7 @@ namespace CreatingCharacters.Abilities
         {
             base.Update();
             CooldownData();
+     
 
             getdmg = AbilityDamage;
 
@@ -47,7 +46,7 @@ namespace CreatingCharacters.Abilities
             {
                 StartCoroutine(removePyramid());
             }
-
+           
         }
 
         private int doublehit;
@@ -55,17 +54,11 @@ namespace CreatingCharacters.Abilities
         {
             latecast = true;
             doublehit += 1;
-            if (doublehit % 3 == 0)
-            {
-                anim.SetTrigger("basicAttackx2");
-            }
-            else
-            {
-                anim.SetTrigger("basicAttack");
-            }
 
+            oldCamTransform = curCamTransform.position;
+            oldCamRotation = curCamTransform.rotation;
+           
 
-            anim.SetBool("casted", true);
             StartCoroutine(basicAttack());
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
         }
@@ -92,24 +85,38 @@ namespace CreatingCharacters.Abilities
 
         public IEnumerator basicAttack()
         {
+            jumpCamTransform = curCamTransform.position;
+
             if (Ability.globalCooldown <= 0.05f)
             {
                 Ability.globalCooldown = 0.05f;
 
             }
+            if (doublehit % 3 == 0)
+            {
+                anim.SetTrigger("basicAttackx2");
+               
+            }
+            else
+            {
+                anim.SetTrigger("basicAttack");
+                
+            }
+            anim.SetBool("casted", true);
+
             yield return new WaitForSeconds(0.001f);
             if (doublehit % 3 == 0)
             {
                 if (Ability.animationCooldown <= 1.3f)
                 {
-                    Ability.animationCooldown = 1.3f;
+                    Ability.animationCooldown = 1.0f;
                 }
             }
             else
             {
-                if (Ability.animationCooldown <= 0.5f)
+                if (Ability.animationCooldown <= 0.4f)
                 {
-                    Ability.animationCooldown = 0.5f;
+                    Ability.animationCooldown = 0.4f;
                     // Ability.globalCooldown = 0.05f;
 
                 }
@@ -128,6 +135,49 @@ namespace CreatingCharacters.Abilities
 
             yield return new WaitForSeconds(15f);
             afterpyramid = false;
+        }
+
+        public void BowReAim()
+        {
+            oldCamTransform = curCamTransform.position;
+            oldCamRotation = curCamTransform.rotation;
+            jumpCamTransform = curCamTransform.position;
+        }
+
+        public void BowEvent()
+        {        
+            GetComponent<AE_BowString>().InHand = true;
+          
+            //GENIUS MOVE TO RIVEN AA STYLE
+            // yield return new WaitForSeconds(0.2f);
+            if (Ability.globalCooldown <= 0.6f)
+            {
+
+                Ability.globalCooldown = 0.6f;
+            }
+            anim.ResetTrigger("basicAttack");
+            anim.ResetTrigger("basicAttackx2");
+            aus[0].Play();
+
+  
+        }
+
+        public void stopBowEvent()
+        {
+            if (GetComponent<MarcoMovementController>().jumptimer > 0)
+            {
+                Instantiate(effect[1], jumpCamTransform, oldCamRotation);
+            }
+            else
+            {
+                Instantiate(effect[1], curCamTransform.position, oldCamRotation);
+
+            }
+            aus[1].Play();
+
+            GetComponent<AE_BowString>().InHand = false;;
+
+     
         }
     }
 }

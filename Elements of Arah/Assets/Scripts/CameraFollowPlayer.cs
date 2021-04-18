@@ -43,6 +43,7 @@ public class CameraFollowPlayer : MonoBehaviour
         if (!HealthPlayer.playerisdeath)
         {
             RotateCamera();
+            //playerTransform.LookAt(GameObject.Find("Warrior Idle").transform);
         }
     }
 

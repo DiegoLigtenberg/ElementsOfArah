@@ -14,14 +14,10 @@ namespace CreatingCharacters.Abilities
         public Transform curCamTransform;
         private Vector3 oldCamTransform;
         private Quaternion oldCamRotation;
-        public CooldownHandler ch;
-
-        public RFX1_TransformMotion setdmg;
-        private GameObject coldmg;
+     
         public Image abilityImage;  //the hidden image in canvas
         private bool latecast; //puts dcd image on cd when latecasted
         public DashAbility dashability;
-        public CooldownReducer cdr;
         public int getdmg;
         private bool pyramid;
         private void Awake()
@@ -33,11 +29,7 @@ namespace CreatingCharacters.Abilities
         private void Start()
         {
             dashability = GetComponent<DashAbility>();
-            cdr = GetComponent<CooldownReducer>();
-            /* this did nothing but caused error in inspector
-            setdmg = coldmg.GetComponent<RFX1_TransformMotion>();        
-            setdmg.damage = AbilityDamage;
-            */
+   
         }
 
         // Update is called once per frame
@@ -45,44 +37,13 @@ namespace CreatingCharacters.Abilities
         {
             base.Update();
             CooldownData();
-              //getdmg = AbilityDamage;
-
-            
-            //if (SunShine.SunShineActive)
-            {
-                /*
-                if (dashability.orbCount == 0) { getdmg = AbilityDamage; }
-                if (dashability.orbCount == 1) { getdmg = AbilityDamage + 2; }
-                if (dashability.orbCount == 2) { getdmg = AbilityDamage + 4; }
-                if (dashability.orbCount == 3) { getdmg = AbilityDamage + 6; }
-                */
-            }
-          //  else
-            {
-                getdmg = AbilityDamage;
-            }
-
-            /*
-
-            if (SunShine.SunShineActive)
-            {
-                if (dashability.orbCount == 0) { getdmg = AbilityDamage; }
-                if (dashability.orbCount == 1) { getdmg = AbilityDamage + 5; }
-                if (dashability.orbCount == 2) { getdmg = AbilityDamage + 10; }
-                if (dashability.orbCount == 3) { getdmg = AbilityDamage + 15; }
-
-            }
-            */
-     
+            getdmg = AbilityDamage;
             
             if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
-            {
-            
+            {            
                 StartCoroutine(removePyramid());
             }
-
         }
-
 
         private void CooldownData()
         {
@@ -104,7 +65,6 @@ namespace CreatingCharacters.Abilities
 
         public override void Cast()
         {
-            coldmg = GameObject.Find("Collision Basic Attack");
             latecast = true;
             
             //zorgt voor casten als je niet klikt

@@ -63,6 +63,8 @@ public class Gun : MonoBehaviour
 
         if (Physics.Raycast(ray, out hitinfo, 2700, CollidesWith))
         {
+          
+
             targetname = hitinfo.collider.gameObject.name;
             TrueDistanceOfCrosshair = hitinfo.distance;
             offsetcamera = hitinfo.distance;

@@ -18,6 +18,7 @@ namespace CreatingCharacters.Player
         protected CharacterController characterController;
         public static float velocityY;
         protected Vector3 currentImpact;
+        [HideInInspector] public bool isGrounded;
 
         [SerializeField] private float turnspeed = 5f;
 
@@ -92,6 +93,13 @@ namespace CreatingCharacters.Player
             //Debug.Log(collision.gameObject.name);
         }
 
+        public void setMovement(Vector3 movement_input)
+        {
+           // movementInput = movement_input;
+           //this was for ai
+        }
+
+
         protected virtual void Update()
         {
             if (Time.time - lastStep > timeBetweenSteps)
@@ -125,7 +133,8 @@ namespace CreatingCharacters.Player
 
             }
 
-
+            if (characterController.isGrounded) { isGrounded = true; }
+            else { isGrounded = false; }
         }
 
         protected virtual void Move()

@@ -27,6 +27,9 @@ namespace CreatingCharacters.Abilities
             jumpCount = 0;
         }
 
+        public float distplayerboss;
+
+
 
         private void Start()
         {
@@ -48,7 +51,6 @@ namespace CreatingCharacters.Abilities
 
         protected override void Update()
         {
-
 
             if (!PauseMenu.GameIsPaused)
             {

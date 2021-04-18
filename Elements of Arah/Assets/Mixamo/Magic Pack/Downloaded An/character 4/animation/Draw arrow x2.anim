@@ -51078,6 +51078,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 1.7
+    functionName: BowReAim
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 1.7166667
     functionName: BowEvent
     data: 
@@ -51085,7 +51092,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.2166667
+  - time: 2.1666667
     functionName: stopBowEvent
     data: 
     objectReferenceParameter: {fileID: 0}
