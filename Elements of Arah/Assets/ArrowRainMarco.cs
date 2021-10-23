@@ -18,6 +18,7 @@ namespace CreatingCharacters.Abilities
         [HideInInspector] public int getdmg;
         private Vector3 arrowRainSpawnPosition;
 
+        public float heightarrows;
         private void OnEnable()
         {
             
@@ -30,7 +31,7 @@ namespace CreatingCharacters.Abilities
             CooldownData();
 
             getdmg = AbilityDamage;
-            arrowRainSpawnPosition = Gun.clonePosition2;
+            arrowRainSpawnPosition =  this.transform.position + new Vector3(0, heightarrows, 0); //= Gun.clonePosition2 + new Vector3(0,heightarrows,0);
         }
 
         private void CooldownData()
@@ -79,22 +80,44 @@ namespace CreatingCharacters.Abilities
             anim.SetTrigger("arrowRain");
             anim.SetBool("arrowRainActive", true);
 
-            yield return new WaitForSeconds(1.2f);
+            yield return new WaitForSeconds(0.25f);
 
-            if (Ability.animationCooldown <= 1.2f)
+            if (Ability.animationCooldown <= 0.8f)
             {
-                Ability.animationCooldown = 1.2f;
+                Ability.animationCooldown = 0.8f;
             }
-            if (Ability.globalCooldown <= 0.7f)
+            if (Ability.globalCooldown <= 0.8f)
             {
-                Ability.globalCooldown = 0.7f;
+                Ability.globalCooldown = 0.8f;
             }
+            yield return new WaitForSeconds(0.35f);
             yield return new WaitForSeconds(0.001f);
-       
-          
-            Instantiate(effect[0], spawnpos, Quaternion.identity);
 
-     
+            Vector3 middle = new Vector3(0, 0, 0);
+            Vector3 left = new Vector3(-1, 0, 0);
+            Vector3 right = new Vector3(1, 0, 0);
+            Vector3 down = new Vector3(0, 0, -1);
+            Vector3 up = new Vector3(0, 0, 1);
+
+
+            GameObject b = Instantiate(effect[0], spawnpos + middle + new Vector3(0,30,0), Quaternion.identity);
+           // Transform target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
+           // b.transform.LookAt(target);
+
+
+            //   Instantiate(effect[0], spawnpos+middle,effectTransform[0].rotation);  //middle     //quaternion.identiy
+            /*
+            yield return new WaitForSeconds(0.2f);
+            Instantiate(effect[0], spawnpos+left, effectTransform[1].rotation); //left
+            yield return new WaitForSeconds(0.2f);
+            Instantiate(effect[0], spawnpos+right, effectTransform[2].rotation); //right
+            yield return new WaitForSeconds(0.2f);
+            Instantiate(effect[0], spawnpos+down, effectTransform[3].rotation); //down 
+            yield return new WaitForSeconds(0.2f);
+            Instantiate(effect[0], spawnpos+up, effectTransform[4].rotation); //up
+
+    */
+
             yield return new WaitForSeconds(1);
 
 
