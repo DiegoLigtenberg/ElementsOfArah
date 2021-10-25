@@ -43,6 +43,7 @@ public class Gun : MonoBehaviour
         CrossWork = hitinfo.point;
 
         FireGun();
+        Debug.Log(this.gameObject.name);
     }
 
     private void FireGun()

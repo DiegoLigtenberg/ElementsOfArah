@@ -757,11 +757,20 @@ public class Health : MonoBehaviour
             {
                 Phase01AA.amntMinions -= 1;
             }
-            if (gameObject.name.Contains("Healing Minion1")) { Phase01AA.filledspot1 = false; }
-            if (gameObject.name.Contains("Healing Minion2")) { Phase01AA.filledspot2 = false; }
-            if (gameObject.name.Contains("Healing Minion3")) { Phase01AA.filledspot3 = false; }
-            if (gameObject.name.Contains("Healing Minion4")) { Phase01AA.filledspot4 = false; }
-            if (gameObject.name.Contains("Healing Minion5")) { Phase01AA.filledspot5 = false; }
+            if (gameObject.name.Contains("Healing Minion1")) { Phase01AA.filledspot1 = false; Phase01AA.alreadygot.Remove(2); }
+            if (gameObject.name.Contains("Healing Minion2")) { Phase01AA.filledspot2 = false; Phase01AA.alreadygot.Remove(1); }
+            if (gameObject.name.Contains("Healing Minion3")) {
+                Phase01AA.filledspot3 = false;
+                if (Phase01AA.filledspot2 == true) { Phase01AA.alreadygot.Remove(1); }
+                if (Phase01AA.filledspot4 == true) { Phase01AA.alreadygot.Remove(4); }
+            }
+            if (gameObject.name.Contains("Healing Minion4")) { Phase01AA.filledspot4 = false; Phase01AA.alreadygot.Remove(4); }
+            if (gameObject.name.Contains("Healing Minion5")) { Phase01AA.filledspot5 = false; Phase01AA.alreadygot.Remove(3); }
+            if (gameObject.name.Contains("Healing Minion6")) {
+                Phase01AA.filledspot6 = false;
+                if (Phase01AA.filledspot1 == true) { Phase01AA.alreadygot.Remove(2); }
+                if (Phase01AA.filledspot5 == true) { Phase01AA.alreadygot.Remove(3); }
+            }
 
 
             Debug.Log("dA should start");

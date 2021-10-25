@@ -43,6 +43,7 @@ public class Phase01AA : MonoBehaviour
     public Health hpm;
     public static int amntMinions;
     private bool minionhasspawned;
+    public int boss_difficulty = 1;
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +57,6 @@ public class Phase01AA : MonoBehaviour
         TrollPhasingLaser.isbeaming = false;
         alreadygot = new List<int>();
         alreadygot.Clear();
-        dontadd = false;
 
         //active player specific
         hp = GameObject.Find("hp check").GetComponent<HealthPlayer>();
@@ -98,9 +98,14 @@ public class Phase01AA : MonoBehaviour
         StartCoroutine(P2GroundFissure());
     }
 
-    public void StartMinionHeal()
-    {
-        StartCoroutine(MinionHeal());
+    public void StartMinionHeal() { 
+
+        for (int i = 0; i<boss_difficulty; i++)
+          {
+            StartCoroutine(MinionHeal());
+
+        }
+        
     }
 
     public void StartInstaKill()
@@ -154,8 +159,33 @@ public class Phase01AA : MonoBehaviour
 
     private float lastStep_1, timeBetweenSteps_1 = .1f;
 
+    public int getRandom()
+    {
+        isoff = Random.Range(1, 5);
 
-
+        for (int i = 0; i < 100; i++)
+        {
+            if (alreadygot.Contains(isoff))
+            {
+                isoff = Random.Range(1, 5);
+                if (alreadygot.Contains(isoff))
+                {
+                    alreadygot.Add(isoff);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                alreadygot.Add(isoff);
+                break;
+            }
+           
+        }
+        return isoff;
+    }
     GameObject pathfind;
     public static bool startcolorchange;
     private float timerlampdelay = 1f;
@@ -572,16 +602,92 @@ public class Phase01AA : MonoBehaviour
             GameObject healminion6;
 
             yield return new WaitForSeconds(1f);
+            if (boss_difficulty == 1)
+            {
+                //zuidwest
+                if (isoff == 1)
+                {
+                    if (filledspot2 == false && !spawned) { healminion2 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; spawned = true; }
+                    else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+                }
+                //zuidoost
+                if (isoff == 2)
+                {
+                    if (filledspot1 == false && !spawned)
+                    {
+                        healminion1 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation);
+                        healminion1.name = "Healing Minion1";
+                        amntMinions += 1;
+                        filledspot1 = true;
+                        spawned = true;
+                    }
+                    else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+                }
+                //noord oost
+                if (isoff == 3)
+                {
+                    if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[13].position, effectTransformP2[13].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; }
+                    else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+                }
+                //noord west
+                if (isoff == 4)
+                {
+                    if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; }
+                    else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+                }
 
-            //zuidwest
-            if (isoff == 1)
-            {
-                if (filledspot2 == false && !spawned) { healminion2 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; spawned = true; }
+                /*
+                else if (filledspot2 == false && !spawned) { healminion2 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; spawned = true; }
                 else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+                else if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; }
+                else if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[13].position, effectTransformP2[13].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; }
+                else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+                */
             }
-            //zuidoost
-            if (isoff == 2)
+            else if (boss_difficulty == 2)
             {
+        
+                if (isoff == 1)
+                {
+                    if (filledspot2 == false && !spawned) { healminion2 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; spawned = true; }
+
+                    else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+                   
+
+                }
+                //zuidoost
+                if (isoff == 2)
+                {
+                    if (filledspot1 == false && !spawned)
+                    {
+                        healminion1 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation);
+                        healminion1.name = "Healing Minion1";
+                        amntMinions += 1;
+                        filledspot1 = true;
+                        spawned = true;
+                    }
+
+                    else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+                  
+
+                }
+                //noord oost
+                if (isoff == 3)
+                {
+                    if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[13].position, effectTransformP2[13].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; }
+                    else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+                }
+                //noord west
+                if (isoff == 4)
+                {
+                    if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; }
+                    else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+                    
+                }
+            }
+            else if (boss_difficulty == 3)
+            {
+
                 if (filledspot1 == false && !spawned)
                 {
                     healminion1 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation);
@@ -590,35 +696,37 @@ public class Phase01AA : MonoBehaviour
                     filledspot1 = true;
                     spawned = true;
                 }
+                
                 else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+
+                else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+               
+
             }
             //noord oost
             if (isoff == 3)
             {
                 if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[13].position, effectTransformP2[13].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; }
                 else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+                else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
             }
             //noord west
             if (isoff == 4)
             {
                 if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; }
+               
                 else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
+                else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
+            
             }
-
-            /*
-            else if (filledspot2 == false && !spawned) { healminion2 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; spawned = true; }
-            else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; }
-            else if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; }
-            else if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[13].position, effectTransformP2[13].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; }
-            else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; }
-            */
-
             spawned = false;
             //  if (amntMinions == 0)      { healminion1 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation); amntMinions += 1;  healminion1.name = "Healing Minion1"; filledspot1 = true; }
             // else if (amntMinions == 1) { healminion2 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; }
             //else if (amntMinions == 2) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minio3"; filledspot3 = true; }
             // else if (amntMinions == 3) { healminion4 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; }
         }
+    
+       
 
         //phase 2
         if (anim.GetInteger("Phase") == 2)
@@ -653,7 +761,7 @@ public class Phase01AA : MonoBehaviour
 
         }
         //phase 2
-
+        yield return new WaitForSeconds(0.5f);
         yield return null;
     }
 
@@ -765,60 +873,16 @@ public class Phase01AA : MonoBehaviour
     GameObject indicatorrock4;
 
     #endregion
-    private static List<int> alreadygot;
+    public static List<int> alreadygot;
 
-    public static bool dontadd;
-    public IEnumerator delayaddingvalues()
-    {
-        dontadd = true;
-        yield return new WaitForSeconds(10f);
-        dontadd = false;
-
-
-    }
-
-    public void rollRandom()
-    {
-        //als waarde al in lijst zit, roll nieuwe waarde
-        // if (!dontadd)
-        {
-            if (alreadygot.Contains(isoff))
-            {
-                isoff = Random.Range(1, 5);
-                if (!alreadygot.Contains(isoff))
-                {
-                    alreadygot.Add(isoff);
-                    StartCoroutine(delayaddingvalues());
-                }
-            }
-            if (!alreadygot.Contains(isoff))
-            {
-                alreadygot.Add(isoff);
-                StartCoroutine(delayaddingvalues());
-            }
-
-        }
-    }
-
+    
     private IEnumerator P2StoneFromAir()
     {
         //hij cast deze abil 3x dus moet met static   
         if (amntstones == 0)
         {
             //probeer nieuwe waarde
-            isoff = Random.Range(1, 5);
-
-            if (alreadygot.Contains(isoff))
-            {
-                rollRandom();
-                alreadygot.Remove(alreadygot.Count - 1);
-                yield break;
-            }
-
-            if (alreadygot.Count >= 4)
-            {
-                alreadygot.Clear();
-            }
+            isoff = getRandom();
         }
 
 
