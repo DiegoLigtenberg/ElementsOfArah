@@ -61,6 +61,7 @@ public class AE_PhysicsMotion : MonoBehaviour
         if (UseCollisionDetect)
         {
             collid = gameObject.AddComponent<SphereCollider>();
+            collid.center -= new Vector3(0, 0, -1.5f);
             collid.radius = ColliderRadius;
         }
 

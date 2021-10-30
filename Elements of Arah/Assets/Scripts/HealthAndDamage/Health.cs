@@ -434,7 +434,7 @@ public class Health : MonoBehaviour
 
         }
 
-        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight"))
+        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") && this.name == "Warrior Idle") //AND ONLY IF IT IS A BOSS -> change also to wendigo later
         {
             // Debug.Log(damageType);
             if (damageType == DamageTypes.Elemental)

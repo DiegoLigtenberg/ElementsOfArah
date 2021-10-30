@@ -92,7 +92,8 @@ namespace CreatingCharacters.Abilities
                 Ability.globalCooldown = 0.05f;
 
             }
-            if (doublehit % 3 == 0)
+        
+            if (Input.GetKey(KeyCode.LeftShift))    // (doublehit % 3 == 0)
             {
                 anim.SetTrigger("basicAttackx2");
                
@@ -105,7 +106,7 @@ namespace CreatingCharacters.Abilities
             anim.SetBool("casted", true);
 
             yield return new WaitForSeconds(0.001f);
-            if (doublehit % 3 == 0)
+            if  (Input.GetKey(KeyCode.LeftShift))//(doublehit % 3 == 0)
             {
                 if (Ability.animationCooldown <= 1.3f)
                 {
@@ -164,9 +165,10 @@ namespace CreatingCharacters.Abilities
 
         public void stopBowEvent()
         {
-            if (GetComponent<MarcoMovementController>().jumptimer > 0)
+            if (GetComponent<MarcoMovementController>().jumptimer >0  &&   Gun.offsetcamera > 7 )
             {
-                Instantiate(effect[1], jumpCamTransform, oldCamRotation);
+             
+                Instantiate(effect[1], new Vector3(curCamTransform.position.x,jumpCamTransform.y,curCamTransform.position.z), oldCamRotation);
             }
             else
             {

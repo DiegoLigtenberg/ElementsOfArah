@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using CreatingCharacters.Player;
+using CreatingCharacters.Abilities;
 
 public class AE_PhysicsMotionFireRain : MonoBehaviour
 {
@@ -38,11 +40,14 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
     GameObject targetAnchor;
     bool isInitializedForce;
     float currentSpeedOffset;
-    Transform target;
+    private Transform target;
+    private Transform initial_target;
 
     [SerializeField] public int damage = 1;
     [SerializeField] private DamageTypes damageType;
 
+    private bool onlyonce;
+    private bool onlyonce2;
     void OnEnable()
     {
         foreach (var obj in DeactivateObjectsAfterCollision)
@@ -55,15 +60,27 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
         }
         currentSpeedOffset = Random.Range(-RandomSpeedOffset * 10000f, RandomSpeedOffset * 10000f) / 10000f;
         InitializeRigid();
-        target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
+       // target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
+
+    
+     
     }
 
     void InitializeRigid()
     {
+        
         if (UseCollisionDetect)
         {
             collid = gameObject.AddComponent<SphereCollider>();
             collid.radius = ColliderRadius;
+            if (!onlyonce)
+            {
+                collid.center -= new Vector3(0, 0, -1);
+                initial_target = GameObject.Find("archer@Standing Aim Recoil (2)").GetComponent<Gun>().hover_clone_trans.transform;
+               
+                onlyonce = true;
+            }
+       
         }
 
         isInitializedForce = false;
@@ -78,10 +95,10 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
         rigid.drag = AirDrag;
         rigid.useGravity = UseGravity;
         // if (FreezeRotation) rigid.constraints = RigidbodyConstraints.FreezeRotation;
-        rigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        rigid.collisionDetectionMode = CollisionDetectionMode.Continuous;
         rigid.interpolation = RigidbodyInterpolation.Interpolate;
-        Transform target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
-        rigid.detectCollisions = false;
+        Transform target = initial_target;//  gameObject.transform ;// GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
+    
         this.transform.LookAt(target);
       //  rigid.AddRelativeForce(target.localPosition * (Speed + currentSpeedOffset), ForceMode);
         rigid.AddForce(transform.forward * (Speed * 1.5f + currentSpeedOffset), ForceMode);
@@ -94,8 +111,9 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
     {
         //Checkforlayermask
         // if ((CollidesWith & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
-        if (collision.collider.tag != "Player")
+        if (collision.collider.tag != "Player" && onlyonce)
         {
+            
 
             if (isCollided && !UseCollisionDetect) return;
             foreach (ContactPoint contact in collision.contacts)
@@ -222,14 +240,27 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
             transform.rotation = targetAnchor.transform.rotation;
         }
 
-        //make sure only enable rigid body collision when arrow is close
-        if ((target.position - this.transform.position).magnitude < 10f)
+       // Debug.Log((initial_target.position - this.transform.position).magnitude);
+      //  Debug.Log(initial_target.position);
+        try
         {
-            rigid.detectCollisions = true;
+            //make sure only enable rigid body collision when arrow is close
+            if ((initial_target.position - this.transform.position).magnitude <= 15 )
+            {
+                rigid.detectCollisions = true;
+             //   first = true;
+                
+            }
+            else
+            {
+                 rigid.detectCollisions = false;
+              
+             //    Debug.Log((target.position - this.transform.position).magnitude);
+            }
         }
-        else
+        catch
         {
-            Debug.Log((target.position - this.transform.position).magnitude);
+           // Debug.Log("error");
         }
     }
 
@@ -249,8 +280,8 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = new Quaternion();
         isCollided = false;
-        if (rigid != null) Destroy(rigid);
-        if (collid != null) Destroy(collid);
+       // if (rigid != null) Destroy(rigid);
+        //if (collid != null) Destroy(collid);
     }
 
     void OnDrawGizmosSelected()

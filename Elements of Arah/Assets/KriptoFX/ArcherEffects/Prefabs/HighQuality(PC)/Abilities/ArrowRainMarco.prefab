@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4398807780889132}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,13 +42,13 @@ GameObject:
   - component: {fileID: 4717280401616944}
   - component: {fileID: 198532455723529312}
   - component: {fileID: 199421601530651806}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: TrailSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4717280401616944
 Transform:
   m_ObjectHideFlags: 0
@@ -4553,7 +4553,8 @@ GameObject:
   - component: {fileID: 33341544196639830}
   - component: {fileID: 23082468344754588}
   - component: {fileID: 6636925653116105740}
-  m_Layer: 14
+  - component: {fileID: 5506204876490184830}
+  m_Layer: 16
   m_Name: arissa:Weapons_Geo (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4641,7 +4642,23 @@ MonoBehaviour:
   begincolor: {r: 1.5, g: 0.42292106, b: 0.17647067, a: 1}
   endcolor: {r: 1.5, g: 0.42292106, b: 0.17647067, a: 0}
   lerpDuration: 2
-  delaytimer: 1.5
+  delaytimer: 5
+--- !u!114 &5506204876490184830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793439337075692}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f112041dd6244b4ab97988cc8b902cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  begincolor: {r: 0.18062828, g: 1.3312874, b: 1.5, a: 1}
+  endcolor: {r: 0.18062828, g: 1.5, b: 1.4472601, a: 0}
+  lerpDuration: 2
+  delaytimer: 5
 --- !u!1 &1795664805227462
 GameObject:
   m_ObjectHideFlags: 0
@@ -4653,7 +4670,9 @@ GameObject:
   - component: {fileID: 4439874536844998}
   - component: {fileID: 5540579555293838600}
   - component: {fileID: 8311703671931476039}
-  m_Layer: 14
+  - component: {fileID: 9219851563658258626}
+  - component: {fileID: 2578581346189973180}
+  m_Layer: 16
   m_Name: TransformMotion
   m_TagString: Untagged
   m_Icon: {fileID: 6926474624037801865, guid: 0000000000000000d000000000000000, type: 0}
@@ -4698,19 +4717,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1795664805227462}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49f2474dc4065844c908f6db4899fef1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UseCollisionDetect: 1
   Mass: 1
-  Speed: 60
-  RandomSpeedOffset: 20
+  Speed: 50
+  RandomSpeedOffset: 0
   AirDrag: 0.2
   UseGravity: 1
   ForceMode: 2
-  ColliderRadius: 0.05
+  ColliderRadius: 0.7
   FreezeRotation: 0
   UseTargetPositionAfterCollision: 1
   CollidesWith:
@@ -4725,6 +4744,75 @@ MonoBehaviour:
   HUE: -1
   damage: 60
   damageType: 1
+--- !u!114 &9219851563658258626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795664805227462}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 151e5fb4355af6c4ab88423606b59ab8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Distance: 30
+  Speed: 30
+  TimeDelay: 0
+  RandomMoveRadius: 0
+  RandomMoveSpeedScale: 0
+  Target: {fileID: 0}
+  CollidesWith:
+    serializedVersion: 2
+    m_Bits: 15927
+  EffectsOnCollision:
+  - {fileID: 1960994969320768, guid: 0e32a857b2cd6e54ca7c24863514d455, type: 3}
+  CollisionOffset: 0
+  DestroyTimeDelay: 7
+  CollisionEffectInWorldSpace: 1
+  DeactivatedObjectsOnCollision:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  HUE: -1
+  CollidedInstances: []
+  damage: 5
+  damageType: 1
+  dashability: {fileID: 0}
+--- !u!114 &2578581346189973180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795664805227462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb506bb0dd47d2459e6c7e2f7747c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Distance: 360
+  Speed: 10
+  TimeDelay: 0
+  RandomMoveRadius: 0.15
+  RandomMoveSpeedScale: 0
+  Target: {fileID: 0}
+  CollidesWith:
+    serializedVersion: 2
+    m_Bits: 10753
+  EffectsOnCollision:
+  - {fileID: 1630120041284270, guid: d7ebaa772e719de478a9d2297883d951, type: 3}
+  CollisionOffset: 0
+  DestroyTimeDelay: 0
+  CollisionEffectInWorldSpace: 0
+  DeactivatedObjectsOnCollision: []
+  HUE: -1
+  CollidedInstances: []
+  damage: 60
+  damageType: 1
+  dashability: {fileID: 0}
 --- !u!1 &1831572337280484
 GameObject:
   m_ObjectHideFlags: 0
@@ -4737,7 +4825,7 @@ GameObject:
   - component: {fileID: 114758286081213608}
   - component: {fileID: 2377063701334523375}
   - component: {fileID: 9160862259000807714}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: ArrowRainMarco
   m_TagString: AllyProjTag
   m_Icon: {fileID: 0}
@@ -4786,7 +4874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c48eb6ca95c5bb4d99819cb01faf523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 10
+  lifeTime: 1.1
   spawned: 0
 --- !u!114 &9160862259000807714
 MonoBehaviour:
@@ -4811,7 +4899,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4267559033096200}
   - component: {fileID: 96569458736402530}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: ArrowEffectTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4948,7 +5036,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4152411105483356}
   - component: {fileID: 96750508985142622}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: ArrowEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5078,7 +5166,7 @@ GameObject:
   - component: {fileID: 5535766275398177587}
   - component: {fileID: 4898147408493845000}
   - component: {fileID: 1098760384770225632}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Particle Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10052,7 +10140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4812831286348574952}
   - component: {fileID: 5830910623810980832}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10180,7 +10268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2959916593855018757}
   - component: {fileID: 5716825725338583450}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Particle System Force Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10706,7 +10794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 490926227824379074}
   - component: {fileID: 8106538929634056755}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Particle System Force Field
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11232,7 +11320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 973681231907071729}
   - component: {fileID: 8664618513575342291}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Trail (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11370,7 +11458,7 @@ GameObject:
   m_Component:
   - component: {fileID: 657865520027554081}
   - component: {fileID: 957846407043331525}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: AudioSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11498,7 +11586,7 @@ GameObject:
   - component: {fileID: 1625410848031218692}
   - component: {fileID: 6256261497699903824}
   - component: {fileID: 163159967696290512}
-  m_Layer: 14
+  m_Layer: 16
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16405,23 +16493,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 103992, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 104008, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 130738, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 135082, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 163674, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 167520, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Name
@@ -16429,15 +16517,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 167520, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 167520, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 170894, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 190024, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 421294, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_RootOrder
@@ -16483,9 +16575,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8223704, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
+      propertyPath: m_Volume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8290600, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
+      propertyPath: m_Volume
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 1067134438575952, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}
       propertyPath: m_Layer
-      value: 14
+      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92877335db3c30742b1ab57d4b8a5633, type: 3}

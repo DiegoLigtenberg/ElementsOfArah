@@ -731,7 +731,7 @@ public class Phase01AA : MonoBehaviour
         //phase 2
         if (anim.GetInteger("Phase") == 2)
         {
-            maxminions = 2;
+            maxminions = Mathf.Max(2,boss_difficulty);
             if (amntMinions >= maxminions) { anim.SetBool("P2BlockMinionSpawn", true); }
             bool spawned = false;
 
@@ -752,11 +752,13 @@ public class Phase01AA : MonoBehaviour
                 spawned = true;
             }
             else if (filledspot2 == false && !spawned) { healminion2 = Instantiate(effectP2[9], effectTransformP2[12].position, effectTransformP2[12].rotation); amntMinions += 1; healminion2.name = "Healing Minion2"; filledspot2 = true; spawned = true; }//nw
-            else if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; } //e
-            else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; } //w
-            else if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; } //se
-            else if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; } //sw
-
+            if (amntMinions >= maxminions)
+            {
+                if (filledspot6 == false && !spawned) { healminion6 = Instantiate(effectP2[9], effectTransformP2[14].position, effectTransformP2[14].rotation); amntMinions += 1; healminion6.name = "Healing Minion6"; filledspot6 = true; spawned = true; } //e
+                else if (filledspot3 == false && !spawned) { healminion3 = Instantiate(effectP2[9], effectTransformP2[11].position, effectTransformP2[11].rotation); amntMinions += 1; healminion3.name = "Healing Minion3"; filledspot3 = true; spawned = true; } //w
+                else if (filledspot5 == false && !spawned) { healminion5 = Instantiate(effectP2[9], effectTransformP2[9].position, effectTransformP2[9].rotation); amntMinions += 1; healminion5.name = "Healing Minion5"; filledspot5 = true; spawned = true; } //se
+                else if (filledspot4 == false && !spawned) { healminion4 = Instantiate(effectP2[9], effectTransformP2[10].position, effectTransformP2[10].rotation); amntMinions += 1; healminion4.name = "Healing Minion4"; filledspot4 = true; spawned = true; } //sw
+            }
 
 
         }
@@ -1018,7 +1020,7 @@ public class Phase01AA : MonoBehaviour
 
 
         yield return new WaitForSeconds(.10f);
-        p3stoneCurPos = effectTransformP3[0].position;
+        p3stoneCurPos = ActivePlayerManager.ActivePlayerGameObj.transform.Find("HitAbove StoneEdge").transform.position; // effectTransformP3[0].position;
         p3stoneCurRot = effectTransformP3[1].rotation;
         //indicator rocks
 

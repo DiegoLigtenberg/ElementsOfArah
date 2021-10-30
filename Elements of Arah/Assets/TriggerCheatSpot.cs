@@ -42,7 +42,7 @@ public class TriggerCheatSpot : MonoBehaviour
     {
         if (other.tag == "PlayerTrigger" && !anim.GetBool("Phasing"))
         {
-           
+         
          //   left -= 0.5f;
             timeleft = left;
             staying = false;
@@ -65,8 +65,7 @@ public class TriggerCheatSpot : MonoBehaviour
 
     private void Update()
     {
-
-  
+        
         if (timeleft > 0 && anim.GetBool("StartFight"))
         {
             timeleft -= Time.deltaTime;

@@ -36,6 +36,7 @@ public class TrollPhasingLaser : MonoBehaviour
         phasenumber = 0;
         anim.ResetTrigger("P2_Enter");
         anim.ResetTrigger("P3_Enter");
+        Debug.Log(this.gameObject.name);
     }
 
 

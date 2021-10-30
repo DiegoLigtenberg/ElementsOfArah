@@ -96,10 +96,11 @@ namespace CreatingCharacters.Abilities
 
         protected override void Jump()
         {
-            jumptimer = 1.5f;
+       
 
             if (Input.GetKeyDown(KeyCode.Space) && !AvatarMoveLocalPosUp.isRooted)
             {
+                jumptimer = 1.5f;
                 if (jumpCount == 0)
                 {
                     ResetImpactY();

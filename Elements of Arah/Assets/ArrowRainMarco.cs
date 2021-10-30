@@ -17,13 +17,17 @@ namespace CreatingCharacters.Abilities
         private bool latecast;       //puts dcd image on cd when latecasted
         [HideInInspector] public int getdmg;
         private Vector3 arrowRainSpawnPosition;
+        public static Transform targetDirection;
+        public int ability_range;
 
         public float heightarrows;
+        public static bool stop_direction;
         private void OnEnable()
         {
             
         }
 
+        private Vector3 spawnpos;
         // Update is called once per frame
         void Update()
         {
@@ -31,7 +35,13 @@ namespace CreatingCharacters.Abilities
             CooldownData();
 
             getdmg = AbilityDamage;
-            arrowRainSpawnPosition =  this.transform.position + new Vector3(0, heightarrows, 0); //= Gun.clonePosition2 + new Vector3(0,heightarrows,0);
+         
+
+            if (!stop_direction)
+            {
+              //  targetDirection = Gun.target_hover;
+            }
+        
         }
 
         private void CooldownData()
@@ -63,10 +73,16 @@ namespace CreatingCharacters.Abilities
 
         public override void Cast()
         {
-            latecast = true;
-    
+            if (Gun.fromCenterPLayerDistance < 80)
+            {
+                arrowRainSpawnPosition = this.transform.position + new Vector3(0, 0*heightarrows, 0); //= Gun.clonePosition2 + new Vector3(0,heightarrows,0);
+                latecast = true;
 
-            StartCoroutine(arrowRain());
+                stop_direction = true;
+                StartCoroutine(arrowRain());
+                Debug.Log("help");
+            }
+                
 
            
 
@@ -90,7 +106,9 @@ namespace CreatingCharacters.Abilities
             {
                 Ability.globalCooldown = 0.8f;
             }
-            yield return new WaitForSeconds(0.35f);
+
+            spawnpos = Gun.clonePosition2;
+            yield return new WaitForSeconds(0.15f);
             yield return new WaitForSeconds(0.001f);
 
             Vector3 middle = new Vector3(0, 0, 0);
@@ -98,11 +116,23 @@ namespace CreatingCharacters.Abilities
             Vector3 right = new Vector3(1, 0, 0);
             Vector3 down = new Vector3(0, 0, -1);
             Vector3 up = new Vector3(0, 0, 1);
+            
+    
+       
+           // Debug.Log(targetDirection.position);
+            for (int i = 0; i <5; i++)
+            {
+                  GameObject b = Instantiate(effect[0], effectTransform[0].position +  (i* new Vector3(0,0,0))  + new Vector3(0, 0f* 30, 0), Quaternion.identity);
+    
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            yield return new WaitForSeconds(.5f);
+            Instantiate(effect[1],spawnpos + new Vector3(0,25,0), effectTransform[5].rotation);
 
 
-            GameObject b = Instantiate(effect[0], spawnpos + middle + new Vector3(0,30,0), Quaternion.identity);
-           // Transform target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
-           // b.transform.LookAt(target);
+            // Transform target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
+            // b.transform.LookAt(target);
 
 
             //   Instantiate(effect[0], spawnpos+middle,effectTransform[0].rotation);  //middle     //quaternion.identiy
@@ -118,8 +148,8 @@ namespace CreatingCharacters.Abilities
 
     */
 
-            yield return new WaitForSeconds(1);
-
+            yield return new WaitForSeconds(4f); //this decides how long the delay between charges MUST BE - causes bugs if too low -> thus cant upgrade abil
+            stop_direction = false;
 
 
         }

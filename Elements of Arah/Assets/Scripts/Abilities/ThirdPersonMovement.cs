@@ -69,7 +69,7 @@ namespace CreatingCharacters.Player
         }
 
         private float newpos;
-        private float RealYvelocity;
+        public static float RealYvelocity;
         public static float scaledvelocity;
         private float oldpos;
         float lastStep, timeBetweenSteps = 0.1f;

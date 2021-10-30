@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4398807780889132}
+  - component: {fileID: 1260627709670797026}
   m_Layer: 16
   m_Name: Arrow
   m_TagString: Untagged
@@ -25,12 +26,27 @@ Transform:
   m_GameObject: {fileID: 1492139392977032}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0.753}
-  m_LocalScale: {x: 10, y: 10, z: 13}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children:
   - {fileID: 4683578883653602}
   m_Father: {fileID: 4439874536844998}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1260627709670797026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1492139392977032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d9a808ac39a1d7448b5bee6d5a9b1c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tf: {fileID: 4398807780889132}
+  speed: {fileID: 0}
+  consta: 10
 --- !u!1 &1660170682600280
 GameObject:
   m_ObjectHideFlags: 0
@@ -4693,7 +4709,7 @@ MonoBehaviour:
   AirDrag: 0.2
   UseGravity: 1
   ForceMode: 1
-  ColliderRadius: 0.05
+  ColliderRadius: 0.01
   FreezeRotation: 0
   UseTargetPositionAfterCollision: 1
   CollidesWith:
@@ -4780,7 +4796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c48eb6ca95c5bb4d99819cb01faf523, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeTime: 10
+  lifeTime: 5
   spawned: 0
 --- !u!1 &1941536939803490
 GameObject:

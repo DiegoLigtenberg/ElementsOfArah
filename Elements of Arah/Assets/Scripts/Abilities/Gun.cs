@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using CreatingCharacters.Abilities;
 
 public class Gun : MonoBehaviour
 {
@@ -31,10 +32,12 @@ public class Gun : MonoBehaviour
     public static float fromCenterPLayerDistance; //only used to fix P1 bug with avalanche
     public static String targetname;
     public Color darkGreen;
-
+    public GameObject hover_clone_trans;
+    private Vector3 oldpoint;
     private void Start()
     {
-
+       // hover_clone_trans.transform.localPosition = hover_clone_trans.transform.localPosition + new Vector3(0, 0, 20);
+    
     }
 
     // Update is called once per frame
@@ -43,8 +46,10 @@ public class Gun : MonoBehaviour
         CrossWork = hitinfo.point;
 
         FireGun();
-        Debug.Log(this.gameObject.name);
+       // Debug.Log(hover_clone_trans.transform.localPosition);
+
     }
+    public static Transform target_hover;
 
     private void FireGun()
     {
@@ -77,7 +82,7 @@ public class Gun : MonoBehaviour
             var distanceOfCrosshairInvert = (1.9f - distanceOfCrosshair);
 
             distanceOfCrosshair = Mathf.Clamp(distanceOfCrosshair, 0.1f, 1f);
-
+       
             Rigidbody clone = (Rigidbody)Instantiate(prefabBody, hitinfo.point, transform.rotation);
             cloneObject = clone.gameObject;
             cloneTransform = (cloneObject.transform);
@@ -100,6 +105,19 @@ public class Gun : MonoBehaviour
             Destroy(clone2.gameObject);
             Destroy(clone.gameObject);
 
+            if (!ArrowRainMarco.stop_direction) { oldpoint = hitinfo.point;
+                hover_clone_trans.transform.position = oldpoint;
+              
+                hover_clone_trans.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
+            }
+            else
+            {
+               // hover_clone_trans.transform.position =oldpoint;
+                hover_clone_trans.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            }
+
+
             //the image ( The crosshair image that goes bigger and smaller)
             //hold value between 0 and 1.5 -> 0 is low range, 1.5 is max range of distance crosshair;
             if (hold < 1.5f)
@@ -108,6 +126,8 @@ public class Gun : MonoBehaviour
                 //in range -> this needs finetunning! based on max range
                 if (hitinfo.collider.tag == "Enemy")
                 {
+                    target_hover = hitinfo.transform;
+
                     if (Gun.TrueDistanceOfCrosshair < 16f)
                     {
                         //  Debug.Log(hold);                  
