@@ -68,7 +68,7 @@ namespace CreatingCharacters.Abilities
             GetComponent<MarcoMovementController>().jumptimer = 2f; //this is a jump
             fl.m_Priority = 11;
  
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             thirdPersonPlayer.gravity = thirdPersonPlayer.gravity * 2;
             thirdPersonPlayer.gravity = -9.81f;
 

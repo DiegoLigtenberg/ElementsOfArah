@@ -92,6 +92,7 @@ MonoBehaviour:
   hp: {fileID: 0}
   textHpNumber: {fileID: 0}
   mr: {fileID: 0}
+  colorText: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &1726063092399524861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,6 +138,7 @@ GameObject:
   - component: {fileID: 8146724229478895417}
   - component: {fileID: 3468493587648772585}
   - component: {fileID: 8486105892218838107}
+  - component: {fileID: 951541107608044123}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -239,6 +241,8 @@ MonoBehaviour:
   Camera: {fileID: 0}
   Active: 1
   AutoInitCamera: 1
+  destroy_me: 1
+  destroy_timer: 0.799
 --- !u!54 &3468493587648772585
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -268,6 +272,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3468493587648772585}
+--- !u!114 &951541107608044123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2859172627875844911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c48eb6ca95c5bb4d99819cb01faf523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 0.8
+  spawned: 0
 --- !u!1 &3258847956133655711
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +502,8 @@ MonoBehaviour:
   Camera: {fileID: 0}
   Active: 1
   AutoInitCamera: 1
+  destroy_me: 0
+  destroy_timer: 0
 --- !u!114 &7232090771355048814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -611,6 +631,8 @@ MonoBehaviour:
   Camera: {fileID: 0}
   Active: 1
   AutoInitCamera: 1
+  destroy_me: 1
+  destroy_timer: 0.799
 --- !u!114 &3161010605628904388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,6 +789,7 @@ MonoBehaviour:
   hp: {fileID: 0}
   textHpNumber: {fileID: 0}
   mr: {fileID: 5809108618368668538}
+  colorText: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &8599010378500425521
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,6 +922,8 @@ MonoBehaviour:
   Camera: {fileID: 0}
   Active: 1
   AutoInitCamera: 1
+  destroy_me: 1
+  destroy_timer: 0.799
 --- !u!114 &2928325553383082433
 MonoBehaviour:
   m_ObjectHideFlags: 0

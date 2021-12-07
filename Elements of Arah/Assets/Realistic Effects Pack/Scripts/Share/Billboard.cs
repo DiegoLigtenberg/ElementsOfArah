@@ -25,7 +25,8 @@ public class Billboard : MonoBehaviour
     contT.position = t.position;
     t.parent = myContainer.transform;
     contT.parent = parent;
-  }
+    if (myContainer.name == "Billboard_Floating Text(Clone)") { DestroyObject(myContainer, 0.8f); }
+    }
 
   private void Update()
   {

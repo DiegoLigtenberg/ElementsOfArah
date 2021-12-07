@@ -17,13 +17,36 @@ public class ParticleCollisionInstance : MonoBehaviour
     private List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
     private ParticleSystem ps;
 
+    [SerializeField] public int damage = 1;
+    [SerializeField] private DamageTypes damageType;
+    private float timer;
+
     void Start()
     {
         part = GetComponent<ParticleSystem>();
+        damage = DamageManager.basicAttackMarcoDMG + 20;
+    }
+    private void Update()
+    {
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+       
     }
     void OnParticleCollision(GameObject other)
-    {      
-        int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);     
+    {
+        if (other.gameObject.GetComponent<Health>() != null)
+        {
+            if (timer <= 0)
+            {
+                var health = other.gameObject.GetComponent<Health>();
+                health.takeDamage(damage, damageType);
+                timer = 0.2f;
+            }
+
+        }
+            int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);     
         for (int i = 0; i < numCollisionEvents; i++)
         {
             foreach (var effect in EffectsOnCollision)

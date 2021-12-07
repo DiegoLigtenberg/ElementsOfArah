@@ -127,8 +127,8 @@ namespace CreatingCharacters.Abilities
                 yield return new WaitForSeconds(0.1f);
             }
 
-            yield return new WaitForSeconds(.5f);
-            Instantiate(effect[1],spawnpos + new Vector3(0,25,0), effectTransform[5].rotation);
+            yield return new WaitForSeconds(.4f);
+            Instantiate(effect[1],spawnpos + new Vector3(0,24,0), effectTransform[5].rotation);
 
 
             // Transform target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;

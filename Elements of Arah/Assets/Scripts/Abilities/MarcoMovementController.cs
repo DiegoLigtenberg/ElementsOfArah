@@ -42,7 +42,10 @@ namespace CreatingCharacters.Abilities
         protected override void Update()
         {
             movementAnimation();
-
+            if (Input.GetKey(KeyCode.C))
+            {
+                anim.SetBool("crunch_shot", true);
+            }
             if (!PauseMenu.GameIsPaused)
             {
                 base.Update();
@@ -75,6 +78,8 @@ namespace CreatingCharacters.Abilities
                 }
             }
         }
+
+       
 
 
 

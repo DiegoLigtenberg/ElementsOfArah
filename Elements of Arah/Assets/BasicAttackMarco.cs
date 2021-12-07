@@ -38,18 +38,22 @@ namespace CreatingCharacters.Abilities
         {
             base.Update();
             CooldownData();
-     
 
+            Debug.Log(RapidFireMarco.rapidFireHits);
             getdmg = AbilityDamage;
 
             if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
             {
                 StartCoroutine(removePyramid());
             }
-           
+           if (first_hit_timer > 0f)
+            {
+                first_hit_timer -= Time.deltaTime;
+            }
         }
 
         private int doublehit;
+        private float first_hit_timer;
         public override void Cast()
         {
             latecast = true;
@@ -57,9 +61,10 @@ namespace CreatingCharacters.Abilities
 
             oldCamTransform = curCamTransform.position;
             oldCamRotation = curCamTransform.rotation;
-           
 
+            RapidFireMarco.rapidFireHits = 0; // fix bug later, hardforce
             StartCoroutine(basicAttack());
+            first_hit_timer = 0.6f;
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
         }
 
@@ -158,13 +163,37 @@ namespace CreatingCharacters.Abilities
             }
             anim.ResetTrigger("basicAttack");
             anim.ResetTrigger("basicAttackx2");
+            anim.ResetTrigger("rapidFire");
             aus[0].Play();
 
   
         }
 
+        public void removeBowString()
+        {
+            GetComponent<AE_BowString>().InHand = false;
+          
+
+        }
+        public void remove_mana_delay()
+        {
+            //yield return new WaitForSeconds(0.25f);
+            if ((RapidFireMarco.rapidFireHits >= 1 || RapidFireMarco.rapidFireHits == -1 ) && GetComponent<RapidFireMarco>().isFiring &&  first_hit_timer <=0)
+            {
+                energy = energy - 10;
+            }
+            if (GetComponent<RapidFireMarco>().isFiring)
+            {
+                RapidFireMarco.rapidFireHits += 1;
+                
+            }
+        }
         public void stopBowEvent()
         {
+
+
+            remove_mana_delay();
+
             if (GetComponent<MarcoMovementController>().jumptimer >0  &&   Gun.offsetcamera > 7 )
             {
              
@@ -179,7 +208,9 @@ namespace CreatingCharacters.Abilities
 
             GetComponent<AE_BowString>().InHand = false;;
 
-     
+    
+
+
         }
     }
 }
