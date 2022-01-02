@@ -164,6 +164,7 @@ namespace CreatingCharacters.Abilities
             anim.ResetTrigger("basicAttack");
             anim.ResetTrigger("basicAttackx2");
             anim.ResetTrigger("rapidFire");
+            anim.ResetTrigger("isJumping");
             aus[0].Play();
 
   

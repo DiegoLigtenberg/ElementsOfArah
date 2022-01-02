@@ -18,6 +18,7 @@ namespace CreatingCharacters.Abilities
         ThirdPersonMovement thirdPersonPlayer;
         private float lastStepm, timeBetweenStepsm = 0.1f;
         public float jumptimer;
+        public float distanceToGround;
 
         void onground()
         {
@@ -30,7 +31,7 @@ namespace CreatingCharacters.Abilities
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
             //    fireJetPack = GameObject.Find("FireSpawn");
             //   fireJetPack.SetActive(false);
-          
+
         }
 
 
@@ -42,6 +43,7 @@ namespace CreatingCharacters.Abilities
         protected override void Update()
         {
             movementAnimation();
+            landOnGround();
             if (Input.GetKey(KeyCode.C))
             {
                 anim.SetBool("crunch_shot", true);
@@ -77,9 +79,23 @@ namespace CreatingCharacters.Abilities
 
                 }
             }
+
+            RaycastHit hit = new RaycastHit();
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit))
+            {
+                {
+                    distanceToGround = hit.distance;
+                }
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                anim.SetTrigger("Explosion Shot");
+            }
+
         }
 
-       
 
 
 
@@ -93,15 +109,35 @@ namespace CreatingCharacters.Abilities
             animator.SetBool("castTime", false);
             animator.SetBool("casted", false);
             animator.SetBool("jump", false);
+            animator.ResetTrigger("isJumping");
+        }
 
 
 
+        public void landOnGround()
+        {
+            if(distanceToGround < 2.75 && distanceToGround > 0.3f && !isGrounded)
+            {
+                anim.SetBool("landGround",true);
+            }
+            else
+            {
+                anim.SetBool("landGround", false);
+            }
+
+        }
+
+
+        public IEnumerator removeJump()
+        {
+            anim.SetBool("jump", true);
+            yield return new WaitForSeconds(0.5f);
+            anim.SetBool("jump", false);
 
         }
 
         protected override void Jump()
         {
-       
 
             if (Input.GetKeyDown(KeyCode.Space) && !AvatarMoveLocalPosUp.isRooted)
             {
@@ -116,7 +152,9 @@ namespace CreatingCharacters.Abilities
                         {
                             if (Ability.energy >= 30)
                             {
+                                StartCoroutine(removeJump());
                                 anim.SetTrigger("isJumping");
+                      
                                 AddForce(Vector3.up, 2.5f * jumpForce);
                                 if (CooldownHandler.outOfCombat) { Ability.energy -= (energyCostJump / 2); }
                                 else { Ability.energy -= energyCostJump; };

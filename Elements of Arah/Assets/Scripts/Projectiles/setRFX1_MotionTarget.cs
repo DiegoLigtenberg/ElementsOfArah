@@ -10,6 +10,16 @@ public class setRFX1_MotionTarget : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        //remove thi if statement it was for testing arrow effect
+        if (this.gameObject.name == "Collision NODAMAGE ARROW")
+        {
+            if (tm != null)
+            {
+                GameObject.Find("arrowpos").transform.position = Gun.clonePosition2;
+                Target = GameObject.Find("arrowpos").gameObject.name;
+            }            
+        }
+
         if (tm != null)
         {
             tm.Target = GameObject.Find(Target);
@@ -31,6 +41,18 @@ public class setRFX1_MotionTarget : MonoBehaviour
         {
             if (tm != null)
             {
+                tm.Target = GameObject.Find(Target);
+            }
+
+
+        }
+
+        if (this.gameObject.name == "Collision NODAMAGE ARROW")
+        {
+            if (tm != null)
+            {
+                GameObject.Find("arrowpos").transform.position = Gun.clonePosition2;
+                Target = GameObject.Find("arrowpos").gameObject.name;
                 tm.Target = GameObject.Find(Target);
             }
 
