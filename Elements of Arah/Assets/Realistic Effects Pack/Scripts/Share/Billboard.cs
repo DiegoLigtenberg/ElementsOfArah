@@ -23,7 +23,7 @@ public class Billboard : MonoBehaviour
     myContainer = new GameObject { name = "Billboard_" + t.gameObject.name };
     contT = myContainer.transform;
     contT.position = t.position;
-    t.parent = myContainer.transform;
+    t.SetParent(myContainer.transform);
     contT.parent = parent;
     if (myContainer.name == "Billboard_Floating Text(Clone)") { DestroyObject(myContainer, 0.8f); }
     }

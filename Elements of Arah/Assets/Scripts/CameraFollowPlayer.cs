@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatingCharacters.Player;
 using Cinemachine;
+using CreatingCharacters.Abilities;
 
 public class CameraFollowPlayer : MonoBehaviour
 {
@@ -22,7 +23,8 @@ public class CameraFollowPlayer : MonoBehaviour
 
     [SerializeField] private ThirdPersonMovement thirdPersonPlayer;
 
-
+    public GameObject archer_rot;
+    public GameObject p_rot;
 
     private void Awake()
     {
@@ -32,7 +34,8 @@ public class CameraFollowPlayer : MonoBehaviour
         camRotation.x = 0;
 
 
-
+        archer_rot = GameObject.Find("archer rot");
+        p_rot = GameObject.Find("archer@Standing Aim Recoil (2)");
     }
 
 
@@ -79,7 +82,17 @@ public class CameraFollowPlayer : MonoBehaviour
 
 
         transform.localRotation = Quaternion.AngleAxis(-currentLookingDirection.y, Vector3.right);
-        playerTransform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
+       
+       // playerTransform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
+        if (Ability.globalCooldown <= 0)
+        {
+           p_rot.transform.localRotation =archer_rot.transform.localRotation;
+           
+          //  playerTransform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
+        }
+
+        archer_rot.transform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
+
 
 
 

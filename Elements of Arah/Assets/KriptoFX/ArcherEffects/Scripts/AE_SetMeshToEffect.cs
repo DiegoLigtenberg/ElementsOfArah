@@ -22,7 +22,7 @@ public class AE_SetMeshToEffect : MonoBehaviour
         }
         if (MeshType == EffectMeshType.Arrow)
         {
-            Mesh = GameObject.Find("Arrow");
+          //  Mesh = GameObject.Find("Arrow");
             Debug.Log(Mesh.gameObject.name);
         }
 

@@ -289,7 +289,7 @@ public class TrollController : MonoBehaviour
                 agent.speed = movespeed;
                 target = targetMiddle;
 
-                agent.stoppingDistance = 1;
+                agent.stoppingDistance = 0;
 
                 startwalkingPlayer = false; //stop met achter speler aanlopen 
                 startwalkingMiddle = true;

@@ -84,9 +84,19 @@ public class AE_PhysicsMotion : MonoBehaviour
 
     }
 
-
+    public GameObject IMPACT;
+    public IEnumerator Destroyer()
+    {
+        yield return new WaitForSeconds(3f);
+        Destroy(IMPACT);
+    }
     void OnCollisionEnter(Collision collision)
     {
+        GameObject empty = new GameObject("empty");
+        IMPACT = Instantiate(empty, collision.GetContact(0).point,Quaternion.identity);
+        Destroy(empty);
+        StartCoroutine(Destroyer());
+
         //Checkforlayermask
         // if ((CollidesWith & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
         if (collision.collider.tag != "Player")

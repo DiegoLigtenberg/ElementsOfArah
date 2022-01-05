@@ -98,7 +98,37 @@ public class CooldownHandler : MonoBehaviour
                 
             }
         }
-        
+
+
+        if (enhance_timer >= 0)
+        {
+            enhance_timer -= Time.deltaTime;
+         
+        }
+        else
+        {
+            if (casted > 0)
+            {
+                casted = 0;
+                enhance_timer = 5;
+            }
+
+        }
+
+
+
+    }
+    private float enhance_timer;
+    public static int casted;
+
+    public IEnumerator delayEnhanced()
+    {
+        yield return new WaitForSeconds(0.3f);
+
+        casted += 3 + 1;
+        casted = Mathf.Min(4, casted);
+
+        enhance_timer = 5;
     }
 
     public bool recasting;
@@ -108,6 +138,20 @@ public class CooldownHandler : MonoBehaviour
         //hier moet ik switch van maken eigenlijk
 
         abilitiesOnCooldown.Add(new CooldownData(ability, ability.AbilityCooldown * cooldownreductionPCT));
+
+        if (ability.AbilityName != "basic Attack Marco")
+        {
+            StartCoroutine(delayEnhanced()); //delay so that it only works after aa + abil
+        }
+        else
+        {
+            if (casted > 0)
+            {
+                casted -= 1;
+            }
+           
+        }
+
 
 
         /*

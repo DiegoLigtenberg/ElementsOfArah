@@ -24,7 +24,7 @@ namespace CreatingCharacters.Abilities
                               // Start is called before the first frame update
         private ThirdPersonMovement thirdPersonPlayer;
         public AudioSource[] aus;
-
+        public int enhanced_attack;
 
         private void Awake()
         {
@@ -39,7 +39,11 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
 
-            Debug.Log(RapidFireMarco.rapidFireHits);
+            if (CooldownHandler.casted > 0) { enhanced_attack = 2; }
+            else { enhanced_attack = 1; }
+           
+
+           // Debug.Log(RapidFireMarco.rapidFireHits);
             getdmg = AbilityDamage;
 
             if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
@@ -122,7 +126,7 @@ namespace CreatingCharacters.Abilities
             {
                 if (Ability.animationCooldown <= 0.4f)
                 {
-                    Ability.animationCooldown = 0.4f;
+                    Ability.animationCooldown = 0.5f;
                     // Ability.globalCooldown = 0.05f;
 
                 }
@@ -189,20 +193,30 @@ namespace CreatingCharacters.Abilities
                 
             }
         }
+
         public void stopBowEvent()
         {
 
 
             remove_mana_delay();
 
-            if (GetComponent<MarcoMovementController>().jumptimer >0  &&   Gun.offsetcamera > 7 )
+            if (GetComponent<MarcoMovementController>().jumptimer > 0 && Gun.offsetcamera > 7)
             {
-             
-                Instantiate(effect[1], new Vector3(curCamTransform.position.x,jumpCamTransform.y,curCamTransform.position.z), oldCamRotation);
+
+
+                Instantiate(effect[enhanced_attack], new Vector3(curCamTransform.position.x, jumpCamTransform.y, curCamTransform.position.z), oldCamRotation);
             }
             else
             {
-                Instantiate(effect[1], curCamTransform.position, oldCamRotation);
+                if (!GetComponent<RapidFireMarco>().isFiring)
+                {
+                    Instantiate(effect[enhanced_attack], curCamTransform.position, oldCamRotation);
+                }
+                else
+                {
+                    Instantiate(effect[2], curCamTransform.position, oldCamRotation); //als we wel rfc firen -> al1 bonus met 3 stacks!
+
+                }
 
             }
             aus[1].Play();
