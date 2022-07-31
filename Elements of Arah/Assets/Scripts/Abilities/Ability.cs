@@ -19,7 +19,12 @@ namespace CreatingCharacters.Abilities
         public static float animationCooldown = 0f;
         public static float tickCooldown = 0f;
 
+        public static bool channel_ability_active;
+
         public static float energy = 0f;
+
+
+        public float AbilityCooldownLeft {get  { return abilityCooldownLeft; } set { abilityCooldownLeft = value; } }
 
         public string AbilityName { get { return abilityName; } }
 
@@ -50,6 +55,7 @@ namespace CreatingCharacters.Abilities
 
         private string furioushitabil = "Furious Hit";
         private string avalancheabil = "Avalanche";
+        private string chargeshotabil = "Charge Shot Marco";
 
 
         private int abilityCountType;
@@ -71,10 +77,20 @@ namespace CreatingCharacters.Abilities
         //abilities
         public abstract void Cast();
 
+        public void check_if_channeling()
+        {
+            // list of all channeled abilities -> if one active, can't use recast for basic attack
+            if (BeamAbility.Beam_is_channeling || RapidFireMarco.RapidFire_is_Channeling) {channel_ability_active = true; }
+            else { channel_ability_active = false; }
+        }
+
         protected virtual void Update()
         {
             //check how long it takes before ability is on cd
             abilityCooldownLeft = CooldownHandler.Instance.CooldownSeconds(this);
+
+            check_if_channeling();
+
 
             //manage out of bound energy
             if (energy > 100) { energy = 100; }
@@ -102,7 +118,7 @@ namespace CreatingCharacters.Abilities
                     // Debug.Log(onlyonce);
 
                     //this is delay for auto ability queing
-                    if (CooldownHandler.alreadyCasting < 0.6f && !onlyonce)
+                    if (CooldownHandler.alreadyCasting < 0.6f && !onlyonce )
                     {
                         onlyonce = true;
                         Debug.Log(this.abilityName + " is on cd for " + CooldownHandler.alreadyCasting);
@@ -155,7 +171,7 @@ namespace CreatingCharacters.Abilities
                     {
                         if (energy >= basicrequirement)
                         {
-                            if (this.AbilityName == furioushitabil && GetComponent<FuriousHit>().cooldownFireBreath >= 0.3f)
+                            if (this.AbilityName == furioushitabil && GetComponent<FuriousHit>().cooldownFireBreath >= 0.3f || this.abilityName == chargeshotabil && !GetComponent<MarcoMovementController>().isGrounded)
                             {
                                 onlyonce = false;
                                 alreadyglobal = false;
@@ -245,7 +261,8 @@ namespace CreatingCharacters.Abilities
             // alreadyglobal = true; //staat al bij begin
             onlyonce = true;
             alreadyglobal = true;
-            // Debug.Log("global cooldown = " + globalCooldown);
+            Debug.Log("global cooldown = " + globalCooldown);
+            Debug.Log(this.abilityName);
 
             //de + 0.01f is zodat je energy goed registered en  (anders is het te laag bij recasten!)
             yield return new WaitForSeconds(globalCooldown + 0.01f);
@@ -396,7 +413,7 @@ namespace CreatingCharacters.Abilities
             Debug.Log(" this is probably also true -,- " + alreadyglobal);
 
 
-            if (GetComponent<BeamAbility>() != null && GetComponent<BeamAbility>().usingBeamP == true || GetComponent<BeamAbility>() == null)
+            if (channel_ability_active) // || GetComponent<BeamAbility>() == null)   // IF we would add this last commented line->marco bug
             {
                 onlyonce = false;
                 alreadyglobal = false;
@@ -405,9 +422,10 @@ namespace CreatingCharacters.Abilities
 
             //de + 0.01f is zodat je energy goed registered en  (anders is het te laag bij recasten!)
             yield return new WaitForSeconds(CooldownHandler.alreadyCasting + 0.01f);
+            //yield return new WaitForSeconds(globalCooldown + 0.01f);
+            Debug.Log(CooldownHandler.alreadyCasting);
 
-
-            if (!alreadyglobal && (GetComponent<BeamAbility>() != null && GetComponent<BeamAbility>().usingBeamP == false || GetComponent<BeamAbility>() == null))
+            if (!alreadyglobal && (channel_ability_active == false))
             {
 
                 if (globalCooldown > 0 && globalCooldown < 0.8f)
@@ -453,7 +471,7 @@ namespace CreatingCharacters.Abilities
 
                                 if (energy >= basicrequirement)
                                 {
-                                    if (this.AbilityName == furioushitabil && GetComponent<FuriousHit>().cooldownFireBreath >= 0.4f)
+                                    if (this.AbilityName == furioushitabil && GetComponent<FuriousHit>().cooldownFireBreath >= 0.4f ||this.abilityName == chargeshotabil && !GetComponent<MarcoMovementController>().isGrounded)
                                     {
                                         onlyonce = false;
                                         alreadyglobal = false;
@@ -565,7 +583,7 @@ namespace CreatingCharacters.Abilities
 
                         if (energy >= basicrequirement)
                         {
-                            if (this.AbilityName == furioushitabil && GetComponent<FuriousHit>().cooldownFireBreath >= 0.4f)
+                            if (this.AbilityName == furioushitabil && GetComponent<FuriousHit>().cooldownFireBreath >= 0.4f ||this.abilityName == chargeshotabil && !GetComponent<MarcoMovementController>().isGrounded)
                             {
                                 //risky may cause bug
                                 onlyonce = false;
@@ -637,7 +655,7 @@ namespace CreatingCharacters.Abilities
 
             }
 
-            else if (GetComponent<BeamAbility>() != null && GetComponent<BeamAbility>().usingBeamP || GetComponent<BeamAbility>() == null)
+            else if (channel_ability_active )
             {
                 onlyonce = false;
                 alreadyglobal = false;

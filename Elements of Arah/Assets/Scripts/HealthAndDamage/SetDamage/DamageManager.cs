@@ -10,6 +10,12 @@ public class DamageManager : MonoBehaviour
     public Avalanche avalanche;
     public FuriousHit furiousHit;
 
+    public BasicAttackMarco basicAttackMarco;
+    public ChargeShotMarco chargeshotMarco;
+    public RapidFireMarco rapidFireMarco;
+    public ArrowRainMarco arrowRainMarco;
+ 
+
     //arah abilities
     public static int basicAttackDMG;
     public static int beamAbilityDMG;
@@ -18,9 +24,13 @@ public class DamageManager : MonoBehaviour
     private int sunshineMultiplier;
 
     //marco abilities
-    public BasicAttackMarco basicAttackMarco;
-
     public static int basicAttackMarcoDMG;
+    public static int chargeshotMarcoDMG;
+    public static int rapidFireMArcoDMG;
+    public static int arrowRainMarcoDMG;
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +44,9 @@ public class DamageManager : MonoBehaviour
 
 
         basicAttackMarcoDMG = basicAttackMarco.getdmg;
+        rapidFireMArcoDMG = rapidFireMarco.getdmg;
+        arrowRainMarcoDMG = arrowRainMarco.getdmg;
+        chargeshotMarcoDMG = chargeshotMarco.getdmg;
 
     }
 
@@ -58,5 +71,7 @@ public class DamageManager : MonoBehaviour
             avalancheDMG = (int)(avalanche.AbilityDamage * SunShine.SunShineMultiplier);
             furiousHitDMG = (int)(furiousHit.AbilityDamage * SunShine.SunShineMultiplier);
         }
+
+        basicAttackMarcoDMG = (int)basicAttackMarco.getdmg +   (5 *  Mathf.Max(0,RapidFireMarco.rapidFireHitsDMG-1));
     }
 }

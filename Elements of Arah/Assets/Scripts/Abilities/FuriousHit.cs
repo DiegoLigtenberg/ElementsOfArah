@@ -486,10 +486,12 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
             ChargeCooldown();
+
+            // match generalized  cooldownleft with charged cooldown due to charge ability
+            AbilityCooldownLeft = cooldownFireBreath;  
             //TickCooldownData();
             //  Debug.Log(stateOfAbil);         
             // text.text = showImageNumber.ToString();
-
             if (stateOfAbil >= 4)
             {
                 // stateOfAbil = 1;

@@ -143,7 +143,6 @@ public class PhasManager : MonoBehaviour
             gf[4].SetActive(false);
 
             indicator[1].SetActive(true);
-            Debug.Log("indicator 1 activated");
 
             pyramids[2].SetActive(true);
         }

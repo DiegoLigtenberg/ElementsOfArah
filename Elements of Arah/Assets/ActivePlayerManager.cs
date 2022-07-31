@@ -7,6 +7,7 @@ public class ActivePlayerManager : MonoBehaviour
     public Transform[] players; //0 = arah       1 = Marco   2 = Melee
     public static string ActivePlayerName;
     public static GameObject ActivePlayerGameObj;
+    public static int ActivePlayerNum;
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,6 +22,7 @@ public class ActivePlayerManager : MonoBehaviour
             {
                 ActivePlayerName = players[i].gameObject.name;
                 ActivePlayerGameObj = players[i].gameObject;
+                ActivePlayerNum = i;
             }
         }
     }

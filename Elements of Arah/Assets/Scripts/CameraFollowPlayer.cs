@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using CreatingCharacters.Player;
 using Cinemachine;
-using CreatingCharacters.Abilities;
 
 public class CameraFollowPlayer : MonoBehaviour
 {
@@ -83,16 +82,17 @@ public class CameraFollowPlayer : MonoBehaviour
 
         transform.localRotation = Quaternion.AngleAxis(-currentLookingDirection.y, Vector3.right);
        
-       // playerTransform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
+        playerTransform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
+
+        /* only rotate if not on animation cooldown!
         if (Ability.globalCooldown <= 0)
         {
            p_rot.transform.localRotation =archer_rot.transform.localRotation;
            
           //  playerTransform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
         }
-
         archer_rot.transform.localRotation = Quaternion.AngleAxis(currentLookingDirection.x, playerTransform.up);
-
+        */
 
 
 

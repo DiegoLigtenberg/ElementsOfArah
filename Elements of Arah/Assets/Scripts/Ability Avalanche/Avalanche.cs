@@ -35,10 +35,10 @@ namespace CreatingCharacters.Abilities
         private bool latecast;
 
         public GameObject nomana;
+        private bool manaactive;
         public GameObject outrange;
 
         public GameObject textobjectcd;
-        [HideInInspector] public float textcdleft;
 
         private void Awake()
         {
@@ -55,7 +55,6 @@ namespace CreatingCharacters.Abilities
         private void CooldownData()
         {
             //text that shows when ability from cd
-            textcdleft = abilityCooldownLeft;
 
             // if (Input.GetKeyDown(abilityKey) && abilityCooldownLeft == 0&& Gun.TrueDistanceOfCrosshair < 50 || latecast)
             if (latecast)
@@ -65,7 +64,7 @@ namespace CreatingCharacters.Abilities
                 Debug.Log("abilitycooldown");
             }
 
-            if (abilityCooldownLeft != 0)
+            if (AbilityCooldownLeft != 0)
             {
                 textobjectcd.SetActive(true);
                 abilityImage.fillAmount -= 1 / AbilityCooldown * Time.deltaTime;
@@ -128,7 +127,7 @@ namespace CreatingCharacters.Abilities
         }
 
 
-        private bool manaactive;
+       
         // Update is called once per frame
         protected override void Update()
         {
@@ -137,7 +136,7 @@ namespace CreatingCharacters.Abilities
             //TickCooldownData();
 
             //nomana
-            if (Ability.energy < 70 && abilityCooldownLeft <= 0)
+            if (Ability.energy < 70 && AbilityCooldownLeft <= 0)
             {
                 manaactive = true;
                 nomana.SetActive(true);
@@ -150,7 +149,7 @@ namespace CreatingCharacters.Abilities
             }
 
             //outrange AND from cd
-            if (Gun.fromCenterPLayerDistance > 60 && abilityCooldownLeft <= 0)
+            if (Gun.fromCenterPLayerDistance > 60 && AbilityCooldownLeft <= 0)
             {
                 if (manaactive == false)
                 {

@@ -13,6 +13,8 @@ public class CooldownHandler : MonoBehaviour
     public static CooldownHandler Instance;
     public static float alreadyCasting = 1f;
     private float cooldownreductionPCT = 1f;
+
+    private float abil_queue_duration = 0.6f; // 0.6 seconds before global cooldown, can already cast ability to queue
     
     private void Awake()
     {
@@ -99,23 +101,8 @@ public class CooldownHandler : MonoBehaviour
             }
         }
 
-
-        if (enhance_timer >= 0)
-        {
-            enhance_timer -= Time.deltaTime;
-         
-        }
-        else
-        {
-            if (casted > 0)
-            {
-                casted = 0;
-                enhance_timer = 5;
-            }
-
-        }
-
-
+        if (casted > 1) { casted = 1; }
+        if (casted < 0) { casted = 0; }
 
     }
     private float enhance_timer;
@@ -123,12 +110,9 @@ public class CooldownHandler : MonoBehaviour
 
     public IEnumerator delayEnhanced()
     {
-        yield return new WaitForSeconds(0.3f);
-
-        casted += 3 + 1;
-        casted = Mathf.Min(4, casted);
-
-        enhance_timer = 5;
+        // instead of float 0.6 first_hit timer = > makes it so that also when delaying rfc after aa -> still only 2 shots when letting loose early -> still wait minimum of 0.4 sec for bug fix
+        yield return new WaitForSeconds(Mathf.Min(Mathf.Max(0.9f - ActivePlayerManager.ActivePlayerGameObj.GetComponent<BasicAttackMarco>().AbilityCooldownLeft, 0.43f), 0.6f));
+        casted +=  1;
     }
 
     public bool recasting;
@@ -139,17 +123,12 @@ public class CooldownHandler : MonoBehaviour
 
         abilitiesOnCooldown.Add(new CooldownData(ability, ability.AbilityCooldown * cooldownreductionPCT));
 
-        if (ability.AbilityName != "basic Attack Marco")
+
+
+        if (ability.AbilityName != "basic Attack Marco" && ActivePlayerManager.ActivePlayerNum == 1) //playernum 1 == marco
         {
-            StartCoroutine(delayEnhanced()); //delay so that it only works after aa + abil
-        }
-        else
-        {
-            if (casted > 0)
-            {
-                casted -= 1;
-            }
-           
+            StartCoroutine( delayEnhanced());
+            Debug.Log(ability.AbilityName);
         }
 
 
@@ -160,7 +139,7 @@ public class CooldownHandler : MonoBehaviour
             abilitiesOnCooldown.Add(new CooldownData(ability, .5f * ability.AbilityCooldown));
         }
         */
-        
+
     }
 
     
@@ -195,7 +174,7 @@ public class CooldownHandler : MonoBehaviour
               //  Debug.Log($" {ability.AbilityName} is on cooldown for another { cooldownData.cooldown} seconds");
 
                 //zorgt ervoor dat je cast queued!
-                if (cooldownData.cooldown < 0.6f)
+                if (cooldownData.cooldown < abil_queue_duration) //0.6f
                 {
                     alreadyCasting = cooldownData.cooldown;
                 }

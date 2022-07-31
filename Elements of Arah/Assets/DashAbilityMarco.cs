@@ -5,6 +5,7 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.UI;
 using TMPro;
+using CreatingCharacters.Abilities;
 
 namespace CreatingCharacters.Abilities
 {
@@ -63,7 +64,15 @@ namespace CreatingCharacters.Abilities
             thirdPersonPlayer.gravity = 0;
             dashtransform = GameObject.Find("dashcampos").transform.position;
 
-         //   charController.enabled = false;
+            yield return new WaitForSeconds(0.091f);
+            Ability.animationCooldown = 0.8f;  //je kan al iets eerder loop input geven dan dat je weer ability kan doen!
+
+            if (Ability.globalCooldown <= 0.74f)
+            {
+                Ability.globalCooldown = 0.74f;
+            }
+
+            //   charController.enabled = false;
             yield return new WaitForSeconds(0.2f);
             GetComponent<MarcoMovementController>().jumptimer = 2f; //this is a jump
             fl.m_Priority = 11;

@@ -30,6 +30,13 @@ public class AvatarMoveLocalPosUp : MonoBehaviour
         goingdown = true;
     }
 
+    public static IEnumerator manual_root(float root_duration)
+    {
+        isRooted = true;
+
+        yield return new WaitForSeconds(root_duration);
+        isRooted = false;
+    }
 
     // Update is called once per frame
     void Update()

@@ -21,6 +21,8 @@ namespace CreatingCharacters.Abilities
         public bool usingBeamP = false; //beamP is zowel voor basic attack als voor animation delay nu!
         public bool usingbeamF = false; //voor furious hit
 
+        public static bool Beam_is_channeling;
+
         float lastStep, timeBetweenSteps = 0.2f;
         float lastStep2, timeBetweenSteps2 = 0.167f; //3 ticks!
         float timer;
@@ -31,7 +33,6 @@ namespace CreatingCharacters.Abilities
         public GameObject nomana;
 
         public GameObject textobjectcd;
-        [HideInInspector] public float textcdleft;
 
         private void Awake()
         {
@@ -42,6 +43,8 @@ namespace CreatingCharacters.Abilities
 
             abilityKey = InputManager.instance.getKeyCode("beam");
             cancelvar = true;
+
+            Beam_is_channeling = false;
            
         }
 
@@ -49,9 +52,6 @@ namespace CreatingCharacters.Abilities
 
         private void CooldownData()
         {
-            //text that shows when ability from cd
-            textcdleft = abilityCooldownLeft;
-          
             
 
            // if (Input.GetKeyDown(abilityKey) && abilityCooldownLeft == 0)
@@ -100,6 +100,8 @@ namespace CreatingCharacters.Abilities
         protected override void Update()
         {
             base.Update();
+
+            Beam_is_channeling = usingBeamP;
 
             //info about cooldown
             CooldownData();

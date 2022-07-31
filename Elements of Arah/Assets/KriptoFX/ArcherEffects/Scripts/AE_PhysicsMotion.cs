@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
+using CreatingCharacters.Abilities;
 public class AE_PhysicsMotion : MonoBehaviour
 {
     public bool UseCollisionDetect = true;
@@ -39,8 +39,11 @@ public class AE_PhysicsMotion : MonoBehaviour
     bool isInitializedForce;
     float currentSpeedOffset;
 
+
     [SerializeField] public int damage = 1;
     [SerializeField] private DamageTypes damageType;
+    public GameObject IMPACT;
+    private bool buff_next_basic_attack;
 
     void OnEnable()
     {
@@ -54,6 +57,9 @@ public class AE_PhysicsMotion : MonoBehaviour
         }
         currentSpeedOffset = Random.Range(-RandomSpeedOffset * 10000f, RandomSpeedOffset * 10000f) / 10000f;
         InitializeRigid();
+
+        //Debug.Log(CooldownHandler.casted );
+        if (CooldownHandler.casted ==1) { buff_next_basic_attack = true; } //smaller than max but bigger than 0
     }
 
     void InitializeRigid()
@@ -84,18 +90,21 @@ public class AE_PhysicsMotion : MonoBehaviour
 
     }
 
-    public GameObject IMPACT;
+
     public IEnumerator Destroyer()
     {
         yield return new WaitForSeconds(3f);
         Destroy(IMPACT);
     }
+
+
     void OnCollisionEnter(Collision collision)
     {
         GameObject empty = new GameObject("empty");
-        IMPACT = Instantiate(empty, collision.GetContact(0).point,Quaternion.identity);
+        IMPACT = Instantiate(empty, collision.GetContact(0).point, Quaternion.identity);
         Destroy(empty);
         StartCoroutine(Destroyer());
+
 
         //Checkforlayermask
         // if ((CollidesWith & 1 << collision.gameObject.layer) == 1 << collision.gameObject.layer)
@@ -132,6 +141,7 @@ public class AE_PhysicsMotion : MonoBehaviour
                     {
                         Debug.Log("dealt " + damage + " damage");
 
+                        if (buff_next_basic_attack){ health.takeDamage(10, DamageTypes.Elemental); }
 
                         if (!this.gameObject.name.Contains("CollisionAvalanche"))
                         {
@@ -213,6 +223,8 @@ public class AE_PhysicsMotion : MonoBehaviour
 
             if (rigid != null) Destroy(rigid);
             if (collid != null) Destroy(collid);
+
+
         }
     }
 

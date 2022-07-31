@@ -39,8 +39,8 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
 
-            if (CooldownHandler.casted > 0) { enhanced_attack = 2; }
-            else { enhanced_attack = 1; }
+        
+            
            
 
            // Debug.Log(RapidFireMarco.rapidFireHits);
@@ -50,14 +50,16 @@ namespace CreatingCharacters.Abilities
             {
                 StartCoroutine(removePyramid());
             }
-           if (first_hit_timer > 0f)
-            {
-                first_hit_timer -= Time.deltaTime;
-            }
+   
         }
 
         private int doublehit;
-        private float first_hit_timer;
+
+        public void update_oldcam_rotation()
+        {
+            oldCamRotation = curCamTransform.rotation;
+        }
+
         public override void Cast()
         {
             latecast = true;
@@ -68,7 +70,6 @@ namespace CreatingCharacters.Abilities
 
             RapidFireMarco.rapidFireHits = 0; // fix bug later, hardforce
             StartCoroutine(basicAttack());
-            first_hit_timer = 0.6f;
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
         }
 
@@ -102,36 +103,30 @@ namespace CreatingCharacters.Abilities
 
             }
         
-            if (Input.GetKey(KeyCode.LeftShift))    // (doublehit % 3 == 0)
-            {
-                anim.SetTrigger("basicAttackx2");
-               
-            }
-            else
-            {
-                anim.SetTrigger("basicAttack");
+         
+            anim.SetTrigger("basicAttack");
                 
-            }
+            
             anim.SetBool("casted", true);
 
             yield return new WaitForSeconds(0.001f);
-            if  (Input.GetKey(KeyCode.LeftShift))//(doublehit % 3 == 0)
+ 
+       
+            if (Ability.animationCooldown <= 0.4f)
             {
-                if (Ability.animationCooldown <= 1.3f)
-                {
-                    Ability.animationCooldown = 1.0f;
-                }
+                Ability.animationCooldown = 0.5f;
+                // Ability.globalCooldown = 0.05f;
+
             }
-            else
+            
+
+            //GENIUS MOVE TO RIVEN AA STYLE
+            yield return new WaitForSeconds(0.3f);
+            if (Ability.globalCooldown <= 0.6f)
             {
-                if (Ability.animationCooldown <= 0.4f)
-                {
-                    Ability.animationCooldown = 0.5f;
-                    // Ability.globalCooldown = 0.05f;
 
-                }
+                Ability.globalCooldown = 0.6f;
             }
-
         }
 
         public IEnumerator removePyramid()
@@ -154,19 +149,26 @@ namespace CreatingCharacters.Abilities
             jumpCamTransform = curCamTransform.position;
         }
 
+        public void StopRapidFire()
+        {
+            if (energy < 10) {  anim.SetBool("rapidFireActive", false); GetComponent<RapidFireMarco>().onlyoncerfc = false; }
+       
+        }
         public void BowEvent()
         {        
             GetComponent<AE_BowString>().InHand = true;
-          
-            //GENIUS MOVE TO RIVEN AA STYLE
-            // yield return new WaitForSeconds(0.2f);
-            if (Ability.globalCooldown <= 0.6f)
-            {
+     
 
-                Ability.globalCooldown = 0.6f;
+            if (Ability.animationCooldown <= 0.2f)
+            {
+              //  Ability.animationCooldown = 0.2f;
+                // Ability.globalCooldown = 0.05f;
+
             }
+
+     
+
             anim.ResetTrigger("basicAttack");
-            anim.ResetTrigger("basicAttackx2");
             anim.ResetTrigger("rapidFire");
             anim.ResetTrigger("isJumping");
             aus[0].Play();
@@ -176,20 +178,22 @@ namespace CreatingCharacters.Abilities
 
         public void removeBowString()
         {
-            GetComponent<AE_BowString>().InHand = false;
-          
-
+            GetComponent<AE_BowString>().InHand = false;   
         }
+
         public void remove_mana_delay()
         {
             //yield return new WaitForSeconds(0.25f);
-            if ((RapidFireMarco.rapidFireHits >= 1 || RapidFireMarco.rapidFireHits == -1 ) && GetComponent<RapidFireMarco>().isFiring &&  first_hit_timer <=0)
+            if ((RapidFireMarco.rapidFireHits >= 2 || RapidFireMarco.rapidFireHits == -1 ) && GetComponent<RapidFireMarco>().isFiring && GetComponent<RapidFireMarco>().first_hit_timer <=0)
             {
-                energy = energy - 10;
+                energy = energy - 7.5f;
+                StartCoroutine(AvatarMoveLocalPosUp.manual_root(0.4f));
             }
             if (GetComponent<RapidFireMarco>().isFiring)
             {
                 RapidFireMarco.rapidFireHits += 1;
+
+
                 
             }
         }
@@ -197,24 +201,41 @@ namespace CreatingCharacters.Abilities
         public void stopBowEvent()
         {
 
+       
 
             remove_mana_delay();
+            if (CooldownHandler.casted > 0) { enhanced_attack = 2; }
+            else { enhanced_attack = 1; }
 
             if (GetComponent<MarcoMovementController>().jumptimer > 0 && Gun.offsetcamera > 7)
             {
 
 
                 Instantiate(effect[enhanced_attack], new Vector3(curCamTransform.position.x, jumpCamTransform.y, curCamTransform.position.z), oldCamRotation);
+               
+                if (CooldownHandler.casted > 0)
+                {
+                    CooldownHandler.casted -= 1;
+                }
+                
             }
             else
             {
                 if (!GetComponent<RapidFireMarco>().isFiring)
                 {
                     Instantiate(effect[enhanced_attack], curCamTransform.position, oldCamRotation);
+                    if (CooldownHandler.casted > 0)
+                    {
+                        CooldownHandler.casted -= 1;
+                    }
                 }
                 else
                 {
-                    Instantiate(effect[2], curCamTransform.position, oldCamRotation); //als we wel rfc firen -> al1 bonus met 3 stacks!
+                    Instantiate(effect[enhanced_attack], curCamTransform.position, oldCamRotation); //als we wel rfc firen -> al1 bonus met 3 stacks!
+                    if (CooldownHandler.casted > 0)
+                    {
+                        CooldownHandler.casted -= 1;
+                    }
 
                 }
 

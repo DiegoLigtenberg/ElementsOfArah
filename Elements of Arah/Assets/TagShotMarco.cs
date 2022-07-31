@@ -26,10 +26,19 @@ namespace CreatingCharacters.Abilities
         public AudioSource[] aus;
         public int enhanced_attack;
 
+        public int[] bombhits;
+
+        public Transform[] boss_attach_transform;
+        public GameObject[] boss_tag_location;
+
+        private int doublehit;
+        private float first_hit_timer;
+        private bool afterpyramid;
+
         private void Awake()
         {
           //  abilityImage.fillAmount = 0;
-            abilityType = 1;
+           // abilityType = 1;
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
         }
 
@@ -41,9 +50,7 @@ namespace CreatingCharacters.Abilities
 
             if (CooldownHandler.casted > 0) { enhanced_attack = 2; }
             else { enhanced_attack = 1; }
-
-
-            // Debug.Log(RapidFireMarco.rapidFireHits);
+            
             getdmg = AbilityDamage;
 
             if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
@@ -56,8 +63,7 @@ namespace CreatingCharacters.Abilities
             }
         }
 
-        private int doublehit;
-        private float first_hit_timer;
+
         public override void Cast()
         {
             latecast = true;
@@ -72,8 +78,6 @@ namespace CreatingCharacters.Abilities
             first_hit_timer = 0.6f;
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
         }
-
-        private bool afterpyramid;
 
         private void CooldownData()
         {
@@ -143,7 +147,6 @@ namespace CreatingCharacters.Abilities
                 Ability.globalCooldown = 0.6f;
             }
             anim.ResetTrigger("basicAttack");
-            anim.ResetTrigger("basicAttackx2");
             anim.ResetTrigger("rapidFire");
             anim.ResetTrigger("isJumping");
             //aus[0].Play();

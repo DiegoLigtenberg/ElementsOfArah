@@ -31,7 +31,6 @@ namespace CreatingCharacters.Abilities
         public GameObject nomana;
 
         public GameObject textobjectcd;
-        [HideInInspector] public float textcdleft;
 
         // Start is called before the first frame update
         void Start()
@@ -130,7 +129,7 @@ namespace CreatingCharacters.Abilities
         private void CooldownData()
         {
 
-            textcdleft = abilityCooldownLeft;
+
             if (Input.GetKeyDown(abilityKey) && abilityCooldownLeft == 0 && GetComponent<BeamAbility>().usingBeamP == false && latecast || latecast && GetComponent<BeamAbility>().usingBeamP == false)
             {
                 latecast = false;
