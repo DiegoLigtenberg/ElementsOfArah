@@ -20,6 +20,7 @@ public class AE_LightCurves : MonoBehaviour
     private GameObject parent_delete;
     private float rfc;
     private bool onlyonce;
+    private bool no_delete_all_once;
     public void SetStartColor(Color color)
     {
         startColor = color;
@@ -28,7 +29,7 @@ public class AE_LightCurves : MonoBehaviour
     public IEnumerator destroy_self()
     {
         yield return new WaitForSeconds(3);
-        parent_delete = transform.root.gameObject;
+        parent_delete = transform.parent.parent.gameObject;
         Destroy(parent_delete);
     }
 
@@ -70,7 +71,7 @@ public class AE_LightCurves : MonoBehaviour
         else
         {
             if (light_intensity > 0) { GetComponent<Light>().intensity -= rfc * Time.deltaTime; }
-            if (light_intensity < 0.1f && !onlyonce) { StartCoroutine(destroy_self()); } //1.1f makes it smooth glow out when loosening rapid fire
+            if (light_intensity < 0.1f && !onlyonce) { if (no_delete_all_once) { StartCoroutine(destroy_self()); no_delete_all_once = true; } } //1.1f makes it smooth glow out when loosening rapid fire
 
             /*
             if (canUpdate) {

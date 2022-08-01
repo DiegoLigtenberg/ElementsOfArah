@@ -194,7 +194,7 @@ namespace CreatingCharacters.Abilities
             Ability.tickCooldown = setTickCooldown;
             yield return new WaitForSeconds(0.001f);
             Ability.animationCooldown = 0.6f;
-            Ability.globalCooldown = .5f;
+            Ability.globalCooldown = .8f;
 
             // Instantiate(effect[4], oldSpawnPosition , new Quaternion(.71f, 0, 0, .71f));  //schijnbaar hoeft niet hahaha
             anim.SetInteger("skillNumber", 4);

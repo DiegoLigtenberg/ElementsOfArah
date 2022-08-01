@@ -24,7 +24,7 @@ public class dragon_circle : MonoBehaviour
 
     void Awake()
     {
-        Application.targetFrameRate = 10;
+     
         bones = transform.GetChild(0).GetChild(0).GetComponentsInChildren<Transform>();
         previous_rotations = new Quaternion[bones.Length - 4];
         target_rotations = new Quaternion[bones.Length - 4];

@@ -25,6 +25,7 @@ namespace CreatingCharacters.Abilities
         private ThirdPersonMovement thirdPersonPlayer;
         public AudioSource[] aus;
         public int enhanced_attack;
+        private bool no_sound;
 
         private void Awake()
         {
@@ -40,8 +41,6 @@ namespace CreatingCharacters.Abilities
             CooldownData();
 
         
-            
-           
 
            // Debug.Log(RapidFireMarco.rapidFireHits);
             getdmg = AbilityDamage;
@@ -53,7 +52,6 @@ namespace CreatingCharacters.Abilities
    
         }
 
-        private int doublehit;
 
         public void update_oldcam_rotation()
         {
@@ -63,8 +61,7 @@ namespace CreatingCharacters.Abilities
         public override void Cast()
         {
             latecast = true;
-            doublehit += 1;
-
+            no_sound = false;
             oldCamTransform = curCamTransform.position;
             oldCamRotation = curCamTransform.rotation;
 
@@ -142,20 +139,24 @@ namespace CreatingCharacters.Abilities
             afterpyramid = false;
         }
 
+
         public void BowReAim()
         {
             oldCamTransform = curCamTransform.position;
             oldCamRotation = curCamTransform.rotation;
             jumpCamTransform = curCamTransform.position;
+
+          
         }
 
+        //function runs at begin of bow animation
         public void StopRapidFire()
         {
-            if (energy < 10) {  anim.SetBool("rapidFireActive", false); GetComponent<RapidFireMarco>().onlyoncerfc = false; }
-       
+
         }
         public void BowEvent()
-        {        
+        {
+        
             GetComponent<AE_BowString>().InHand = true;
      
 
@@ -171,7 +172,9 @@ namespace CreatingCharacters.Abilities
             anim.ResetTrigger("basicAttack");
             anim.ResetTrigger("rapidFire");
             anim.ResetTrigger("isJumping");
-            aus[0].Play();
+
+        
+            if (! no_sound ) { aus[0].Play(); }
 
   
         }
@@ -186,7 +189,8 @@ namespace CreatingCharacters.Abilities
             //yield return new WaitForSeconds(0.25f);
             if ((RapidFireMarco.rapidFireHits >= 2 || RapidFireMarco.rapidFireHits == -1 ) && GetComponent<RapidFireMarco>().isFiring && GetComponent<RapidFireMarco>().first_hit_timer <=0)
             {
-                energy = energy - 7.5f;
+                //7.5 caused problems based manual delay of aa and rapid fire cast -> dont want that
+                energy = energy - 7.4f;
                 StartCoroutine(AvatarMoveLocalPosUp.manual_root(0.4f));
             }
             if (GetComponent<RapidFireMarco>().isFiring)
@@ -201,9 +205,9 @@ namespace CreatingCharacters.Abilities
         public void stopBowEvent()
         {
 
-       
-
             remove_mana_delay();
+
+
             if (CooldownHandler.casted > 0) { enhanced_attack = 2; }
             else { enhanced_attack = 1; }
 
@@ -240,13 +244,37 @@ namespace CreatingCharacters.Abilities
                 }
 
             }
-            aus[1].Play();
+
+            if (!(Ability.energy < 7.5 && no_sound)) { aus[1].Play(); }
 
             GetComponent<AE_BowString>().InHand = false;;
 
-    
 
+            if (energy < 7.5) { anim.SetBool("bug_rfc", true); if (Ability.animationCooldown <= 0.25) { Ability.animationCooldown = 0.15f; } }
+            if (energy < 7.5f)
+            {
+                anim.SetBool("rapidFireActive", false);
 
+                GetComponent<RapidFireMarco>().onlyoncerfc = false;
+
+            }
+            if (energy < 7.5f)
+            {
+                // no_sound = true;
+                no_sound = true;
+                GetComponent<RapidFireMarco>().isFiring = false;
+
+                RapidFireMarco.rapidFireHits = -1;
+                GetComponent<RapidFireMarco>().fire_once = false;
+            }
+            if (energy >= 7.5f)
+            {
+                //no_sound = false;
+                no_sound = false;
+                anim.SetBool("bug_rfc", false);
+
+            }
+     
         }
     }
 }

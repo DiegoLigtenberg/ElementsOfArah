@@ -56,6 +56,7 @@ namespace CreatingCharacters.Abilities
             else { Ability.animationCooldown = 0.4f; yield return new WaitForSeconds(0.2f); remove_anim = true; } // 3 or more hits
             yield return new WaitForEndOfFrame();
             rapidFireHits = -1;
+            fire_once = false;
         }
 
         public void reset_anim_to_zero()
@@ -109,12 +110,12 @@ namespace CreatingCharacters.Abilities
             {
                 first_hit_timer -= Time.deltaTime;
             }
-
+     
             if (isFiring)
             {
                 if (Input.GetKey(abilityKey) && energy >= 7.5f || first_hit_timer>0f || minimum_active >=0)
                 {
-                    if (!onlyoncerfc) { anim.SetBool("rapidFireActive", true); onlyoncerfc = true; }
+                    if (!onlyoncerfc && minimum_active>0) { anim.SetBool("rapidFireActive", true); onlyoncerfc = true;  }
                   
                     if (Ability.globalCooldown <= 0.6f)
                     {
@@ -157,16 +158,18 @@ namespace CreatingCharacters.Abilities
             }
         }
 
-
+        [HideInInspector] public bool fire_once;
         public override void Cast()
         {
             minimum_active = 0.5f; // works so that ability doesn't stop when quickly releasing ability key
             minimum_active_dmg = 0.9f; // works so that aa dmg can scale up properly aa + rfc restting with basic attack
 
+            anim.SetBool("bug_rfc", false);
+
             latecast = true;
             rapidFireHits = 1;
 
-            isFiring = true;
+            if (!fire_once) { isFiring = true; fire_once = true; }
 
             GetComponent<BasicAttackMarco>().update_oldcam_rotation(); //fixes that you don't fail aim when rfc is first ability used.
             StartCoroutine(RFbasicAttack());
@@ -211,8 +214,14 @@ namespace CreatingCharacters.Abilities
 
             yield return new WaitForSeconds(0.001f);
 
+
             Instantiate(effect[0], effectTransform[0].position, Quaternion.identity);
-       
+
+            if (Ability.globalCooldown <= 0.8f)
+            {
+                Ability.globalCooldown = 0.8f;
+            }
+
             if (Ability.animationCooldown <= 0.4f)
             {
                 Ability.animationCooldown = 0.4f;
