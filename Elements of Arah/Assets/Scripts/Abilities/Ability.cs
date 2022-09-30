@@ -80,7 +80,7 @@ namespace CreatingCharacters.Abilities
         public void check_if_channeling()
         {
             // list of all channeled abilities -> if one active, can't use recast for basic attack
-            if (BeamAbility.Beam_is_channeling || RapidFireMarco.RapidFire_is_Channeling) {channel_ability_active = true; }
+            if (BeamAbility.Beam_is_channeling || RapidFireMarco.TRUE_CHANNEL ) {channel_ability_active = true; }
             else { channel_ability_active = false; }
         }
 
@@ -410,20 +410,17 @@ namespace CreatingCharacters.Abilities
         //own ability
         public IEnumerator Recast()
         {
-            Debug.Log(" this is probably also true -,- " + alreadyglobal);
-
-
+            //de + 0.01f is zodat je energy goed registered en  (anders is het te laag bij recasten!)
+            yield return new WaitForSeconds(CooldownHandler.alreadyCasting + 0.01f);
             if (channel_ability_active) // || GetComponent<BeamAbility>() == null)   // IF we would add this last commented line->marco bug
             {
                 onlyonce = false;
                 alreadyglobal = false;
                 //  yield break;
             }
-
-            //de + 0.01f is zodat je energy goed registered en  (anders is het te laag bij recasten!)
-            yield return new WaitForSeconds(CooldownHandler.alreadyCasting + 0.01f);
+            Debug.Log(" this is probably also true -,- " + alreadyglobal);
+            Debug.Log(channel_ability_active);
             //yield return new WaitForSeconds(globalCooldown + 0.01f);
-            Debug.Log(CooldownHandler.alreadyCasting);
 
             if (!alreadyglobal && (channel_ability_active == false))
             {

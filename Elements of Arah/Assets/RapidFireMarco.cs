@@ -23,8 +23,7 @@ namespace CreatingCharacters.Abilities
         public static int rapidFireHits;
         public static int rapidFireHitsDMG;//copy of rapidFireHits but will act for dmg purposes
         public bool isFiring;
-        public static bool isFiring_mana; //works also when mana is low
-        public static bool RapidFire_is_Channeling;
+        public static bool isFiring_BowEffect; //works also when mana is low
 
         public float first_hit_timer;
 
@@ -35,15 +34,22 @@ namespace CreatingCharacters.Abilities
         [HideInInspector] public bool onlyoncerfc;
         private float minimum_active; //removes bug that you aa + rapid fire, but loose ability key too fast resulting in no 2 shot rapid fire 
         private float minimum_active_dmg; // works so that aa dmg can scale up properly aa + rfc restting with basic attack
+        [HideInInspector] public float minimum_active_time_ability;
+        public static bool TRUE_CHANNEL;
 
+        public Image abil_img;
+        public Image img;
 
+        private bool once;
         private void Awake()
         {
             abilityImage.fillAmount = 0;
            // abilityType = 1;
             rapidFireHits = 0;
+            TRUE_CHANNEL = false;
+            isFiring_BowEffect = false;
+            rapidFireHitsDMG = 0;
 
-            RapidFire_is_Channeling = false;
         }
         private bool remove_anim;
 
@@ -55,7 +61,13 @@ namespace CreatingCharacters.Abilities
             if (old_rf_hits <= 2) { Ability.animationCooldown = 1.3f; yield return new WaitForSeconds(0.3f); remove_anim = true; } // double hit
             else { Ability.animationCooldown = 0.4f; yield return new WaitForSeconds(0.2f); remove_anim = true; } // 3 or more hits
             yield return new WaitForEndOfFrame();
+
+
             rapidFireHits = -1;
+
+     
+        
+
             fire_once = false;
         }
 
@@ -74,13 +86,17 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
 
-            RapidFire_is_Channeling = isFiring;
-            if (Ability.energy > 10f) { isFiring_mana = isFiring; }
-            else { isFiring_mana = false; }
+            
+
+            if (Ability.energy > 10f) { isFiring_BowEffect = isFiring; }
+            else { isFiring_BowEffect = false; }
 
             if (minimum_active_dmg>0.5f) { rapidFireHitsDMG = 1; }
             else if (minimum_active_dmg  <0.5f && minimum_active_dmg > 0) { rapidFireHitsDMG = 2; }
             else { rapidFireHitsDMG = rapidFireHits; }
+
+            if (isFiring || minimum_active_time_ability > 0) { TRUE_CHANNEL = true; }
+            else { TRUE_CHANNEL = false; }
 
             // resets animation_cooldown to zero when ending rapid fire hits 
             reset_anim_to_zero();
@@ -88,6 +104,9 @@ namespace CreatingCharacters.Abilities
             //2 bug fixes see variable declaration for details
             if (minimum_active > 0) { minimum_active -= Time.deltaTime; }
             if (minimum_active_dmg > 0) { minimum_active_dmg -= Time.deltaTime; }
+            if (minimum_active_time_ability > 0) { minimum_active_time_ability -= Time.deltaTime; }
+
+            //Debug.Log(isFiring);
 
             if (Ability.energy < thresholdrequirement && AbilityCooldownLeft <= 0)
             {
@@ -97,7 +116,6 @@ namespace CreatingCharacters.Abilities
             {
                 nomana.SetActive(false);
             }
-
 
             getdmg = AbilityDamage;
 
@@ -110,16 +128,16 @@ namespace CreatingCharacters.Abilities
             {
                 first_hit_timer -= Time.deltaTime;
             }
-     
+        
             if (isFiring)
             {
                 if (Input.GetKey(abilityKey) && energy >= 7.5f || first_hit_timer>0f || minimum_active >=0)
                 {
                     if (!onlyoncerfc && minimum_active>0) { anim.SetBool("rapidFireActive", true); onlyoncerfc = true;  }
                   
-                    if (Ability.globalCooldown <= 0.6f)
+                    if (Ability.globalCooldown <= 1.6f)
                     {
-                        Ability.globalCooldown = 0.6f;
+                        Ability.globalCooldown = 1.6f;
 
                     }
                         
@@ -128,21 +146,26 @@ namespace CreatingCharacters.Abilities
                     {
                         Ability.animationCooldown = 0.25f;
                     }
+                    once = false;
                 }
           
                 else
                 {
 
-                    if (Ability.globalCooldown <= 0.4f)
+                    if (Ability.globalCooldown <= 1.6f && !once)
                     {
-                        Ability.globalCooldown = 0.2f;
+                        once = true;
+                        Ability.globalCooldown = 0.6f;
 
                     }
+                   
                     if (Ability.animationCooldown <= 1.0f)
                     {
                         Ability.animationCooldown = 0.25f;
                     }
                     anim.SetBool("rapidFireActive", false);
+                    
+
                     if (rapidFireHits != 0)
                     {
                
@@ -159,17 +182,25 @@ namespace CreatingCharacters.Abilities
         }
 
         [HideInInspector] public bool fire_once;
+      
         public override void Cast()
         {
             minimum_active = 0.5f; // works so that ability doesn't stop when quickly releasing ability key
             minimum_active_dmg = 0.9f; // works so that aa dmg can scale up properly aa + rfc restting with basic attack
 
+            minimum_active_time_ability = 1.5f; 
+
             anim.SetBool("bug_rfc", false);
+            Ability.globalCooldown = 0.8f;
+
+            GetComponent<BasicAttackMarco>().remaining_enhanced_rfc_hits = GetComponent<DashAbilityMarco>().remainingDashes;
 
             latecast = true;
             rapidFireHits = 1;
 
             if (!fire_once) { isFiring = true; fire_once = true; }
+
+ 
 
             GetComponent<BasicAttackMarco>().update_oldcam_rotation(); //fixes that you don't fail aim when rfc is first ability used.
             StartCoroutine(RFbasicAttack());
@@ -185,12 +216,12 @@ namespace CreatingCharacters.Abilities
                 latecast = false;
                 abilityImage.fillAmount = 1;
             }
-
+        
             if (abilityCooldownLeft != 0)
             {
                 textobjectcd.SetActive(true);
-                abilityImage.fillAmount -= 1 / AbilityCooldown * Time.deltaTime;
-                if (abilityImage.fillAmount <= 0.05f)
+                abilityImage.fillAmount =  abilityCooldownLeft/ AbilityCooldown ;
+                if (abilityCooldownLeft <= 0.03f)
                 {
                     abilityImage.fillAmount = 0;
                 }
@@ -199,6 +230,20 @@ namespace CreatingCharacters.Abilities
             {
                 textobjectcd.SetActive(false);
             }
+        }
+
+        public void Update_AbilityUI_CD_Reductione(float reduction_value)
+        {
+            //Debug.Log(AbilityCooldown);
+            //Debug.Log(abilityCooldownLeft);
+            //Debug.Log(reduction_value);
+           // Debug.Log((AbilityCooldown - (abilityCooldownLeft - reduction_value)) / AbilityCooldown);
+
+
+            //abilityImage.fillAmount -=   1- ((AbilityCooldown - (abilityCooldownLeft - reduction_value))/AbilityCooldown);
+            AbilityCooldownLeft = reduction_value;
+           
+  
         }
 
         public IEnumerator RFbasicAttack()

@@ -22,16 +22,30 @@ namespace CreatingCharacters.Abilities
         [HideInInspector] public int getdmg;
         private bool pyramid; //fixes p1 bug when pyramid comes up
                               // Start is called before the first frame update
-        private ThirdPersonMovement thirdPersonPlayer;
         public AudioSource[] aus;
         public int enhanced_attack;
         private bool no_sound;
+        private DashAbilityMarco dam;
+        public int remaining_enhanced_rfc_hits;
+
+        private RapidFireMarco rfm;
+
+        public Color startcolor;
+        public Color endcolor;
+        public Color endcolormana;
+        private Color tempcollor;
+        public Color darkcolor;
+        public Color lightcolor;
+        public float time_elapsed;
+        private float lerp_duration;
 
         private void Awake()
         {
             abilityImage.fillAmount = 0;
             abilityType = 1;
-            thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
+            dam = GetComponent<DashAbilityMarco>();
+            rfm = GetComponent<RapidFireMarco>();
+            lerp_duration = 0.22f;
         }
 
         // Update is called once per frame
@@ -40,18 +54,20 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
 
-        
-
            // Debug.Log(RapidFireMarco.rapidFireHits);
             getdmg = AbilityDamage;
 
             if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
             {
                 StartCoroutine(removePyramid());
-            }
-   
-        }
+            }   
 
+            if (highlight_timer > 0) { highlight_timer -= Time.deltaTime; }
+            if (lerping && onlylerponce)
+            {
+                highlight_color();
+            }
+        }
 
         public void update_oldcam_rotation()
         {
@@ -80,10 +96,11 @@ namespace CreatingCharacters.Abilities
                 abilityImage.fillAmount = 1;
             }
 
-            if (abilityCooldownLeft != 0)
+            //if doing max(abilcd + gcd, then get more accurate aa cooldown, but kinda confusing and inconsistent aswell
+            if (abilityCooldownLeft != 0) // Mathf.Max(AbilityCooldown, globalCooldown)
             {
-                abilityImage.fillAmount -= 1 / AbilityCooldown * Time.deltaTime;
-                if (abilityImage.fillAmount <= 0.05f)
+                abilityImage.fillAmount = abilityCooldownLeft / AbilityCooldown; // Mathf.Max( AbilityCooldown,globalCooldown)
+                if (abilityCooldownLeft <= 0.03f)
                 {
                     abilityImage.fillAmount = 0;
                 }
@@ -97,31 +114,23 @@ namespace CreatingCharacters.Abilities
             if (Ability.globalCooldown <= 0.05f)
             {
                 Ability.globalCooldown = 0.05f;
-
             }
         
-         
             anim.SetTrigger("basicAttack");
-                
-            
             anim.SetBool("casted", true);
 
-            yield return new WaitForSeconds(0.001f);
- 
+            yield return new WaitForSeconds(0.001f); 
        
             if (Ability.animationCooldown <= 0.4f)
             {
                 Ability.animationCooldown = 0.5f;
                 // Ability.globalCooldown = 0.05f;
-
-            }
-            
+            }            
 
             //GENIUS MOVE TO RIVEN AA STYLE
             yield return new WaitForSeconds(0.3f);
             if (Ability.globalCooldown <= 0.6f)
             {
-
                 Ability.globalCooldown = 0.6f;
             }
         }
@@ -134,7 +143,6 @@ namespace CreatingCharacters.Abilities
             pyramid = true;
             yield return new WaitForSeconds(2.5f);
             pyramid = false;
-
             yield return new WaitForSeconds(15f);
             afterpyramid = false;
         }
@@ -145,14 +153,12 @@ namespace CreatingCharacters.Abilities
             oldCamTransform = curCamTransform.position;
             oldCamRotation = curCamTransform.rotation;
             jumpCamTransform = curCamTransform.position;
-
-          
         }
 
         //function runs at begin of bow animation
         public void StopRapidFire()
         {
-
+            rfm.minimum_active_time_ability= 0.45f;
         }
         public void BowEvent()
         {
@@ -167,16 +173,11 @@ namespace CreatingCharacters.Abilities
 
             }
 
-     
-
             anim.ResetTrigger("basicAttack");
             anim.ResetTrigger("rapidFire");
             anim.ResetTrigger("isJumping");
-
         
             if (! no_sound ) { aus[0].Play(); }
-
-  
         }
 
         public void removeBowString()
@@ -184,65 +185,164 @@ namespace CreatingCharacters.Abilities
             GetComponent<AE_BowString>().InHand = false;   
         }
 
-        public void remove_mana_delay()
+        private bool lerping;
+        private float highlight_timer;
+
+        public void highlight_color()
+        {
+            if (highlight_timer < 0.025f)
+            {
+               
+                rfm.img.color = startcolor;
+                time_elapsed = 0;
+                rfm.abil_img.color = lightcolor;
+
+            }
+            else
+            {
+                rfm.img.color = Color.Lerp(startcolor, endcolor, time_elapsed / lerp_duration); 
+                time_elapsed += Time.deltaTime; 
+                tempcollor = rfm.img.color;
+            }
+        }
+
+        private bool onlylerponce;
+        public IEnumerator potential_reset(int remaining_hits)
+        {
+
+            onlylerponce = true;
+
+            yield return new WaitForSeconds(.69f);
+
+            if (!RapidFireMarco.TRUE_CHANNEL)
+            {
+                Debug.Log("hits left bug");
+                Debug.Log(remaining_hits);
+                if (remaining_hits > 0)
+                {
+                    CooldownHandler.Instance.ReduceAbilityCooldownToValue(rfm, 4.7f);
+                    rfm.Update_AbilityUI_CD_Reductione(4.7f);
+                    lerping = true;
+                    //color start
+                    rfm.img.color = startcolor;
+                    rfm.abil_img.color = darkcolor;
+                    highlight_timer = .32f;
+                    Debug.Log("first111");
+                    yield return new WaitForSeconds(.32f);
+                    Debug.Log("second222");
+               
+
+                 
+                    lerping = false;
+                    onlylerponce = false;
+                }
+
+            }
+         
+       
+
+         
+        }
+
+        public void remove_mana_delay(int attack)
         {
             //yield return new WaitForSeconds(0.25f);
-            if ((RapidFireMarco.rapidFireHits >= 2 || RapidFireMarco.rapidFireHits == -1 ) && GetComponent<RapidFireMarco>().isFiring && GetComponent<RapidFireMarco>().first_hit_timer <=0)
+            if ((RapidFireMarco.rapidFireHits >= 2 || RapidFireMarco.rapidFireHits == -1) && rfm.isFiring && rfm.first_hit_timer <= 0)
             {
                 //7.5 caused problems based manual delay of aa and rapid fire cast -> dont want that
                 energy = energy - 7.4f;
                 StartCoroutine(AvatarMoveLocalPosUp.manual_root(0.4f));
             }
-            if (GetComponent<RapidFireMarco>().isFiring)
-            {
-                RapidFireMarco.rapidFireHits += 1;
 
-
-                
-            }
-        }
-
-        public void stopBowEvent()
-        {
-
-            remove_mana_delay();
-
+            //    if (RapidFireMarco.rapidFireHits == 1) { CooldownHandler.casted = 0; }
 
             if (CooldownHandler.casted > 0) { enhanced_attack = 2; }
             else { enhanced_attack = 1; }
 
+            //here should be the logic for how many rapid fire hits should be enhanced -> BASED ON AVAILABLE DASHES!
+            if (remaining_enhanced_rfc_hits > 0) { rfc_enhanced = 2; } //make some consume_enhanced_dash func
+            else { rfc_enhanced = 1; }
+
+            if (rfm.isFiring)
+            {
+                RapidFireMarco.rapidFireHits += 1;
+            }
+
+            if (attack == 1) { StartCoroutine(potential_reset(remaining_enhanced_rfc_hits)); }
+            
+       
+        }
+
+        //updates amount of basic attacks or rapid fire attacks after using an ability (s.t. aiblity =/= basic attack)
+        private void consume_enhanced_attack(GameObject aa)
+        {
+            if (CooldownHandler.casted > 0)
+            {
+                CooldownHandler.casted -= 1;
+                aa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
+                FrictionMarco.friction_stacks += 1;
+            }
+
+       
+        }
+
+        private void consume_enhanced_rfc(GameObject eaa)
+        {
+            if (remaining_enhanced_rfc_hits > 0)
+            {
+                eaa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
+                remaining_enhanced_rfc_hits -= 1;
+                FrictionMarco.friction_stacks += 1;
+            }
+       
+        }
+
+        private int rfc_enhanced;
+
+        public void stopBowEvent(AnimationEvent animationEvent)
+        {
+
+            // logic for when ulting
+            if (FrictionMarco.friction_active) { CooldownHandler.casted = 1; remaining_enhanced_rfc_hits = 1; }
+
+            remove_mana_delay(animationEvent.intParameter);
+            Debug.Log(FrictionMarco.friction_stacks);
+
+
+            // attacks when not jumping OR when jumping and camera is not looking in air (then don't need to reposition arrow for jump position)
             if (GetComponent<MarcoMovementController>().jumptimer > 0 && Gun.offsetcamera > 7)
             {
 
-
-                Instantiate(effect[enhanced_attack], new Vector3(curCamTransform.position.x, jumpCamTransform.y, curCamTransform.position.z), oldCamRotation);
+                // basic attack
+                if (animationEvent.intParameter == 0)
+                {
+                    GameObject aaj = Instantiate(effect[enhanced_attack], new Vector3(curCamTransform.position.x, jumpCamTransform.y, curCamTransform.position.z), oldCamRotation);
                
-                if (CooldownHandler.casted > 0)
-                {
-                    CooldownHandler.casted -= 1;
+                    consume_enhanced_attack(aaj);
                 }
-                
-            }
-            else
-            {
-                if (!GetComponent<RapidFireMarco>().isFiring)
-                {
-                    Instantiate(effect[enhanced_attack], curCamTransform.position, oldCamRotation);
-                    if (CooldownHandler.casted > 0)
-                    {
-                        CooldownHandler.casted -= 1;
-                    }
-                }
+                // rapid fire attack
                 else
                 {
-                    Instantiate(effect[enhanced_attack], curCamTransform.position, oldCamRotation); //als we wel rfc firen -> al1 bonus met 3 stacks!
-                    if (CooldownHandler.casted > 0)
-                    {
-                        CooldownHandler.casted -= 1;
-                    }
-
+                    GameObject eaaj = Instantiate(effect[rfc_enhanced], new Vector3(curCamTransform.position.x, jumpCamTransform.y, curCamTransform.position.z), oldCamRotation);
+                    consume_enhanced_rfc(eaaj);
+                }                
+            }
+            // attacks when not jumping
+            else
+            {
+                // basic attack
+                if (animationEvent.intParameter == 0)
+                {
+                    GameObject aa = Instantiate(effect[enhanced_attack], curCamTransform.position, oldCamRotation);
+                    consume_enhanced_attack(aa);
                 }
 
+                // rapid fire attack
+                else
+                {
+                    GameObject eaa = Instantiate(effect[rfc_enhanced], curCamTransform.position, oldCamRotation); //als we wel rfc firen -> al1 bonus met 3 stacks!
+                    consume_enhanced_rfc(eaa);
+                }
             }
 
             if (!(Ability.energy < 7.5 && no_sound)) { aus[1].Play(); }
@@ -255,26 +355,27 @@ namespace CreatingCharacters.Abilities
             {
                 anim.SetBool("rapidFireActive", false);
 
-                GetComponent<RapidFireMarco>().onlyoncerfc = false;
+                rfm.onlyoncerfc = false;
 
             }
             if (energy < 7.5f)
             {
                 // no_sound = true;
                 no_sound = true;
-                GetComponent<RapidFireMarco>().isFiring = false;
+                rfm.isFiring = false;
+         
 
                 RapidFireMarco.rapidFireHits = -1;
-                GetComponent<RapidFireMarco>().fire_once = false;
+                rfm.fire_once = false;
+                Ability.globalCooldown = 0.6f;
+              
             }
             if (energy >= 7.5f)
             {
                 //no_sound = false;
                 no_sound = false;
                 anim.SetBool("bug_rfc", false);
-
-            }
-     
+            }     
         }
     }
 }

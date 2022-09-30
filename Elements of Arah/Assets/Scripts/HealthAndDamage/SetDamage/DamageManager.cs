@@ -73,5 +73,8 @@ public class DamageManager : MonoBehaviour
         }
 
         basicAttackMarcoDMG = (int)basicAttackMarco.getdmg +   (5 *  Mathf.Max(0,RapidFireMarco.rapidFireHitsDMG-1));
+
+        arrowRainMarcoDMG = (int)arrowRainMarco.getdmg;
+        chargeshotMarcoDMG = (int)chargeshotMarco.getdmg;
     }
 }

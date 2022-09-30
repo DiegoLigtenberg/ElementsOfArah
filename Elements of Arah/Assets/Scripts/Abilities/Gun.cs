@@ -33,7 +33,9 @@ public class Gun : MonoBehaviour
     public static String targetname;
     public Color darkGreen;
     public GameObject hover_clone_trans;
-    private Vector3 oldpoint;
+    public Vector3 oldpoint;
+    private bool arrow_rain_once;
+
     private void Start()
     {
        // hover_clone_trans.transform.localPosition = hover_clone_trans.transform.localPosition + new Vector3(0, 0, 20);
@@ -105,16 +107,22 @@ public class Gun : MonoBehaviour
             Destroy(clone2.gameObject);
             Destroy(clone.gameObject);
 
-            if (!ArrowRainMarco.stop_direction) { oldpoint = hitinfo.point;
+            if (!ArrowRainMarco.stop_direction && !arrow_rain_once) 
+            {   oldpoint = hitinfo.point;
                 hover_clone_trans.transform.position = oldpoint;
               
+                
                 hover_clone_trans.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
+                arrow_rain_once = true;
             }
             else
             {
-               // hover_clone_trans.transform.position =oldpoint;
+                // hover_clone_trans.transform.position =oldpoint;
+        
                 hover_clone_trans.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                arrow_rain_once = false;
+                hover_clone_trans.transform.position = oldpoint;
+
             }
 
 

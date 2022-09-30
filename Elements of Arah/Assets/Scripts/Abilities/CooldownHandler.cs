@@ -28,6 +28,7 @@ public class CooldownHandler : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        casted = 0;
     }
 
     [System.Serializable]
@@ -140,6 +141,20 @@ public class CooldownHandler : MonoBehaviour
         }
         */
 
+    }
+
+    public void ReduceAbilityCooldownToValue(Ability ability, float value)
+    {
+
+        for (int i = 0; i < abilitiesOnCooldown.Count; i++)
+        {
+            CooldownData cooldownData = abilitiesOnCooldown[i];
+            if (cooldownData.ability == ability)
+            {
+                cooldownData.cooldown = value;
+                Debug.Log("set to value");
+            }
+        }    
     }
 
     

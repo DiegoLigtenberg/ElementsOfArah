@@ -18,19 +18,21 @@ public class ArrowFadeOut : MonoBehaviour
     void Start()
     {
         rend = GetComponent<Renderer>();
-        lerpDuration = 3.5f;
+        lerpDuration = 2f;
+        delaytimer = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-        timeElapsed += Time.deltaTime;
-        delaytimer -= Time.deltaTime;
-        float t = timeElapsed / lerpDuration;
+       
 
 
         if (delaytimer <= 0)
         {
+            timeElapsed += Time.deltaTime;
+            // delaytimer -= Time.deltaTime;
+            float t = timeElapsed / lerpDuration;
             actualcolor = Color.Lerp(begincolor, endcolor, t);
         }
         else

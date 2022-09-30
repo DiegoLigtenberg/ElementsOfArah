@@ -43,7 +43,7 @@ public class AE_PhysicsMotion : MonoBehaviour
     [SerializeField] public int damage = 1;
     [SerializeField] private DamageTypes damageType;
     public GameObject IMPACT;
-    private bool buff_next_basic_attack;
+    public bool buff_next_basic_attack;
 
     void OnEnable()
     {
@@ -59,7 +59,7 @@ public class AE_PhysicsMotion : MonoBehaviour
         InitializeRigid();
 
         //Debug.Log(CooldownHandler.casted );
-        if (CooldownHandler.casted ==1) { buff_next_basic_attack = true; } //smaller than max but bigger than 0
+      //  if (CooldownHandler.casted ==1) { buff_next_basic_attack = true; } //smaller than max but bigger than 0
     }
 
     void InitializeRigid()
@@ -95,6 +95,12 @@ public class AE_PhysicsMotion : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         Destroy(IMPACT);
+    }
+
+    private IEnumerator delay_elemental_dmg(Health health)
+    {
+        yield return new WaitForSeconds(0.0f);
+        health.takeDamage(10, DamageTypes.Elemental);
     }
 
 
@@ -141,7 +147,7 @@ public class AE_PhysicsMotion : MonoBehaviour
                     {
                         Debug.Log("dealt " + damage + " damage");
 
-                        if (buff_next_basic_attack){ health.takeDamage(10, DamageTypes.Elemental); }
+                        if (buff_next_basic_attack ||FrictionMarco.friction_active ){ StartCoroutine(delay_elemental_dmg(health));  }
 
                         if (!this.gameObject.name.Contains("CollisionAvalanche"))
                         {
@@ -194,6 +200,20 @@ public class AE_PhysicsMotion : MonoBehaviour
                 if (EffectOnCollision != null)
                 {
                     var instance = Instantiate(EffectOnCollision, contact.point, new Quaternion()) as GameObject;
+                   
+                    foreach (TagSizeIncrease tsi in GetComponentsInChildren<TagSizeIncrease>())
+                    {
+                        tsi.collision_shrink = true;
+                    }
+                    foreach(ArrowFadeOut afo in GetComponentsInChildren<ArrowFadeOut>())
+                    {
+                        afo.delaytimer = 0;
+                    }
+                    
+                  
+                    
+              
+                    
 
                     if (HUE > -0.9f)
                     {

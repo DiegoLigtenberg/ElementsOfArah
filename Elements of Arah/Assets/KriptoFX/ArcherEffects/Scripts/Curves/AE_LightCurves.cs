@@ -63,7 +63,7 @@ public class AE_LightCurves : MonoBehaviour
         if (RapidFireMarco.rapidFireHits <= 2) { rfc = 1.5f; }
         else if (RapidFireMarco.rapidFireHits > 2) { rfc = 5.5f; }
 
-        if (RapidFireMarco.isFiring_mana && Ability.energy >= 10)
+        if (RapidFireMarco.isFiring_BowEffect && Ability.energy >= 10)
         {
             if (light_intensity < 1.5f) { GetComponent<Light>().intensity += 1.5f * Time.deltaTime; }
             time = (Time.time) - startTime;

@@ -20,11 +20,13 @@ public class ParticleCollisionInstance : MonoBehaviour
     [SerializeField] public int damage = 1;
     [SerializeField] private DamageTypes damageType;
     private float timer;
-
+    private int max_hits;
     void Start()
     {
         part = GetComponent<ParticleSystem>();
-        damage = DamageManager.basicAttackMarcoDMG + 20;
+        if(name.Contains("dmg") )
+        damage = DamageManager.arrowRainMarcoDMG ;
+        max_hits = 5;
     }
     private void Update()
     {
@@ -32,6 +34,7 @@ public class ParticleCollisionInstance : MonoBehaviour
         {
             timer -= Time.deltaTime;
         }
+      
        
     }
     void OnParticleCollision(GameObject other)
@@ -40,13 +43,22 @@ public class ParticleCollisionInstance : MonoBehaviour
         {
             if (timer <= 0)
             {
-                var health = other.gameObject.GetComponent<Health>();
-                health.takeDamage(damage, damageType);
-                timer = 0.2f;
+                //only allows for 5 hits of dmg (otherwise visual noise)
+                if (max_hits>0)
+                {
+                    if (name.Contains("dmg"))
+                    {
+                        var health = other.gameObject.GetComponent<Health>();
+                        health.takeDamage(damage, damageType);
+                        timer = 0.2f;
+                        max_hits -= 1;
+                    }
+                       
+                }               
             }
-
         }
-            int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);     
+
+        int numCollisionEvents = part.GetCollisionEvents(other, collisionEvents);     
         for (int i = 0; i < numCollisionEvents; i++)
         {
             foreach (var effect in EffectsOnCollision)

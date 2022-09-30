@@ -14,8 +14,7 @@ public class ArrowLocChanger : MonoBehaviour
     private float smoothing = 0.009f;
     public RFX1_EffectSettingProjectile speed;
 
-    private bool wasrunningleft;
-    private bool wasrunningright;
+
     private bool onlyonce;
 
 

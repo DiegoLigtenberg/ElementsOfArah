@@ -44,10 +44,6 @@ namespace CreatingCharacters.Abilities
         {
             movementAnimation();
             landOnGround();
-            if (Input.GetKey(KeyCode.C))
-            {
-                anim.SetBool("crunch_shot", true);
-            }
             if (!PauseMenu.GameIsPaused)
             {
                 base.Update();
@@ -89,11 +85,7 @@ namespace CreatingCharacters.Abilities
             }
 
 
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                anim.SetTrigger("Explosion Shot");
-            }
-
+ 
         }
 
 
@@ -119,10 +111,12 @@ namespace CreatingCharacters.Abilities
             if(distanceToGround < 2.75 && distanceToGround > 0.3f && !isGrounded)
             {
                 anim.SetBool("landGround",true);
+                anim.ResetTrigger("isDoubleJump");
             }
             else
             {
                 anim.SetBool("landGround", false);
+                anim.ResetTrigger("isDoubleJump");
             }
 
         }
@@ -170,7 +164,8 @@ namespace CreatingCharacters.Abilities
                                 //levitating (levitate duration the higher the faster gravity drops!
                                 gravity = Mathf.Lerp(-10, -19.81f, Time.deltaTime * levitateDuration);
                                 ResetImpactY();
-                                AddForce(Vector3.up, 2f * jumpForce);
+                                anim.SetTrigger("isDoubleJump");
+                                AddForce(Vector3.up, 3f * jumpForce);
                                 jumpCount = 2;
                             }
                         }

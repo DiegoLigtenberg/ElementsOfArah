@@ -221,7 +221,7 @@ public class Health : MonoBehaviour
 
             if (elementalSplat != null)
             {
-                elementalSplat.transform.position = splatspawn.position + new Vector3(0, 3.85f, 0);
+                elementalSplat.transform.position = splatspawn.position + new Vector3(0, 3.85f, 0) + .75f *camera.transform.right;
                 elementalSplat.transform.rotation = splatspawn.rotation;
             }
         }
@@ -246,7 +246,7 @@ public class Health : MonoBehaviour
             }
             if (elementalSplat != null)
             {
-                elementalSplat.transform.position = transform.position + new Vector3(0, 3.2f, -1.5f);
+                elementalSplat.transform.position = transform.position + new Vector3(0, 3.2f, -1.5f) +.75f * camera.transform.right;
                 elementalSplat.transform.rotation = transform.rotation;
             }
         }
@@ -269,7 +269,7 @@ public class Health : MonoBehaviour
             }
             if (elementalSplat != null)
             {
-                elementalSplat.transform.position = transform.position + new Vector3(0, 1.85f, 0);
+                elementalSplat.transform.position = transform.position + new Vector3(0, 1.85f, 0) + .75f * camera.transform.right;
                 elementalSplat.transform.rotation = transform.rotation;
             }
 
@@ -449,12 +449,10 @@ public class Health : MonoBehaviour
 
             if (!startfightonce)
             {
-                //fix later
-                try
-                {
-                    GameObject.Find(ActivePlayerManager.ActivePlayerName).GetComponent<DashAbility>().ResetDashes();
-                }
-                catch { Debug.Log("FIX LaTER THAT START FIGHT IS ALSO OK WITH MARCO"); }
+                       
+                //reests dash when starting fight for both arah and marco
+                if (ActivePlayerManager.ActivePlayerNum == 0) { ActivePlayerManager.ActivePlayerGameObj.GetComponent<DashAbility>().ResetDashes(); }
+                if (ActivePlayerManager.ActivePlayerNum == 1) { ActivePlayerManager.ActivePlayerGameObj.GetComponent<DashAbilityMarco>().ResetDashes(); }
                 startfightonce = true;
                 StartCoroutine(setStartFightTrue());
             }

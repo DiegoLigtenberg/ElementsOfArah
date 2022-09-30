@@ -22,9 +22,60 @@ namespace CreatingCharacters.Abilities
         public GameObject self;
         private Vector3 dashdir;
         public GameObject dashcampos;
+
+        private bool onlyonce_dash;
+
+        public static float AACorrection;
+
+
+        public GameObject nomana;
+
+        private float outofcombatmultiplier;
+        public static bool PhasingBugFixAA;
+        [HideInInspector] public bool quickfix = false;
+        [HideInInspector] public bool isactivated = false;
+        [HideInInspector] public bool aabugActivate = false; //free var- not used - is when dash is activated
+
+
+        [HideInInspector] public BeamAbility beam;
+
+        public Image abilityImage; //the hidden image in canvas
+
+        float lastStep, timeBetweenSteps = 0.2f;
+
+      //  public GameObject playerPathFindHitBox;
+
+        /// <summary>
+        ///Animator control
+        /// </summary>
+        public GameObject[] effect;
+        public Transform[] effectTransform;
+
+
+        public static float Beamready;
+        [SerializeField] private float dashRechargeTime;
+        [SerializeField] private int maxDashes = 3;
+        [HideInInspector] public int remainingDashes = 1;
+        private float currentDashRechargeTime;
+        private float currentDashRechargeTime2;
+
+        [HideInInspector] public int orbCount;
+
         private void Awake()
         {
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
+
+            abilityImage.fillAmount = 0;
+            remainingDashes = 1;
+            thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
+            ThirdPersonMovement.canmovecamera = true;
+            beam = GetComponent<BeamAbility>();
+            currentDashRechargeTime = 0;
+            currentDashRechargeTime2 = 0;
+            outofcombatmultiplier = 2;
+
+            PhasingBugFixAA = false;
+
         }
         private Vector3 dashtransform;
 
@@ -35,36 +86,150 @@ namespace CreatingCharacters.Abilities
 
         }
 
+
+
+
+        //dont run this, because you get dmg before it resets
+        public void ResetDashes()
+        {
+            remainingDashes = 1;
+            currentDashRechargeTime = 0;
+            abilityImage.fillAmount = 1;
+            outofcombatmultiplier = 1f;
+        }
+
+        private void CooldownData()
+        {
+
+
+
+            if (!onlyonce_dash)
+            {
+
+                abilityImage.fillAmount = 1;
+                onlyonce_dash = true;
+            }
+
+            if (remainingDashes < maxDashes)
+            {
+                abilityImage.fillAmount -= 1 / (dashRechargeTime / outofcombatmultiplier) * Time.deltaTime;
+                if (abilityImage.fillAmount <= 0)
+                {
+                    abilityImage.fillAmount = 0;
+
+                    if (remainingDashes < maxDashes)
+                    {
+                        onlyonce_dash = false;
+                    }
+                    if (CooldownHandler.outOfCombat) { outofcombatmultiplier = 2f; }
+                    else { outofcombatmultiplier = 1f; }
+
+                }
+
+            }
+            else
+            {
+                abilityImage.fillAmount = 0;
+                onlyonce_dash = true;
+            }
+        }
+
+
         public override void Cast()
         {
-            StartCoroutine(Dash());
+            if (quickfix == false)
+            {
+                StartCoroutine(Dash());
+            }
+       
+
+
 
         }
 
         // Update is called once per frame
         void Update()
         {
+            CooldownData();
             base.Update();
-            if (Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                anim.SetTrigger("Teleport");
-            }
+
+    
             dashdir = (self.transform.position - dashdirection.transform.position); //.normalized;
                                                                                     //  Debug.Log(self.transform.position);
                                                                                     // Debug.Log(dashdirection.transform.position);
             dashtransform = GameObject.Find("dashcampos").transform.position;
-           // Debug.Log(dashtransform);
+            // Debug.Log(dashtransform);
 
             // Debug.Log(Camera.main.transform.eulerAngles);
+
+            if (remainingDashes < maxDashes)
+            {
+                currentDashRechargeTime += Time.deltaTime * outofcombatmultiplier;
+                if (currentDashRechargeTime >= dashRechargeTime)
+                {
+                    remainingDashes++;
+                    currentDashRechargeTime = 0f;
+
+                }
+            }
+            if (remainingDashes == maxDashes)
+            {
+                currentDashRechargeTime2 = 0;
+            }
+
+            if (remainingDashes == 0)
+            {
+                nomana.SetActive(true);
+            }
+            if (remainingDashes > 0)
+            {
+                nomana.SetActive(false);
+            }
+
+
+
+
+        
+      
+            if (remainingDashes == 0)
+            {
+                orbCount = 0;
+            }
+
+            if (remainingDashes == 1)
+            {
+                orbCount = 1;
+            }
+
+            if (remainingDashes == 2)
+            {
+                orbCount = 2;
+            }
+            if (remainingDashes == 3)
+            {
+                orbCount = 3;
+            }
+       
+
         }
 
         public IEnumerator Dash()
         {
+            if (remainingDashes <= 0) { yield break; }
+        
+            anim.SetTrigger("Teleport");
+            quickfix = true;
+        
+
             thirdPersonPlayer.ResetImpactY();
             thirdPersonPlayer.gravity = 0;
             dashtransform = GameObject.Find("dashcampos").transform.position;
 
             yield return new WaitForSeconds(0.091f);
+
+
+            remainingDashes--;
+
             Ability.animationCooldown = 0.8f;  //je kan al iets eerder loop input geven dan dat je weer ability kan doen!
 
             if (Ability.globalCooldown <= 0.74f)
@@ -87,7 +252,8 @@ namespace CreatingCharacters.Abilities
             thirdPersonPlayer.AddForce(dashdir, dashForce);
             yield return new WaitForSeconds(0.5f);
             fl.m_Priority = 9;
- 
+
+            quickfix = false;
             /*
             if (Camera.main.transform.eulerAngles.x < 58 && !thirdPersonPlayer.isGrounded)
             {

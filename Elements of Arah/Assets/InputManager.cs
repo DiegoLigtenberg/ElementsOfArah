@@ -138,7 +138,9 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-    
+        if (Input.GetKeyDown(KeyCode.Plus)) { Time.timeScale += 0.1f; }
+        if (Input.GetKeyDown(KeyCode.Minus)) { Time.timeScale -= 0.1f; }
+        if (Input.GetKeyDown(KeyCode.P)) { Time.timeScale = 1; }
     }
 
     public bool KeyDown(string key)

@@ -11,6 +11,7 @@ public class TextMeshProText : MonoBehaviour
 {
 
     public DashAbility dash;
+    public DashAbilityMarco dashmarco;
     public TMP_Text textDashes;
 
 
@@ -27,7 +28,15 @@ public class TextMeshProText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        textDashes.text = dash.remainingDashes.ToString();
+        if (ActivePlayerManager.ActivePlayerNum == 0)
+        {
+            textDashes.text = dash.remainingDashes.ToString();
+        }
+        if (ActivePlayerManager.ActivePlayerNum == 1)
+        {
+            textDashes.text = dashmarco.remainingDashes.ToString();
+        }
+
 
     }
 }

@@ -51,7 +51,7 @@ public class AE_ShaderFloatCurve : MonoBehaviour {
         rend.GetPropertyBlock(props);
 
         //manually added
-        if (RapidFireMarco.isFiring_mana && Ability.energy >= 10 && time < GraphTimeMultiplier) { time = (Time.time )- startTime; }
+        if (RapidFireMarco.isFiring_BowEffect && Ability.energy >= 10 && time < GraphTimeMultiplier) { time = (Time.time )- startTime; }
         else {   GraphIntensityMultiplier += (Time.deltaTime /1.1f);  } //1.1f makes it smooth glow out when loosening rapid fire
 
         if (canUpdate)

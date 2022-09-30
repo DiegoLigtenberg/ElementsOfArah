@@ -29,12 +29,15 @@ namespace CreatingCharacters.Abilities
         public GameObject nomana;
 
         public static int friction_stacks;
+        public static bool friction_active;
 
         private void Awake()
         {
             abilityImage.fillAmount = 0;
             thirdPersonPlayer = GetComponent<ThirdPersonMovement>();
             rapidFireHits = 0;
+            friction_active = false;
+            friction_stacks = 0;
         }
 
         public IEnumerator remove_firing()
@@ -61,12 +64,19 @@ namespace CreatingCharacters.Abilities
 
             getdmg = AbilityDamage;
 
+            if (friction_stacks > 50) { friction_stacks = 50; }
 
         }
 
 
         public override void Cast()
         {
+            //no double cast
+            if (Ability.globalCooldown <= 0.8f)
+            {
+                Ability.globalCooldown = 0.8f;
+            }
+
             StartCoroutine(CrownOfFire());
         }
 
@@ -97,15 +107,19 @@ namespace CreatingCharacters.Abilities
 
         public IEnumerator CrownOfFire()
         {
+  
+
+            yield return new WaitForSeconds(0.001f);
+
             if (Ability.globalCooldown <= 0.05f)
             {
                 Ability.globalCooldown = 0.05f;
             }
             anim.SetTrigger("frictionShot");
 
-            Instantiate(effect[0], effectTransform[0].position - new Vector3(0,1.7f,0), Quaternion.identity);
+            Instantiate(effect[0], effectTransform[0].position - new Vector3(0, 1.7f, 0), Quaternion.identity);
 
-            yield return new WaitForSeconds(0.001f);
+            friction_active = true;
 
             Ability.globalCooldown = 0.6f;
 
@@ -113,6 +127,9 @@ namespace CreatingCharacters.Abilities
             {
                 Ability.animationCooldown = 1.5f;
             }
+
+            yield return new WaitForSeconds(13);
+            friction_active = false;
         }
     }
 }

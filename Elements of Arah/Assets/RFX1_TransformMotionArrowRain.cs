@@ -60,17 +60,23 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
     float heightdif;
     float startheight;
 
+    private float forward_timer;
+
     //maak hier een list van -> loop over alle damage en kijk welke je wilt
     //[SerializeField] private DealDamage dealDamage;
     //[SerializeField]  private BasicAttack basicAttackDamage;
 
     private Gun gun;
 
+    private float xy_dist_towards_target;
+    private float xy_dist_once;
+
     private void Awake()
     {
 
         dashability = GameObject.Find(ActivePlayerManager.ActivePlayerName).GetComponent<DashAbility>();
-
+        speedfactor = Random.Range(1, 1.5f);
+        forward_timer = 1f;
     }
 
 
@@ -79,9 +85,13 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
         gun = ActivePlayerManager.ActivePlayerGameObj.GetComponent<Gun>();
         Target = gun.hover_clone_trans.gameObject; //GameObject.Find("Warrior Idle/HitMeHere");
         //Target.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-        parabola = 50;
+        parabola = 55;
         t = transform;
         if (Target != null) targetT = Target.transform;
+        xy_dist_towards_target = (new Vector3(t.transform.position.x, 0, t.transform.position.z) - new Vector3(targetT.transform.position.x, 0, targetT.transform.position.z)).magnitude;
+        xy_dist_once = xy_dist_towards_target;
+        if (Target != null) targetT.transform.position = targetT.transform.position + (targetT.transform.position - ActivePlayerManager.ActivePlayerGameObj.transform.position).normalized * (xy_dist_once/50);
+
 
         startQuaternion = t.rotation;
         startPositionLocal = t.localPosition;
@@ -123,6 +133,7 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
     private float end;
     private float heightvel;
     private bool onlyonce;
+    private Vector3 search_pos;
 
     void Update()
     {
@@ -138,8 +149,11 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
             UpdateWorldPosition();
         }
         else dropFirstFrameForFixUnityBugWithParticles = false;
+
+        forward_timer -= Time.deltaTime;
     }
 
+    private Vector3 temp_forward_vec;
     void UpdateWorldPosition()
     {
         currentDelay += Time.deltaTime;
@@ -154,6 +168,8 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
             if (Target != null)
             {
                 if (targetT == null) targetT = Target.transform;
+                if (Target != null) targetT.transform.position = targetT.transform.position   + (targetT.transform.position - ActivePlayerManager.ActivePlayerGameObj.transform.position).normalized * (xy_dist_once/50);
+
                 var fade = Vector3.Distance(t.position, targetT.position) / Vector3.Distance(startPosition, targetT.position);         
                 if (!onlyonce)
                 {
@@ -171,8 +187,8 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
             //currentSpeed = Mathf.Clamp(currentSpeed - Speed*Dampeen*Time.deltaTime, MinSpeed, Speed);
             if (Target == null)
             {
-                Speed = Speed ;  //+ (heightdif / 40);
-                var currentForwardVector = (Vector3.forward + randomOffset) * (Speed ) * Time.deltaTime;
+                Speed = Speed * speedfactor;  //+ (heightdif / 40);
+                var currentForwardVector = (Vector3.forward + randomOffset) * (Speed) * Time.deltaTime;
                 frameMoveOffset = t.localRotation * currentForwardVector;
                 frameMoveOffsetWorld = startQuaternion * currentForwardVector;
 
@@ -180,12 +196,39 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
             }
             else
             {
-        
-                t.LookAt(targetT.position + new Vector3(0, parabola, 0));
-                Speed = 50 + Random.Range(-30, 30) +  (heightdif / 1.2f);
-                var forwardVec = (targetT.position + new Vector3(0, parabola, 0) - t.position).normalized * (Speed/ 40);
-                var currentForwardVector = (forwardVec + randomOffset) * (Speed) * Time.deltaTime;
- 
+
+             
+
+                xy_dist_towards_target = (new Vector3(t.transform.position.x, 0, t.transform.position.z) - new Vector3(targetT.transform.position.x, 0, targetT.transform.position.z)).magnitude;
+
+
+                Speed = 50 + Random.Range(-30, 30) + (heightdif / 1.2f);
+                // Debug.Log(Speed);
+
+
+
+                // locks forward vector to old position when the thrown arrows are 1.1 sec (forward timres) in air, then they go to just downards position
+
+                // var forwardVec = (search_pos     + new Vector3(0, parabola, 0) - t.position).normalized * (Speed/ 40);
+                if (forward_timer <= 0 || xy_dist_towards_target < 15f && forward_timer - 0.5f * forward_timer <= 0)
+                {
+                    temp_forward_vec = (new Vector3(targetT.position.x, -1000000, targetT.position.z) + new Vector3(0, parabola, 0) + t.position).normalized * (Speed / 50);
+
+                    //if (xy_dist_towards_target > 0) { Debug.Log("WTF"); randomOffset = Vector3.zero; }
+                    randomOffset *= .3f;
+                    t.LookAt(targetT.position + new Vector3(0, -100000f, 0));
+                }
+                else
+                {
+                    temp_forward_vec = (targetT.position + new Vector3(0, parabola, 0) - t.position).normalized * (Speed / 40);
+                    t.LookAt(targetT.position + new Vector3(0, parabola, 0));
+                }
+
+
+
+                var currentForwardVector = (temp_forward_vec + randomOffset) * (Speed) * Time.deltaTime;
+                //   Debug.Log(currentForwardVector);
+
                 frameMoveOffset = currentForwardVector;
                 frameMoveOffsetWorld = currentForwardVector;
                 parabola -= Speed * Time.deltaTime;
@@ -197,6 +240,7 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
                 //Debug.Log(forwardVec);
             }
         }
+     
 
         var currentDistance = (t.localPosition + frameMoveOffset - startPositionLocal).magnitude;
         Debug.DrawRay(t.position, frameMoveOffsetWorld.normalized * (Distance - currentDistance), Color.red, 2f);
@@ -228,10 +272,11 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
 
                                 if (!this.gameObject.name.Contains("Collision NODAMAGE"))
                                 {
-                                    if (dashability.orbCount == 0) { health.takeDamage(damage, damageType); }
-                                    if (dashability.orbCount == 1) { health.takeDamage(damage, damageType); }
-                                    if (dashability.orbCount == 2) { health.takeDamage(damage, damageType); }
-                                    if (dashability.orbCount == 3) { health.takeDamage(damage, damageType); }
+                                    //damage is deactivated because we want to damage different from arrow hits!
+                                   // if (dashability.orbCount == 0) { health.takeDamage(damage, damageType); }
+                                   // if (dashability.orbCount == 1) { health.takeDamage(damage, damageType); }
+                                   // if (dashability.orbCount == 2) { health.takeDamage(damage, damageType); }
+                                   // if (dashability.orbCount == 3) { health.takeDamage(damage, damageType); }
                                 }
 
 
@@ -240,7 +285,7 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
 
                             if (!this.gameObject.name.Contains("Collision basicattack"))
                             {
-                                health.takeDamage(damage, damageType);
+                               // health.takeDamage(damage, damageType);
                             }
 
                         }
@@ -250,9 +295,9 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
                             //   if (dashability.orbCount == 0) { health.takeDamage(0, DamageTypes.Fire); }
                             if (SunShine.SunShineActive)
                             {
-                                if (dashability.orbCount == 1) { health.takeDamage(10, DamageTypes.Elemental); }
-                                if (dashability.orbCount == 2) { health.takeDamage(20, DamageTypes.Elemental); }
-                                if (dashability.orbCount == 3) { health.takeDamage(30, DamageTypes.Elemental); }
+                             //   if (dashability.orbCount == 1) { health.takeDamage(10, DamageTypes.Elemental); }
+                               // if (dashability.orbCount == 2) { health.takeDamage(20, DamageTypes.Elemental); }
+                               // if (dashability.orbCount == 3) { health.takeDamage(30, DamageTypes.Elemental); }
                             }
                         }
 

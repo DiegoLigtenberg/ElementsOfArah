@@ -11,13 +11,11 @@ namespace CreatingCharacters.Abilities
         public GameObject[] effect;
         public Transform[] effectTransform;
         public Transform curCamTransform;
-        private Vector3 oldCamTransform;
-        private Quaternion oldCamRotation;
         public Image abilityImage;   //the hidden image in canvas
         private bool latecast;       //puts dcd image on cd when latecasted
         [HideInInspector] public int getdmg;
         private Vector3 arrowRainSpawnPosition;
-        public static Transform targetDirection;
+
         public int ability_range;
 
         public float heightarrows;
@@ -27,11 +25,14 @@ namespace CreatingCharacters.Abilities
         public GameObject nomana;
         private bool manaactive;
         public GameObject outrange;
+        public AudioSource[] aus;
         //[HideInInspector] public float textcdleft;
+        public GameObject faraway_cross_aim;
 
         private void OnEnable()
         {
             abilityImage.fillAmount = 0;
+            stop_direction = false;
         }
 
         private Vector3 spawnpos;
@@ -41,14 +42,12 @@ namespace CreatingCharacters.Abilities
         void Update()
         {
             base.Update();
-            CooldownData();
-
-       
+            CooldownData();       
 
             getdmg = AbilityDamage;
 
             //nomana
-            if (Ability.energy < 70 && AbilityCooldownLeft <= 0)
+            if (Ability.energy < thresholdrequirement && AbilityCooldownLeft <= 0)
             {
                 manaactive = true;
                 nomana.SetActive(true);
@@ -67,14 +66,11 @@ namespace CreatingCharacters.Abilities
                 {
                     outrange.SetActive(true);
                 }
-
-
             }
             else
             {
                 outrange.SetActive(false);
             }
-
 
             if (!stop_direction)
             {
@@ -103,108 +99,106 @@ namespace CreatingCharacters.Abilities
                 {
                     abilityImage.fillAmount = 0;
                 }
-
             }
             else
             {
                 textobjectcd.SetActive(false);
             }
-
-
-
-
-
         }
 
         public void stopArrowRain()
         {
             anim.SetBool("arrowRainActive", false);
-            anim.ResetTrigger("basicAttack");
+            //anim.ResetTrigger("basicAttack");
+        }
+
+        public IEnumerator PlayArrowSound()
+        {
+            yield return new WaitForSeconds(0.25f);
+            aus[2].Play();
+        }
+
+        public IEnumerator startArrowVisual()
+        {
+            aus[1].pitch -= 0.1f;
+            aus[1].Play();
+      
+            aus[1].pitch += 0.1f;
+
+            var slightly_forward = (faraway_cross_aim.transform.position - effectTransform[0].position).normalized * .4f;
+
+            // Debug.Log(targetDirection.position);
+            for (int i = 0; i < 6; i++)
+            {
+                if (i == 0) { GameObject b = Instantiate(effect[0], effectTransform[0].position + new Vector3(0, 0.75f, 0) + slightly_forward, Quaternion.identity); }
+
+                else
+                {
+                    GameObject b = Instantiate(effect[2], effectTransform[0].position + (new Vector3(0, 0.7f, 0)) + slightly_forward, Quaternion.identity);
+                    GameObject c = Instantiate(effect[2], effectTransform[0].position + (new Vector3(0, 0.75f, 0)) + slightly_forward, Quaternion.identity);
+                    GameObject d = Instantiate(effect[2], effectTransform[0].position + (new Vector3(0, 0.75f, 0)) + slightly_forward, Quaternion.identity);
+                }
+
+                yield return new WaitForSeconds(0.015f * i);
+            }
+            yield return new WaitForSeconds(.6f);
+            Instantiate(effect[1], ActivePlayerManager.ActivePlayerGameObj.GetComponent<Gun>().oldpoint + new Vector3(0, 37, 0), effectTransform[1].rotation);
+
         }
 
         public override void Cast()
         {
-            
+            stop_direction = false;
+
             if (Gun.fromCenterPLayerDistance < 80)
             {
-                Ability.globalCooldown = 0.75f; // because larger than 0.7 -> blocks double cast
+                Ability.globalCooldown = 0.5f; // because larger than 0.7 -> blocks double cast
                 arrowRainSpawnPosition = this.transform.position + new Vector3(0, 0*heightarrows, 0); //= Gun.clonePosition2 + new Vector3(0,heightarrows,0);
                 latecast = true;
-
-                stop_direction = true;
+               
                 StartCoroutine(AvatarMoveLocalPosUp.manual_root(1.05f));
                 StartCoroutine(arrowRain());
-
-             
             }
-                
-
-           
-
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
+            aus[0].pitch -= 0.05f; 
+            aus[0].Play();
+            aus[0].pitch += 0.05f;
+    
         }
 
 
         public IEnumerator arrowRain()
         {
+
+            yield return new WaitForSeconds(0.01f);
+            stop_direction = true;
+
             Vector3 spawnpos = arrowRainSpawnPosition;
             anim.SetTrigger("arrowRain");
             anim.SetBool("arrowRainActive", true);
+
+            if (Ability.animationCooldown <= 1f)
+            {
+                Ability.animationCooldown = 1f;
+
+            }
+
+
             yield return new WaitForSeconds(0.25f);
 
-            if (Ability.animationCooldown <= 0.8f)
-            {
-                Ability.animationCooldown = 0.8f;
-          
-            }
+       
             if (Ability.globalCooldown <= 0.7f)
             {
-                Ability.globalCooldown = 0.5f;
+                Ability.globalCooldown = 0.8f;
             }
 
             spawnpos = Gun.clonePosition2;
             yield return new WaitForSeconds(0.15f);
             yield return new WaitForSeconds(0.001f);
 
-            Vector3 middle = new Vector3(0, 0, 0);
-            Vector3 left = new Vector3(-1, 0, 0);
-            Vector3 right = new Vector3(1, 0, 0);
-            Vector3 down = new Vector3(0, 0, -1);
-            Vector3 up = new Vector3(0, 0, 1);
-            
-    
-       
-           // Debug.Log(targetDirection.position);
-            for (int i = 0; i <5; i++)
-            {
-                  GameObject b = Instantiate(effect[0], effectTransform[0].position +  (i* new Vector3(0,0,0))  + new Vector3(0, 0f* 30, 0), Quaternion.identity);
-    
-                yield return new WaitForSeconds(0.1f);
-            }
 
-            yield return new WaitForSeconds(.4f);
-            Instantiate(effect[1],spawnpos + new Vector3(0,24,0), effectTransform[5].rotation);
-
-
-            // Transform target = GameObject.Find("Warrior Idle/CaveTroll_Pants_low_Mesh.002/Cube").transform;
-            // b.transform.LookAt(target);
-
-
-            //   Instantiate(effect[0], spawnpos+middle,effectTransform[0].rotation);  //middle     //quaternion.identiy
-            /*
-            yield return new WaitForSeconds(0.2f);
-            Instantiate(effect[0], spawnpos+left, effectTransform[1].rotation); //left
-            yield return new WaitForSeconds(0.2f);
-            Instantiate(effect[0], spawnpos+right, effectTransform[2].rotation); //right
-            yield return new WaitForSeconds(0.2f);
-            Instantiate(effect[0], spawnpos+down, effectTransform[3].rotation); //down 
-            yield return new WaitForSeconds(0.2f);
-            Instantiate(effect[0], spawnpos+up, effectTransform[4].rotation); //up
-
-    */
-
-            yield return new WaitForSeconds(4f); //this decides how long the delay between charges MUST BE - causes bugs if too low -> thus cant upgrade abil
-            stop_direction = false;
+            yield return new WaitForSeconds(3f); //this decides how long the delay between charges MUST BE - causes bugs if too low -> thus cant upgrade abil
+           // stop_direction = false;
 
 
         }
