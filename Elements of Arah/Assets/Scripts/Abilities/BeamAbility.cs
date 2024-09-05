@@ -48,6 +48,13 @@ namespace CreatingCharacters.Abilities
            
         }
 
+        private bool getAbilityConditions()
+        {
+            bool condition_1 = false; //Gun.fromCenterPLayerDistance < 80;
+
+            return condition_1;
+        }
+
         public bool canceldash;
 
         private void CooldownData()
@@ -108,6 +115,7 @@ namespace CreatingCharacters.Abilities
 
             timer += Time.deltaTime;
 
+            abilityConditionsViolated = getAbilityConditions();
 
             if ((Input.GetKeyUp(abilityKey) || canceldash ) && !AvatarMoveLocalPosUp.isRooted )
             {

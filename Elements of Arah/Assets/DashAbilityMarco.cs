@@ -43,7 +43,7 @@ namespace CreatingCharacters.Abilities
 
         float lastStep, timeBetweenSteps = 0.2f;
 
-      //  public GameObject playerPathFindHitBox;
+        //  public GameObject playerPathFindHitBox;
 
         /// <summary>
         ///Animator control
@@ -75,6 +75,8 @@ namespace CreatingCharacters.Abilities
             outofcombatmultiplier = 2;
 
             PhasingBugFixAA = false;
+
+            abilityKey = InputManager.instance.getKeyCode("marcodash");
 
         }
         private Vector3 dashtransform;
@@ -141,7 +143,7 @@ namespace CreatingCharacters.Abilities
             {
                 StartCoroutine(Dash());
             }
-       
+
 
 
 
@@ -153,7 +155,7 @@ namespace CreatingCharacters.Abilities
             CooldownData();
             base.Update();
 
-    
+
             dashdir = (self.transform.position - dashdirection.transform.position); //.normalized;
                                                                                     //  Debug.Log(self.transform.position);
                                                                                     // Debug.Log(dashdirection.transform.position);
@@ -189,8 +191,8 @@ namespace CreatingCharacters.Abilities
 
 
 
-        
-      
+
+
             if (remainingDashes == 0)
             {
                 orbCount = 0;
@@ -209,17 +211,17 @@ namespace CreatingCharacters.Abilities
             {
                 orbCount = 3;
             }
-       
+
 
         }
 
         public IEnumerator Dash()
         {
             if (remainingDashes <= 0) { yield break; }
-        
+
             anim.SetTrigger("Teleport");
             quickfix = true;
-        
+
 
             thirdPersonPlayer.ResetImpactY();
             thirdPersonPlayer.gravity = 0;
@@ -228,7 +230,7 @@ namespace CreatingCharacters.Abilities
             yield return new WaitForSeconds(0.091f);
 
 
-            remainingDashes--;
+            //  remainingDashes--;
 
             Ability.animationCooldown = 0.8f;  //je kan al iets eerder loop input geven dan dat je weer ability kan doen!
 
@@ -237,17 +239,18 @@ namespace CreatingCharacters.Abilities
                 Ability.globalCooldown = 0.74f;
             }
 
+
+            thirdPersonPlayer.gravity = -9.81f;
+            thirdPersonPlayer.gravity = thirdPersonPlayer.gravity * 2;
             //   charController.enabled = false;
             yield return new WaitForSeconds(0.2f);
             GetComponent<MarcoMovementController>().jumptimer = 2f; //this is a jump
             fl.m_Priority = 11;
- 
+
             yield return new WaitForSeconds(0.1f);
-            thirdPersonPlayer.gravity = thirdPersonPlayer.gravity * 2;
-            thirdPersonPlayer.gravity = -9.81f;
 
             float magnitude = 0;
-           // charController.enabled = true;
+            // charController.enabled = true;
             thirdPersonPlayer.ResetImpactY();
             thirdPersonPlayer.AddForce(dashdir, dashForce);
             yield return new WaitForSeconds(0.5f);

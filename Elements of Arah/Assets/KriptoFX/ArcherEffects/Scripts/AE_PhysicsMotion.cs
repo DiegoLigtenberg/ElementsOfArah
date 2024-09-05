@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using CreatingCharacters.Abilities;
+using System.Reflection;
+
 public class AE_PhysicsMotion : MonoBehaviour
 {
     public bool UseCollisionDetect = true;
@@ -39,11 +41,15 @@ public class AE_PhysicsMotion : MonoBehaviour
     bool isInitializedForce;
     float currentSpeedOffset;
 
+    private GameObject player_obj;
+
 
     [SerializeField] public int damage = 1;
     [SerializeField] private DamageTypes damageType;
     public GameObject IMPACT;
     public bool buff_next_basic_attack;
+
+    public static bool killed_target_chargeshot;
 
     void OnEnable()
     {
@@ -58,8 +64,12 @@ public class AE_PhysicsMotion : MonoBehaviour
         currentSpeedOffset = Random.Range(-RandomSpeedOffset * 10000f, RandomSpeedOffset * 10000f) / 10000f;
         InitializeRigid();
 
+        killed_target_chargeshot = false;
+
+        player_obj = ActivePlayerManager.ActivePlayerGameObj;
+
         //Debug.Log(CooldownHandler.casted );
-      //  if (CooldownHandler.casted ==1) { buff_next_basic_attack = true; } //smaller than max but bigger than 0
+        //  if (CooldownHandler.casted ==1) { buff_next_basic_attack = true; } //smaller than max but bigger than 0
     }
 
     void InitializeRigid()
@@ -99,8 +109,46 @@ public class AE_PhysicsMotion : MonoBehaviour
 
     private IEnumerator delay_elemental_dmg(Health health)
     {
-        yield return new WaitForSeconds(0.0f);
-        health.takeDamage(10, DamageTypes.Elemental);
+        if (this.gameObject.name.Contains("TransformMotionEnhanced"))
+        {
+            yield return new WaitForSeconds(0.0f);
+           // int enhanced_dmg = ActivePlayerManager.ActivePlayerGameObj.GetComponent<DashAbilityMarco>().remainingDashes * 10;
+            int stack_dmg =  Mathf.Min(50, 10* ((int) FrictionMarco.friction_stacks / 10));
+
+            if (FrictionMarco.friction_active || ActivePlayerManager.ActivePlayerGameObj.GetComponent<ChargeShotMarco>().activated_during_friction)
+            {
+
+                if (stack_dmg >= 10) //don't add purple splat if dash is 0
+                {
+                    if (RapidFireMarco.TRUE_CHANNEL)
+                    {
+                        health.takeDamage(stack_dmg, DamageTypes.Elemental);
+
+                        Debug.Log("WHY??");
+                    }
+                }
+                else
+                {
+                    Debug.Log("WHY??");
+                    health.takeDamage(5, DamageTypes.Elemental);
+                }
+            }
+            else
+            {
+                if (stack_dmg >= 10) //don't add purple splat if dash is 0
+                {
+                    health.takeDamage(stack_dmg, DamageTypes.Elemental);
+                }
+                else
+                {
+                    health.takeDamage(5, DamageTypes.Elemental);
+                }
+            }
+        
+        }
+    
+       
+
     }
 
 
@@ -147,7 +195,7 @@ public class AE_PhysicsMotion : MonoBehaviour
                     {
                         Debug.Log("dealt " + damage + " damage");
 
-                        if (buff_next_basic_attack ||FrictionMarco.friction_active ){ StartCoroutine(delay_elemental_dmg(health));  }
+                        if (buff_next_basic_attack  ){ StartCoroutine(delay_elemental_dmg(health));  }
 
                         if (!this.gameObject.name.Contains("CollisionAvalanche"))
                         {
@@ -171,8 +219,84 @@ public class AE_PhysicsMotion : MonoBehaviour
 
                             if (!this.gameObject.name.Contains("Collision basicattack"))
                             {
+                       
                                 health.takeDamage(damage, damageType);
+
+                                if (this.gameObject.name.Contains("TransformMotionChargeShot") ) 
+                                {
+                                    if (player_obj.GetComponent<ChargeShotMarco>().activated_during_friction)
+                                        {
+                                        if (FrictionMarco.friction_stacks >= 10)
+                                        {
+                                           // health.takeDamage(10*(int)(FrictionMarco.friction_stacks/1), DamageTypes.Elemental);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //when friction not active
+                                        if (FrictionMarco.friction_stacks >= 10)
+                                        {
+                                            //health.takeDamage((int)(FrictionMarco.friction_stacks), DamageTypes.Elemental);
+                                            health.takeDamage(10*(int)(FrictionMarco.friction_stacks/10), DamageTypes.Elemental);
+                                        }
+                                    }
+                                    
+                                  
+                                }
+
+                              
+
+                                //killed target with chargeshot
+                                if (this.gameObject.name.Contains("TransformMotionChargeShot") )
+                                {
+                                    // ult is not active
+                                    if (!player_obj.GetComponent<ChargeShotMarco>().activated_during_friction)
+                                    {
+                                        if (health.currentHealth <= 0)
+                                        {                                            
+                                            FrictionMarco.friction_stacks += 5;
+
+                                            /*
+                                            FrictionMarco friction = player_obj.GetComponent<FrictionMarco>();
+                                            if (friction.AbilityCooldownLeft > 0)
+                                            {
+                                                float reduction_value = 5; // friction.AbilityCooldownLeft / 2 ;
+                                                CooldownHandler.Instance.ReduceAbilityCooldownByValue(friction, reduction_value);
+                                            }
+                                            */
+                                           
+                                        }
+                                        else
+                                        {
+                                            //nothing
+
+
+                                        }                                
+                                    }
+                                    // ult is active
+                                    if (player_obj.GetComponent<ChargeShotMarco>().activated_during_friction && FrictionMarco.friction_stacks >= 0)
+                                    {
+                                        if (health.currentHealth <= 0)
+                                        {                                           
+                                            //Ability.energy += ChargeShotMarco.preResetFrictionStacks;
+                                            FrictionMarco.friction_stacks += 10;
+                                            //FrictionMarco.stored_friction_stacks += 10;
+                                            Ability.energy += ActivePlayerManager.ActivePlayerGameObj.GetComponent<Ability>().basicrequirement; // regain mana cost
+                                            FrictionMarco friction = player_obj.GetComponent<FrictionMarco>();
+                                           // float reduction_value = 5; // friction.AbilityCooldownLeft / 2 ;
+
+                                            //CooldownHandler.Instance.ReduceAbilityCooldownByValue(friction, reduction_value);
+                                        }
+                                    }
+                                    Debug.Log("killed target");
+                                    
+                             
+                                }
+                            
+
                             }
+
+                       
 
                         }
 

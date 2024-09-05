@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,20 +30,48 @@ namespace CreatingCharacters.Abilities
         //[HideInInspector] public float textcdleft;
         public GameObject faraway_cross_aim;
 
+        private float maxRange;
+
+        public Image abil_img;
+        public Image img;
+        public Color startcolor;
+        public Color endcolor;
+        public Color endcolormana;
+        private Color tempcollor;
+        public Color darkcolor;
+        public Color lightcolor;
+        public float time_elapsed;
+        private float lerp_duration;
+        private bool onlylerponce;
+
         private void OnEnable()
         {
             abilityImage.fillAmount = 0;
             stop_direction = false;
+            maxRange = 60;
+
+            abilityKey = InputManager.instance.getKeyCode("arrowrain");
+          
+            Debug.Log(abilityKey);
         }
 
         private Vector3 spawnpos;
         // Update is called once per frame
-      
+
+        private bool getAbilityConditions()
+        {
+            //if at least 1 condition isn't met, then there is a violation thus this function should return false
+            bool condition_1 = Gun.fromCenterPLayerDistance < maxRange; // max range
+            bool[] conditions = { condition_1, };
+            return !conditions.All(x => x); //  not all <=> at least one not -> we return true if at least 1 condition is not met, aka violated
+        }
 
         void Update()
         {
             base.Update();
-            CooldownData();       
+            CooldownData();
+
+            abilityConditionsViolated = getAbilityConditions();
 
             getdmg = AbilityDamage;
 
@@ -60,7 +89,7 @@ namespace CreatingCharacters.Abilities
             }
 
             //outrange AND from cd
-            if (Gun.fromCenterPLayerDistance > 60 && AbilityCooldownLeft <= 0)
+            if (Gun.fromCenterPLayerDistance > maxRange && AbilityCooldownLeft <= 0)
             {
                 if (manaactive == false)
                 {
@@ -76,7 +105,13 @@ namespace CreatingCharacters.Abilities
             {
               //  targetDirection = Gun.target_hover;
             }
-        
+
+            if (highlight_timer > 0) { highlight_timer -= Time.deltaTime; }
+            if (lerping && onlylerponce)
+            {
+                highlight_color();
+            }
+
         }
 
         private void CooldownData()
@@ -94,8 +129,8 @@ namespace CreatingCharacters.Abilities
             if (AbilityCooldownLeft != 0)
             {
                 textobjectcd.SetActive(true);
-                abilityImage.fillAmount -= 1 / AbilityCooldown * Time.deltaTime;
-                if (abilityImage.fillAmount <= 0)
+                abilityImage.fillAmount = abilityCooldownLeft / AbilityCooldown;
+                if (abilityCooldownLeft <= 0.03f)
                 {
                     abilityImage.fillAmount = 0;
                 }
@@ -146,9 +181,69 @@ namespace CreatingCharacters.Abilities
 
         }
 
+
+        private bool lerping;
+        private float highlight_timer;
+
+        public void highlight_color()
+        {
+            if (highlight_timer < 0.025f)
+            {
+
+                img.color = startcolor;
+                time_elapsed = 0;
+                abil_img.color = lightcolor;
+
+            }
+            else
+            {
+                img.color = Color.Lerp(startcolor, endcolor, time_elapsed / lerp_duration);
+                time_elapsed += Time.deltaTime;
+                tempcollor = img.color;
+            }
+        }
+
+        public void Update_AbilityUI_CD_Reductione(float reduction_value)
+        {
+            textobjectcd.SetActive(true);
+            AbilityCooldownLeft = reduction_value;
+        }
+
+
+        public IEnumerator PotentialReset()
+        {
+            onlylerponce = true;
+            yield return new WaitForSeconds(0.69f);
+            if (FrictionMarco.friction_active && FrictionMarco.friction_stacks >=0)
+            {
+                float cd_time = 2.7f;
+              //  Debug.Log(this.abilityCooldownLeft);
+                CooldownHandler.Instance.ReduceAbilityCooldownToValue(this, cd_time);
+
+               // Debug.Log(this.abilityCooldownLeft);
+                this.Update_AbilityUI_CD_Reductione(cd_time);
+                lerping = true;
+                //color start
+                this.img.color = startcolor;
+                this.abil_img.color = darkcolor;
+                highlight_timer = .22f;
+
+                //wait lerp
+                yield return new WaitForSeconds(.62f);
+
+                lerping = false;
+                FrictionMarco.friction_stacks += 0;
+
+            }
+            onlylerponce = false;
+        }
+
         public override void Cast()
         {
             stop_direction = false;
+
+            // reset unique targets hit for arrow rain
+            ArrowRainDamage.uniqueTargets = new List<GameObject>();
 
             if (Gun.fromCenterPLayerDistance < 80)
             {
@@ -158,6 +253,9 @@ namespace CreatingCharacters.Abilities
                
                 StartCoroutine(AvatarMoveLocalPosUp.manual_root(1.05f));
                 StartCoroutine(arrowRain());
+
+                StartCoroutine(PotentialReset());
+
             }
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
             aus[0].pitch -= 0.05f; 

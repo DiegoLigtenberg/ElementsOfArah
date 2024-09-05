@@ -5231,8 +5231,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.6
-      minScalar: 0.6
+      scalar: 0.2
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -9672,7 +9672,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b01c7987f71eab1449155923bea304e4, type: 2}
   - {fileID: 2100000, guid: b01c7987f71eab1449155923bea304e4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -19239,8 +19238,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.4
-      minScalar: 0.3
+      scalar: 0.2
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -23748,7 +23747,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 650ecd18c88971f4da615ca0b34955b1, type: 2}
-  - {fileID: 2100000, guid: 650ecd18c88971f4da615ca0b34955b1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28169,7 +28167,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5ed5ff06ebb85194586f245b1823df49, type: 2}
-  - {fileID: 2100000, guid: 5ed5ff06ebb85194586f245b1823df49, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -28328,8 +28325,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.4
-      minScalar: 0.3
+      scalar: 0.2
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -32837,7 +32834,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 1663c6c1e926c584d89d33dff002c6b1, type: 2}
-  - {fileID: 2100000, guid: 1663c6c1e926c584d89d33dff002c6b1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -32974,9 +32970,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Distance: 100
-  Speed: 55
+  Speed: 45
   TimeDelay: 0
-  RandomMoveRadius: 0
+  RandomMoveRadius: 0.03
   RandomMoveSpeedScale: 0
   Target: {fileID: 0}
   CollidesWith:

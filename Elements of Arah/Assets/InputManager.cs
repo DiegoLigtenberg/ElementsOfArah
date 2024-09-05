@@ -34,6 +34,12 @@ public class InputManager : MonoBehaviour
             PlayerPrefs.SetInt("ClickedKeySunshineability", 0);
             PlayerPrefs.SetInt("ClickedKeyDashability", 0);
 
+            PlayerPrefs.SetInt("ClickedKeyBindChargeshotability", 0);
+            PlayerPrefs.SetInt("ClickedKeyBindRapidfireability", 0);
+            PlayerPrefs.SetInt("ClickedKeyBindArrowrainability", 0);
+            PlayerPrefs.SetInt("ClickedKeyBindFrictionability1", 0);
+            PlayerPrefs.SetInt("ClickedKeyBindDashmarcoability", 0);
+
         }
 
 
@@ -42,6 +48,7 @@ public class InputManager : MonoBehaviour
             {
             
                     keyBindings.furioushit = KeyCode.Alpha1;
+                    keyBindings.chargeshot = KeyCode.Alpha1;
                 
             }
             else
@@ -50,7 +57,9 @@ public class InputManager : MonoBehaviour
                 {
 
                     keyBindings.furioushit = SettingMenu.keyFurioushit;
+                    keyBindings.chargeshot = SettingMenu.keyChargeshot;
                     SettingMenu.ChangedFurioushit = false;
+                    SettingMenu.ChangedChargeshot = false;
                 }
             }
 
@@ -59,6 +68,7 @@ public class InputManager : MonoBehaviour
             {                
              
                     keyBindings.beamability = KeyCode.Alpha2;
+                    keyBindings.rapidfire = KeyCode.Alpha2;
 
                 
             }
@@ -67,7 +77,9 @@ public class InputManager : MonoBehaviour
                 if (SettingMenu.ChangedBeamability)
                 {
                     keyBindings.beamability = SettingMenu.keyBeamability;
+                    keyBindings.rapidfire = SettingMenu.keyRapidfireability;
                     SettingMenu.ChangedBeamability = false;
+                    SettingMenu.ChangedRapidfireability = false;
                 }
             }
 
@@ -75,6 +87,7 @@ public class InputManager : MonoBehaviour
             {
              
                     keyBindings.avalanche= KeyCode.Alpha3;
+                    keyBindings.arrowrain = KeyCode.Alpha3; 
 
                 
             }
@@ -83,7 +96,9 @@ public class InputManager : MonoBehaviour
                 if (SettingMenu.ChangedAvalancheability)
                 {
                     keyBindings.avalanche = SettingMenu.keyAvalancheability;
+                    keyBindings.arrowrain = SettingMenu.keyArrowrainability;
                     SettingMenu.ChangedAvalancheability = false;
+                    SettingMenu.ChangedArrowrainability = false;
                 }
             }
 
@@ -91,6 +106,7 @@ public class InputManager : MonoBehaviour
             {
                 
                     keyBindings.sunshine = KeyCode.Alpha4;
+                    keyBindings.friction = KeyCode.Alpha4;
 
                 
             }
@@ -99,7 +115,9 @@ public class InputManager : MonoBehaviour
                 if (SettingMenu.ChangedSunshineability)
                 {
                     keyBindings.sunshine = SettingMenu.keySunshineability;
+                    keyBindings.friction = SettingMenu.keyFrictionability;
                     SettingMenu.ChangedSunshineability = false;
+                    SettingMenu.ChangedFrictionability = false;
                 }
             }
 
@@ -108,6 +126,7 @@ public class InputManager : MonoBehaviour
             {
                
                     keyBindings.dash = KeyCode.LeftControl;
+                    keyBindings.marcodash = KeyCode.LeftControl;
 
                 
             }
@@ -116,7 +135,9 @@ public class InputManager : MonoBehaviour
                 if (SettingMenu.ChangedDashability)
                 {
                     keyBindings.dash = SettingMenu.keyDashAbility;
+                    keyBindings.marcodash = SettingMenu.keyMarcoDashAbility;
                     SettingMenu.ChangedDashability = false;
+                    SettingMenu.ChangedMarcoDashability = false;
                 }
             }
             // Debug.Log(keyBindings.furioushit);
@@ -161,6 +182,7 @@ public class InputManager : MonoBehaviour
     {
         switch (key)
         {
+            // arah
             case "dash":
                 return keyBindings.dash;
                // return keyBindings.CheckKey("dash");
@@ -177,7 +199,21 @@ public class InputManager : MonoBehaviour
             case "sunshine":
                 return keyBindings.sunshine;
 
-    
+            // marco
+            case "chargeshot":
+                return keyBindings.chargeshot;
+
+            case "rapidfire":
+                return keyBindings.rapidfire;
+
+            case "arrowrain":
+                return keyBindings.arrowrain;
+
+            case "friction":
+                return keyBindings.friction;
+
+            case "marcodash":
+                return keyBindings.marcodash;
 
 
 

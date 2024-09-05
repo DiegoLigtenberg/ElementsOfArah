@@ -16,7 +16,7 @@ public class CollisionDamageSmallRocket : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         bc = gameObject.GetComponent<BoxCollider>();
-        bc.isTrigger = false;
+        //bc.isTrigger = false;
 
         if (RFX1_TransformMotion.turnoff)
         {
@@ -50,13 +50,13 @@ public class CollisionDamageSmallRocket : MonoBehaviour
                 Debug.Log(collision.collider.gameObject.name);
                 Debug.Log("dealt " + damage + " damage");
                 health.takeDamage(damage, damageType);
-                this.gameObject.SetActive(false);
+               // this.gameObject.SetActive(false);
             }
             else
             {
                 if (collision.collider.tag != "BlockWall")
                 {
-                    this.gameObject.SetActive(false);
+                   // this.gameObject.SetActive(false);
                 }
 
             }
@@ -67,7 +67,7 @@ public class CollisionDamageSmallRocket : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (!(other.gameObject.name.Contains("Cube")))
+        if (!(other.gameObject.name.Contains("Cube") || other.gameObject.name.Contains("extended hitbox")))
         {
             var health = other.GetComponent<Health>();
 

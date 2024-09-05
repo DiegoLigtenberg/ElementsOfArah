@@ -25,7 +25,7 @@ public class RingOfFireStoneRiser : MonoBehaviour
          timer += Time.deltaTime;
       
 
-        if (timer  > start_delay && timer < 12)
+        if (timer  > start_delay && timer < 13)
         {
             bc.enabled = true;
             if (height <= max_height)
@@ -43,7 +43,7 @@ public class RingOfFireStoneRiser : MonoBehaviour
             }
         }
 
-        if (timer > 12)
+        if (timer > 13)
         {
             for (int i = 0; i < 100; i++)
             {

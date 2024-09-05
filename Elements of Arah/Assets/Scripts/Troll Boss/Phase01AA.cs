@@ -482,7 +482,7 @@ public class Phase01AA : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        Debug.Log(onlyonceInstaKill + "  this should be false? ");
+        //Debug.Log(onlyonceInstaKill + "  this should be false? ");
         if (!onlyonceInstaKill)
         {
 

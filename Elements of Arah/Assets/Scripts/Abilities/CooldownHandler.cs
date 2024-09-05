@@ -157,7 +157,21 @@ public class CooldownHandler : MonoBehaviour
         }    
     }
 
-    
+    public void ReduceAbilityCooldownByValue(Ability ability, float value)
+    {
+
+        for (int i = 0; i < abilitiesOnCooldown.Count; i++)
+        {
+            CooldownData cooldownData = abilitiesOnCooldown[i];
+            if (cooldownData.ability == ability)
+            {
+                cooldownData.cooldown -= value;
+                Debug.Log("set to value");
+            }
+        }
+    }
+
+
 
 
     public float CooldownSeconds(Ability ability)

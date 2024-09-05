@@ -10,7 +10,7 @@ public class AvalancheCollisionCheckDMG : MonoBehaviour
     {
         if (collision.collider.tag == "Enemy")
         {
-            this.gameObject.SetActive(false);
+           // this.gameObject.SetActive(false);
         }
 
     }

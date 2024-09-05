@@ -16,7 +16,7 @@ public class InstakillCanceled : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        Debug.Log(rb);
+        //Debug.Log(rb);
 
         startpos = this.transform;
      

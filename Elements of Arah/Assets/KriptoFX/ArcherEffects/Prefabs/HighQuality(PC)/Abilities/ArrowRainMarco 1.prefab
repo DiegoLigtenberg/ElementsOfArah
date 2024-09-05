@@ -4827,8 +4827,8 @@ MonoBehaviour:
   DeactivatedObjectsOnCollision: []
   HUE: -1
   CollidedInstances: []
-  damage: 60
-  damageType: 1
+  damage: 70
+  damageType: 0
   dashability: {fileID: 0}
 --- !u!1 &1831572337280484
 GameObject:

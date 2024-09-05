@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CreatingCharacters.Player;
+using System;
 
 namespace CreatingCharacters.Abilities
 {
@@ -28,11 +29,17 @@ namespace CreatingCharacters.Abilities
 
         private bool afterpyramid;
         private int start_dmg;
+        public static int preResetFrictionStacks;
 
         private void Start()
         {
+
             abilityImage.fillAmount = 0;
             start_dmg = AbilityDamage;
+            activated_during_friction = false;
+
+            abilityKey = InputManager.instance.getKeyCode("chargeshot");
+            //FrictionMarco.friction_stacks = 20;
         }
 
         // Update is called once per frame
@@ -40,6 +47,7 @@ namespace CreatingCharacters.Abilities
         {
             base.Update();
             CooldownData();
+
 
             if (Ability.energy < basicrequirement  && AbilityCooldownLeft <= 0)
             {
@@ -62,8 +70,10 @@ namespace CreatingCharacters.Abilities
             }          
         }
 
+        public bool activated_during_friction;
         public override void Cast()
         {
+           
             latecast = true;       
             oldCamRotation = curCamTransform.rotation;
 
@@ -73,7 +83,16 @@ namespace CreatingCharacters.Abilities
 
             StartCoroutine(chargeShotVisual());
             // Instantiate(effect[1], effectTransform[0].position, effectTransform[1].transform.rotation);
+
+          
+            if (FrictionMarco.friction_active && FrictionMarco.friction_stacks >=10)
+            {
+                activated_during_friction = true;
+            }
+
         }  
+
+
 
         public IEnumerator chargeShotVisual() //this name can be freely changed , currently it is only the explosion animation -> not the dmg
         {
@@ -100,23 +119,42 @@ namespace CreatingCharacters.Abilities
             // incentive is that when low on stacks, you definitely want to prioritize farming stacks with low rfc cooldown, high stacks = can do full arrow rain
 
             //als je in ult doet, dan kan je gratis veel dmg doen maar verlies je wel stacks
-            if (FrictionMarco.friction_active && FrictionMarco.friction_stacks >= 10)
+            if (activated_during_friction && FrictionMarco.friction_stacks >= 10)
             {
-                getdmg =  (int)((start_dmg * Mathf.Pow(1.065f, (float)FrictionMarco.friction_stacks)) / 1.5f) ;
-                FrictionMarco.friction_stacks /= 2;
+
+                //getdmg =  (int)((start_dmg * Mathf.Pow(1.065f, (float)FrictionMarco.friction_stacks)) / 1.5f) ;
+                //FrictionMarco.friction_stacks /= 2;
+                //float poww = Mathf.Pow((500f - 0 * 75f) / 75f, (float)(1f / 50f));
+               // int added_dmg =  (int) Math.Ceiling( (start_dmg *  Mathf.Pow(poww,(float) FrictionMarco.friction_stacks)));
+                //getdmg = (int)((start_dmg * Mathf.Pow(1.065f, (float)FrictionMarco.friction_stacks)) / 1.5f);
+               // getdmg = start_dmg + added_dmg;
+
+                getdmg =  FrictionMarco.friction_stacks * 10;
+                Instantiate(effect[0], effectTransform[3].position, effectTransform[0].rotation);
+                preResetFrictionStacks = FrictionMarco.friction_stacks;
+                FrictionMarco.friction_stacks -=10;
             }
 
             //als je uit ult doet, verlies je alle stacks, maar wellicht nodig voor specific moment om high priority target te killen OF execute (biggest burst) -
             // if this kills target, only half stacks are lost.
-            else if (Input.GetKey(KeyCode.LeftShift) && FrictionMarco.friction_stacks >= 10)
+            /*
+            else if (Input.GetKey(KeyCode.LeftShift) && FrictionMarco.friction_stacks > 10)
             {
 
-                getdmg = (int) (start_dmg *  Mathf.Pow(1.065f,(float)FrictionMarco.friction_stacks));
-                
+                float poww = Mathf.Pow((500f - 0*75f)/75f, (float)(1f / 50f));
+                Debug.Log(poww);
+               // Debug.Log(Type
+                //Debug.Log(start_dmg);
+               // float added_dmg =  (int) Math.Ceiling( (start_dmg *  Mathf.Pow(poww,(float)60 - FrictionMarco.friction_stacks)));
+                getdmg =  FrictionMarco.friction_stacks * 10;
+               // getdmg = start_dmg + added_dmg;
                 Instantiate(effect[0], effectTransform[3].position, effectTransform[0].rotation);
+                
+                preResetFrictionStacks = FrictionMarco.friction_stacks;
+                
                 FrictionMarco.friction_stacks = 0;
             }
-
+            */
 
             else
             {

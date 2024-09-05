@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +40,7 @@ namespace CreatingCharacters.Abilities
         public GameObject outrange;
 
         public GameObject textobjectcd;
+        private float maxRange;
 
         private void Awake()
         {
@@ -47,9 +49,17 @@ namespace CreatingCharacters.Abilities
             tickImage.fillAmount = 0;
 
             abilityKey = InputManager.instance.getKeyCode("avalanche");
+            maxRange = 60;
 
         }
 
+        private bool getAbilityConditions()
+        {
+            //if at least 1 condition isn't met, then there is a violation thus this function should return false
+            bool condition_1 = Gun.fromCenterPLayerDistance < maxRange; // max range
+            bool[] conditions = {condition_1, };
+            return !conditions.All(x=>x); //  not all <=> at least one not -> we return true if at least 1 condition is not met, aka violated
+        }
 
 
         private void CooldownData()
@@ -135,6 +145,8 @@ namespace CreatingCharacters.Abilities
             CooldownData();
             //TickCooldownData();
 
+            abilityConditionsViolated = getAbilityConditions(); 
+
             //nomana
             if (Ability.energy < 70 && AbilityCooldownLeft <= 0)
             {
@@ -149,7 +161,7 @@ namespace CreatingCharacters.Abilities
             }
 
             //outrange AND from cd
-            if (Gun.fromCenterPLayerDistance > 60 && AbilityCooldownLeft <= 0)
+            if (Gun.fromCenterPLayerDistance > maxRange && AbilityCooldownLeft <= 0)
             {
                 if (manaactive == false)
                 {

@@ -167,15 +167,24 @@ public class RFX1_TransformMotionInstakill : MonoBehaviour
             {
                 //this if statement is ADDED!
                 {
+                    try
+                    {
+                        var forwardVec = (targetT.position - t.position).normalized;
+                        var currentForwardVector = (forwardVec + randomOffset) * Speed * Time.deltaTime;
+                        frameMoveOffset = currentForwardVector;
+                        frameMoveOffsetWorld = currentForwardVector;
+                    }
+                    catch ( Exception e) 
+                    {
+                        Debug.Log("troll king is charging instakill, thus forward vec can not temporarily not be calculated" + e);
+                        Debug.LogException(e, this);
+                    }
 
-                    var forwardVec = (targetT.position - t.position).normalized;
-                    var currentForwardVector = (forwardVec + randomOffset) * Speed * Time.deltaTime;
-                    frameMoveOffset = currentForwardVector;
-                    frameMoveOffsetWorld = currentForwardVector;
                 }
 
             }
         }
+
 
         var currentDistance = (t.localPosition + frameMoveOffset - startPositionLocal).magnitude;
         Debug.DrawRay(t.position, frameMoveOffsetWorld.normalized * (Distance - currentDistance), Color.red, 2f);

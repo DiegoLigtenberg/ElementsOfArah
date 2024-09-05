@@ -315,7 +315,7 @@ public class RFX1_TransformMotionArrowRain : MonoBehaviour
                 }
                 //////////////////////////////////////////////////////////////////////////////////////////
 
-                Debug.Log("woot");
+                //Debug.Log("woot");
                 isCollided = true;
                 t.position = hit.point;
                 oldPos = t.position;

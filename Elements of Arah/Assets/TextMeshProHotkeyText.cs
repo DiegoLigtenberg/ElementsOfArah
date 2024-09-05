@@ -18,11 +18,17 @@ public class TextMeshProHotkeyText : MonoBehaviour
     public DashAbility dashability;
     public SunShine sunshineability;
 
+    public ChargeShotMarco chargeshotability;
+    public RapidFireMarco rapidfireability;
+    public ArrowRainMarco arrowrainability;
+    public FrictionMarco frictionability;
+    public DashAbilityMarco marcodashability;
+
     // Start is called before the first frame update
     void Start()
     {
- 
-          text = GetComponent<TMP_Text>();
+
+        text = GetComponent<TMP_Text>();
 
 
     }
@@ -36,173 +42,355 @@ public class TextMeshProHotkeyText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (this.gameObject.name == "Hotkey Furioushit") {
-
-            if (furioushit.abilityKey.ToString().Contains("Alpha"))
-            {
-                text.text = furioushit.abilityKey.ToString().ToLower().Substring(5);            
-            }
-            
-            else if (furioushit.abilityKey.ToString().Contains("Left"))
-            {
-                if (furioushit.abilityKey.ToString().Contains("Control"))
-                {
-                    text.text = "ctrl";
-                }
-                if (furioushit.abilityKey.ToString().Contains("Shift"))
-                {
-                    text.text = "shift";
-                }
-                if (furioushit.abilityKey.ToString().Contains("Alt"))
-                {
-                    text.text = "alt";
-                }              
-            }
-            else if (furioushit.abilityKey.ToString().Contains("Mouse"))
-            {
-                text.text = furioushit.abilityKey.ToString().Substring(0, 1) + furioushit.abilityKey.ToString().Substring(5);                
-        
-            }
-            else
-            {
-                text.text = furioushit.abilityKey.ToString().ToLower();
-            }            
-           
-        }
-
-
-        if (this.gameObject.name == "Hotkey Beam") {
-            if (beamability.abilityKey.ToString().Contains("Alpha"))
-            {
-                text.text = beamability.abilityKey.ToString().ToLower().Substring(5);
-            }
-
-            else if (beamability.abilityKey.ToString().Contains("Left"))
-            {
-                if (beamability.abilityKey.ToString().Contains("Control"))
-                {
-                    text.text = "ctrl";
-                }
-                if (beamability.abilityKey.ToString().Contains("Shift"))
-                {
-                    text.text = "shift";
-                }
-                if (beamability.abilityKey.ToString().Contains("Alt"))
-                {
-                    text.text = "alt";
-                }
-            }
-            else if (beamability.abilityKey.ToString().Contains("Mouse"))
-            {
-                text.text = beamability.abilityKey.ToString().Substring(0, 1) + beamability.abilityKey.ToString().Substring(5);
-
-            }
-            else
-            {
-                text.text = beamability.abilityKey.ToString().ToLower();
-            }
-        }
-
-        if (this.gameObject.name == "Hotkey Avalanche")
+        // arah
+        if (ActivePlayerManager.ActivePlayerNum == 0)
         {
-            if (avalancheability.abilityKey.ToString().Contains("Alpha"))
+            if (this.gameObject.name == "Hotkey Furioushit")
             {
-                text.text = avalancheability.abilityKey.ToString().ToLower().Substring(5);
+
+                if (furioushit.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = furioushit.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (furioushit.abilityKey.ToString().Contains("Left"))
+                {
+                    if (furioushit.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (furioushit.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (furioushit.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (furioushit.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = furioushit.abilityKey.ToString().Substring(0, 1) + furioushit.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = furioushit.abilityKey.ToString().ToLower();
+                }
+
             }
 
-            else if (avalancheability.abilityKey.ToString().Contains("Left"))
+
+            if (this.gameObject.name == "Hotkey Beam")
             {
-                if (avalancheability.abilityKey.ToString().Contains("Control"))
+                if (beamability.abilityKey.ToString().Contains("Alpha"))
                 {
-                    text.text = "ctrl";
+                    text.text = beamability.abilityKey.ToString().ToLower().Substring(5);
                 }
-                if (avalancheability.abilityKey.ToString().Contains("Shift"))
+
+                else if (beamability.abilityKey.ToString().Contains("Left"))
                 {
-                    text.text = "shift";
+                    if (beamability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (beamability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (beamability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
                 }
-                if (avalancheability.abilityKey.ToString().Contains("Alt"))
+                else if (beamability.abilityKey.ToString().Contains("Mouse"))
                 {
-                    text.text = "alt";
+                    text.text = beamability.abilityKey.ToString().Substring(0, 1) + beamability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = beamability.abilityKey.ToString().ToLower();
                 }
             }
-            else if (avalancheability.abilityKey.ToString().Contains("Mouse"))
+
+            if (this.gameObject.name == "Hotkey Avalanche")
             {
-                text.text = avalancheability.abilityKey.ToString().Substring(0, 1) + avalancheability.abilityKey.ToString().Substring(5);
+                if (avalancheability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = avalancheability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (avalancheability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (avalancheability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (avalancheability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (avalancheability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (avalancheability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = avalancheability.abilityKey.ToString().Substring(0, 1) + avalancheability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = avalancheability.abilityKey.ToString().ToLower();
+                }
+            }
+            if (this.gameObject.name == "Hotkey Sunshine")
+            {
+                if (sunshineability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = sunshineability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (sunshineability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (sunshineability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (sunshineability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (sunshineability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (sunshineability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = sunshineability.abilityKey.ToString().Substring(0, 1) + sunshineability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = sunshineability.abilityKey.ToString().ToLower();
+                }
+            }
+
+            if (this.gameObject.name == "Hotkey Dash")
+            {
+                if (dashability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = dashability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (dashability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (dashability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (dashability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (dashability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (dashability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = dashability.abilityKey.ToString().Substring(0, 1) + dashability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = dashability.abilityKey.ToString().ToLower();
+                }
 
             }
-            else
-            {
-                text.text = avalancheability.abilityKey.ToString().ToLower();
-            }
+            // if (this.gameObject.name == "Hotkey 1 Shield") { text.text = furioushit.getAbilitykey.ToString().ToLower(); }
+            //if (this.gameObject.name == "Hotkey 1 Healing") { text.text = furioushit.getAbilitykey.ToString().ToLower(); }
         }
-        if (this.gameObject.name == "Hotkey Sunshine") {
-            if (avalancheability.abilityKey.ToString().Contains("Alpha"))
+
+        // marco
+        if (ActivePlayerManager.ActivePlayerNum == 1)
+        {
+            if (this.gameObject.name == "Hotkey Chargeshot")
             {
-                text.text = sunshineability.abilityKey.ToString().ToLower().Substring(5);
+
+                if (chargeshotability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = chargeshotability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (chargeshotability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (chargeshotability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (chargeshotability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (chargeshotability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (chargeshotability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = chargeshotability.abilityKey.ToString().Substring(0, 1) + chargeshotability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = chargeshotability.abilityKey.ToString().ToLower();
+                }
+
             }
 
-            else if (sunshineability.abilityKey.ToString().Contains("Left"))
+
+            if (this.gameObject.name == "Hotkey Rapidfire")
             {
-                if (sunshineability.abilityKey.ToString().Contains("Control"))
+                if (rapidfireability.abilityKey.ToString().Contains("Alpha"))
                 {
-                    text.text = "ctrl";
+                    text.text = rapidfireability.abilityKey.ToString().ToLower().Substring(5);
                 }
-                if (sunshineability.abilityKey.ToString().Contains("Shift"))
+
+                else if (rapidfireability.abilityKey.ToString().Contains("Left"))
                 {
-                    text.text = "shift";
+                    if (rapidfireability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (rapidfireability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (rapidfireability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
                 }
-                if (sunshineability.abilityKey.ToString().Contains("Alt"))
+                else if (rapidfireability.abilityKey.ToString().Contains("Mouse"))
                 {
-                    text.text = "alt";
+                    text.text = rapidfireability.abilityKey.ToString().Substring(0, 1) + rapidfireability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = rapidfireability.abilityKey.ToString().ToLower();
                 }
             }
-            else if (sunshineability.abilityKey.ToString().Contains("Mouse"))
+
+            if (this.gameObject.name == "Hotkey Arrowrain")
             {
-                text.text = sunshineability.abilityKey.ToString().Substring(0, 1) + sunshineability.abilityKey.ToString().Substring(5);
+                if (arrowrainability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = arrowrainability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (arrowrainability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (arrowrainability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (arrowrainability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (arrowrainability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (arrowrainability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = arrowrainability.abilityKey.ToString().Substring(0, 1) + arrowrainability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = arrowrainability.abilityKey.ToString().ToLower();
+                }
+            }
+            if (this.gameObject.name == "Hotkey Friction")
+            {
+                if (frictionability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = frictionability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (frictionability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (frictionability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (frictionability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (frictionability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (frictionability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = frictionability.abilityKey.ToString().Substring(0, 1) + frictionability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = frictionability.abilityKey.ToString().ToLower();
+                }
+            }
+
+            if (this.gameObject.name == "Hotkey Marcodash")
+            {
+                if (marcodashability.abilityKey.ToString().Contains("Alpha"))
+                {
+                    text.text = marcodashability.abilityKey.ToString().ToLower().Substring(5);
+                }
+
+                else if (marcodashability.abilityKey.ToString().Contains("Left"))
+                {
+                    if (marcodashability.abilityKey.ToString().Contains("Control"))
+                    {
+                        text.text = "ctrl";
+                    }
+                    if (marcodashability.abilityKey.ToString().Contains("Shift"))
+                    {
+                        text.text = "shift";
+                    }
+                    if (marcodashability.abilityKey.ToString().Contains("Alt"))
+                    {
+                        text.text = "alt";
+                    }
+                }
+                else if (marcodashability.abilityKey.ToString().Contains("Mouse"))
+                {
+                    text.text = marcodashability.abilityKey.ToString().Substring(0, 1) + marcodashability.abilityKey.ToString().Substring(5);
+
+                }
+                else
+                {
+                    text.text = marcodashability.abilityKey.ToString().ToLower();
+                }
 
             }
-            else
-            {
-                text.text = sunshineability.abilityKey.ToString().ToLower();
-            }
+            // if (this.gameObject.name == "Hotkey 1 Shield") { text.text = furioushit.getAbilitykey.ToString().ToLower(); }
+            //if (this.gameObject.name == "Hotkey 1 Healing") { text.text = furioushit.getAbilitykey.ToString().ToLower(); }
         }
-
-        if (this.gameObject.name == "Hotkey Dash") {
-            if (dashability.abilityKey.ToString().Contains("Alpha"))
-            {
-                text.text = dashability.abilityKey.ToString().ToLower().Substring(5);
-            }
-
-            else if (dashability.abilityKey.ToString().Contains("Left"))
-            {
-                if (dashability.abilityKey.ToString().Contains("Control"))
-                {
-                    text.text = "ctrl";
-                }
-                if (dashability.abilityKey.ToString().Contains("Shift"))
-                {
-                    text.text = "shift";
-                }
-                if (dashability.abilityKey.ToString().Contains("Alt"))
-                {
-                    text.text = "alt";
-                }
-            }
-            else if (dashability.abilityKey.ToString().Contains("Mouse"))
-            {
-                text.text = dashability.abilityKey.ToString().Substring(0, 1) + dashability.abilityKey.ToString().Substring(5);
-
-            }
-            else
-            {
-                text.text = dashability.abilityKey.ToString().ToLower();
-            }
-
-        }
-       // if (this.gameObject.name == "Hotkey 1 Shield") { text.text = furioushit.getAbilitykey.ToString().ToLower(); }
-        //if (this.gameObject.name == "Hotkey 1 Healing") { text.text = furioushit.getAbilitykey.ToString().ToLower(); }
-        
 
     }
+
 }
+

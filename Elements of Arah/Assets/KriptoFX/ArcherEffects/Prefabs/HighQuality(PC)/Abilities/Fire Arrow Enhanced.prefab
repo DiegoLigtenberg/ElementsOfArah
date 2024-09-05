@@ -4681,7 +4681,7 @@ GameObject:
   - component: {fileID: 114504314701750860}
   - component: {fileID: 5540579555293838600}
   m_Layer: 16
-  m_Name: TransformMotion
+  m_Name: TransformMotionEnhanced
   m_TagString: Untagged
   m_Icon: {fileID: 6926474624037801865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -4741,6 +4741,7 @@ MonoBehaviour:
   damage: 1
   damageType: 1
   IMPACT: {fileID: 0}
+  buff_next_basic_attack: 0
 --- !u!114 &5540579555293838600
 MonoBehaviour:
   m_ObjectHideFlags: 0

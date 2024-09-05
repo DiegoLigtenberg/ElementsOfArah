@@ -207,36 +207,84 @@ namespace CreatingCharacters.Abilities
         }
 
         private bool onlylerponce;
+        private bool reocur;  // help variabele voor ui white flash
+        private bool finished; // dient voor niet resetten van ui white flash bij meerdere rfc hits
         public IEnumerator potential_reset(int remaining_hits)
         {
 
             onlylerponce = true;
 
+            int index = RapidFireMarco.rapidFireHitsDMG-1; //  1 * ((int)FrictionMarco.friction_stacks / 10);
+
             yield return new WaitForSeconds(.69f);
 
             if (!RapidFireMarco.TRUE_CHANNEL)
             {
+
                 Debug.Log("hits left bug");
                 Debug.Log(remaining_hits);
                 if (remaining_hits > 0)
                 {
-                    CooldownHandler.Instance.ReduceAbilityCooldownToValue(rfm, 4.7f);
-                    rfm.Update_AbilityUI_CD_Reductione(4.7f);
+                    //0,9 * (5,7,9,11,13, ..., 15, 17, 19, 21) + 0.2f
+                    //float[] cd_timers = { 4.7f, 6.5f, 8.3f, 10.1f, 11.9f,  //this is for the first 5 values
+                    //13.7f, 15.5f, 17.3f, 19.1f }; //this is cooldown for when you do a full ultimate
+
+                    float cd_time = (0.9f * ((index * 1.0f) + 3)) + 0.2f;
+
+                    CooldownHandler.Instance.ReduceAbilityCooldownToValue(rfm, cd_time);
+                    rfm.Update_AbilityUI_CD_Reductione(cd_time);
                     lerping = true;
                     //color start
                     rfm.img.color = startcolor;
                     rfm.abil_img.color = darkcolor;
                     highlight_timer = .32f;
-                    Debug.Log("first111");
-                    yield return new WaitForSeconds(.32f);
-                    Debug.Log("second222");
-               
 
-                 
+                    //wait lerp
+                    yield return new WaitForSeconds(.32f);
+
+
+
                     lerping = false;
                     onlylerponce = false;
                 }
 
+            }
+            else
+            {
+                reocur = true;
+                if (RapidFireMarco.TRUE_CHANNEL && !reocur)
+                {
+                    //Debug.Log("This loop can not happen multiple times");
+                    yield return new WaitForSeconds(10f);
+                    if (!finished)
+                    {
+                        reocur = false;
+                    }
+                }
+                if (!reocur)
+                {
+                    finished = false;
+                    reocur = true;
+                    float cd_time = (0.9f * ((index * 1.0f) + 3)) + 0.2f;
+
+                    CooldownHandler.Instance.ReduceAbilityCooldownToValue(rfm, cd_time);
+                    rfm.Update_AbilityUI_CD_Reductione(cd_time);
+                    lerping = true;
+                    //color start
+                    rfm.img.color = startcolor;
+                    rfm.abil_img.color = darkcolor;
+                    highlight_timer = .32f;
+
+                    //wait lerp
+                    yield return new WaitForSeconds(.32f);
+
+
+
+                    lerping = false;
+                    onlylerponce = false;
+                    finished = true;
+                    onlylerponce = false;
+                }
             }
          
        
@@ -260,7 +308,7 @@ namespace CreatingCharacters.Abilities
             else { enhanced_attack = 1; }
 
             //here should be the logic for how many rapid fire hits should be enhanced -> BASED ON AVAILABLE DASHES!
-            if (remaining_enhanced_rfc_hits > 0) { rfc_enhanced = 2; } //make some consume_enhanced_dash func
+            if (remaining_enhanced_rfc_hits > 0) { if (FrictionMarco.friction_active) { rfc_enhanced = 2; }; } //make some consume_enhanced_dash func
             else { rfc_enhanced = 1; }
 
             if (rfm.isFiring)
@@ -280,7 +328,11 @@ namespace CreatingCharacters.Abilities
             {
                 CooldownHandler.casted -= 1;
                 aa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
-                FrictionMarco.friction_stacks += 1;
+
+                //if (FrictionMarco.friction_active)
+                {
+                    FrictionMarco.friction_stacks += 1;
+                }
             }
 
        
@@ -290,9 +342,21 @@ namespace CreatingCharacters.Abilities
         {
             if (remaining_enhanced_rfc_hits > 0)
             {
-                eaa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
+                
                 remaining_enhanced_rfc_hits -= 1;
-                FrictionMarco.friction_stacks += 1;
+                if (!FrictionMarco.friction_active)
+                {
+
+                    
+                   // FrictionMarco.friction_stacks += 1;
+                }
+                else
+                { 
+                    eaa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
+                    FrictionMarco.friction_stacks += 2;
+                    
+                }
+               
             }
        
         }
@@ -303,10 +367,9 @@ namespace CreatingCharacters.Abilities
         {
 
             // logic for when ulting
-            if (FrictionMarco.friction_active) { CooldownHandler.casted = 1; remaining_enhanced_rfc_hits = 1; }
+           // if (FrictionMarco.friction_active || GetComponent<ChargeShotMarco>().activated_during_friction) { CooldownHandler.casted = 1; remaining_enhanced_rfc_hits = 1; }
 
             remove_mana_delay(animationEvent.intParameter);
-            Debug.Log(FrictionMarco.friction_stacks);
 
 
             // attacks when not jumping OR when jumping and camera is not looking in air (then don't need to reposition arrow for jump position)
@@ -363,11 +426,16 @@ namespace CreatingCharacters.Abilities
                 // no_sound = true;
                 no_sound = true;
                 rfm.isFiring = false;
-         
+
 
                 RapidFireMarco.rapidFireHits = -1;
                 rfm.fire_once = false;
-                Ability.globalCooldown = 0.6f;
+                if (Ability.globalCooldown <= 0.6f)
+                {
+                    Ability.globalCooldown = 0.6f;
+                }
+                   
+            
               
             }
             if (energy >= 7.5f)

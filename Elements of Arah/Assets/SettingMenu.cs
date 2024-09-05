@@ -147,73 +147,107 @@ public class SettingMenu : MonoBehaviour
 
     public static KeyCode keyFurioushit;
     public static bool ChangedFurioushit;
+    public static KeyCode keyChargeshot;
+    public static bool ChangedChargeshot;
     public void setKeybindFurioushit()
     {
-      
-            if (PlayerPrefs.GetInt("OpenedKeybind") == 1)
+
+        if (PlayerPrefs.GetInt("OpenedKeybind") == 1)
         {
             Debug.Log(PlayerPrefs.GetInt("OpenedKeybind"));
             PlayerPrefs.SetInt("ClickedKeyBindFurioushit", 1);
         }
-     
+
         ChangedFurioushit = true;
+        ChangedChargeshot = true;
         PlayerPrefs.SetInt("HotkeyFurioushit", keybindingsDropdown.value);
+        PlayerPrefs.SetInt("HotkeyChargeshot", keybindingsDropdown.value);
         keyFurioushit = DropDownKeys[PlayerPrefs.GetInt("HotkeyFurioushit", 0)];
-       // Debug.Log(keybindingsDropdown.value);
+        keyChargeshot = DropDownKeys[PlayerPrefs.GetInt("HotkeyChargeshot", 0)];
+        // Debug.Log(keybindingsDropdown.value);
         //Debug.Log(keyFurioushit);
 
     }
 
     public static KeyCode keyBeamability;
     public static bool ChangedBeamability;
+
+    public static KeyCode keyRapidfireability;
+    public static bool ChangedRapidfireability;
     public void setKeybindBeamability()
     {
         if (PlayerPrefs.GetInt("OpenedKeybind") == 1)
         {
             PlayerPrefs.SetInt("ClickedKeyBindBeamability", 1);
+            PlayerPrefs.SetInt("ClickedKeyBindRapidfireability", 1);
         }
         ChangedBeamability = true;
+        ChangedRapidfireability = true;
         PlayerPrefs.SetInt("HotkeyBeamability", keybindingsDropdown1.value);
+        PlayerPrefs.SetInt("HotkeyRapidfireability", keybindingsDropdown1.value);
         keyBeamability = DropDownKeys1[PlayerPrefs.GetInt("HotkeyBeamability", 0)];
+        keyRapidfireability = DropDownKeys1[PlayerPrefs.GetInt("HotkeyRapidfireability", 0)];
     }
 
     public static KeyCode keyAvalancheability;
     public static bool ChangedAvalancheability;
+
+    public static KeyCode keyArrowrainability;
+    public static bool ChangedArrowrainability; 
+
     public void setKeybindAvalancheability()
     {
         if (PlayerPrefs.GetInt("OpenedKeybind") == 1)
         {
             PlayerPrefs.SetInt("ClickedKeyAvalancheability", 1);
+            PlayerPrefs.SetInt("ClickedKeyArrowrainability", 1);
         }
         ChangedAvalancheability = true;
+        ChangedArrowrainability = true;
         PlayerPrefs.SetInt("HotkeyAvalancheability", keybindingsDropdown2.value);
+        PlayerPrefs.SetInt("HotkeyArrowrainability", keybindingsDropdown2.value);
+
         keyAvalancheability = DropDownKeys[PlayerPrefs.GetInt("HotkeyAvalancheability", 0)];
+        keyArrowrainability = DropDownKeys[PlayerPrefs.GetInt("HotkeyArrowrainability", 0)];
     }
 
     public static KeyCode keySunshineability;
     public static bool ChangedSunshineability;
+    public static KeyCode keyFrictionability;
+    public static bool ChangedFrictionability;
     public void setKeybindSunshineability()
     {
         if (PlayerPrefs.GetInt("OpenedKeybind") == 1)
         {
             PlayerPrefs.SetInt("ClickedKeySunshineability", 1);
+            PlayerPrefs.SetInt("ClickedKeyFrictionability", 1);
         }
         ChangedSunshineability = true;
+        ChangedFrictionability = true;
         PlayerPrefs.SetInt("HotkeySunshineability", keybindingsDropdown3.value);
+        PlayerPrefs.SetInt("HotkeyFrictionability", keybindingsDropdown3.value);
         keySunshineability = DropDownKeys[PlayerPrefs.GetInt("HotkeySunshineability", 0)];
+        keyFrictionability = DropDownKeys[PlayerPrefs.GetInt("HotkeyFrictionability", 0)];
     }
 
     public static KeyCode keyDashAbility;
     public static bool ChangedDashability;
+
+    public static KeyCode keyMarcoDashAbility;
+    public static bool ChangedMarcoDashability;
     public void setKeybindDashability()
     {
         if (PlayerPrefs.GetInt("OpenedKeybind") == 1)
         {
             PlayerPrefs.SetInt("ClickedKeyDashability", 1);
+            PlayerPrefs.SetInt("ClickedKeyMarcoDashability", 1);
         }
         ChangedDashability = true;
+        ChangedMarcoDashability = true;
         PlayerPrefs.SetInt("HotkeyDashability", keybindingsDropdown4.value);
+        PlayerPrefs.SetInt("HotkeyMarcoDashability", keybindingsDropdown4.value);
         keyDashAbility = DropDownKeys[PlayerPrefs.GetInt("HotkeyDashability", 0)];
+        keyMarcoDashAbility = DropDownKeys[PlayerPrefs.GetInt("HotkeyMarcoDashability", 0)];
     }
 
     public void ResetScene()

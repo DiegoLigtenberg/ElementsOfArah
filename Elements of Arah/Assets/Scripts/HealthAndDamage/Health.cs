@@ -434,9 +434,9 @@ public class Health : MonoBehaviour
 
         }
 
-        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") && this.name == "Warrior Idle") //AND ONLY IF IT IS A BOSS -> change also to wendigo later
+        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") && this.name == "Warrior Idle" && ActivePlayerManager.ActivePlayerNum == 0) //AND ONLY IF IT IS A BOSS -> change also to wendigo later
         {
-            // Debug.Log(damageType);
+            // this solves the problem that when Arah ults with stacks stored from being afk in combat, the stacks are 'reset' to 1, thus dealing only 10 damage
             if (damageType == DamageTypes.Elemental)
             {
                 damageAmount = 10;

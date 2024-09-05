@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using CreatingCharacters.Player;
+using TMPro;
 
 namespace CreatingCharacters.Abilities
 {
@@ -30,7 +31,10 @@ namespace CreatingCharacters.Abilities
 
         public static int friction_stacks;
         public static bool friction_active;
+        public static int stored_friction_stacks;
 
+        public TMP_Text textUnleash;
+        public float timer;
         private void Awake()
         {
             abilityImage.fillAmount = 0;
@@ -38,6 +42,10 @@ namespace CreatingCharacters.Abilities
             rapidFireHits = 0;
             friction_active = false;
             friction_stacks = 0;
+            stored_friction_stacks = 0;
+
+            abilityKey = InputManager.instance.getKeyCode("friction");
+            //friction_stacks = 50;
         }
 
         public IEnumerator remove_firing()
@@ -51,6 +59,12 @@ namespace CreatingCharacters.Abilities
         {
             base.Update();
             CooldownData();
+            //Debug.Log(timer);
+            if (timer > 0)
+            {
+                timer -= Time.deltaTime;
+                //Debug.Log(timer);
+            }
 
             if (Ability.energy < 75 && AbilityCooldownLeft <= 0)
             {
@@ -64,13 +78,25 @@ namespace CreatingCharacters.Abilities
 
             getdmg = AbilityDamage;
 
-            if (friction_stacks > 50) { friction_stacks = 50; }
+            if (!GetComponent<ChargeShotMarco>().activated_during_friction)
+            {
+                if (friction_stacks > 50) { friction_stacks = 50; }
+            }
+            else
+            {
+                if (friction_stacks > 50) { friction_stacks = 50; }
+                // can go above cap of 50!
+            }
+            
 
         }
 
 
         public override void Cast()
         {
+
+            latecast = true;
+            stored_friction_stacks = 0;
             //no double cast
             if (Ability.globalCooldown <= 0.8f)
             {
@@ -84,6 +110,7 @@ namespace CreatingCharacters.Abilities
 
         private void CooldownData()
         {
+            textUnleash.text = FrictionMarco.friction_stacks.ToString();
             if (Input.GetKeyDown(abilityKey) && abilityCooldownLeft == 0 && latecast || latecast)
             {
                 latecast = false;
@@ -103,11 +130,12 @@ namespace CreatingCharacters.Abilities
             {
                 textobjectcd.SetActive(false);
             }
+          
         }
 
         public IEnumerator CrownOfFire()
         {
-  
+
 
             yield return new WaitForSeconds(0.001f);
 
@@ -120,16 +148,32 @@ namespace CreatingCharacters.Abilities
             Instantiate(effect[0], effectTransform[0].position - new Vector3(0, 1.7f, 0), Quaternion.identity);
 
             friction_active = true;
+            timer = 13f;
 
-            Ability.globalCooldown = 0.6f;
-
-            if (Ability.animationCooldown <= 1.5f)
-            {
-                Ability.animationCooldown = 1.5f;
+            if (Ability.globalCooldown <= 1.0f) 
+            { 
+                Ability.globalCooldown = 1.0f;
             }
 
-            yield return new WaitForSeconds(13);
+            if (Ability.animationCooldown <= 1.6f)
+            {
+                Ability.animationCooldown = 1.6f;
+            }
+
+            yield return new WaitForSeconds(14.0f);
             friction_active = false;
+            
+
+            yield return new WaitForSeconds(1f); // add one second delay such that long hits can still travel towards target and don't lose their dmg
+            if (GetComponent<ChargeShotMarco>().activated_during_friction)
+            {
+                GetComponent<ChargeShotMarco>().activated_during_friction = false;
+               // friction_stacks = 0;
+                //friction_stacks += stored_friction_stacks;
+                yield return new WaitForSeconds(0f);
+                stored_friction_stacks = 0;
+            }
+            
         }
     }
 }

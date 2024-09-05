@@ -13,6 +13,7 @@ namespace CreatingCharacters.Abilities
         [SerializeField] public int abilityType;
 
         [HideInInspector] protected float abilityCooldownLeft;
+        [HideInInspector] protected bool abilityConditionsViolated;
         [SerializeField] public KeyCode abilityKey;
 
         public static float globalCooldown = 0f;
@@ -25,6 +26,8 @@ namespace CreatingCharacters.Abilities
 
 
         public float AbilityCooldownLeft {get  { return abilityCooldownLeft; } set { abilityCooldownLeft = value; } }
+
+        public bool AbilityConditionsViolated { get { return abilityConditionsViolated; } set { abilityConditionsViolated = value; } }
 
         public string AbilityName { get { return abilityName; } }
 
@@ -99,6 +102,8 @@ namespace CreatingCharacters.Abilities
             ////////////////////////////////////////////////////////////////////////////////////////////////////
             if (Input.GetKeyDown(abilityKey) && !PauseMenu.GameIsPaused)
             {
+                if (abilityConditionsViolated) { return; }
+
                 //cast zonder gcd
                 if (this.abilityType == 0)
                 {
@@ -199,7 +204,7 @@ namespace CreatingCharacters.Abilities
                     if (this.abilityType == 3)
                     {
                         // implicatie
-                        if (energy >= thresholdrequirement && (!(this.AbilityName == avalancheabil) || Gun.fromCenterPLayerDistance < 80))
+                        if (energy >= thresholdrequirement)
                         {
                             Cast();
 
@@ -355,7 +360,7 @@ namespace CreatingCharacters.Abilities
                 if (this.abilityType == 3)
                 {
                     // implicatie
-                    if (energy >= thresholdrequirement && (!(this.AbilityName == avalancheabil) || Gun.fromCenterPLayerDistance < 80))
+                    if (energy >= thresholdrequirement)
                     {
                         Cast();
                         energy -= thresholdAbilManaCost;
@@ -420,6 +425,7 @@ namespace CreatingCharacters.Abilities
             }
             Debug.Log(" this is probably also true -,- " + alreadyglobal);
             Debug.Log(channel_ability_active);
+            Debug.Log(globalCooldown);
             //yield return new WaitForSeconds(globalCooldown + 0.01f);
 
             if (!alreadyglobal && (channel_ability_active == false))
@@ -497,7 +503,7 @@ namespace CreatingCharacters.Abilities
                             if (this.abilityType == 3)
                             {
                                 //implciatie
-                                if (energy >= thresholdrequirement && (!(this.AbilityName == avalancheabil) || Gun.fromCenterPLayerDistance < 80))
+                                if (energy >= thresholdrequirement )
                                 {
                                     Cast();
                                     energy -= thresholdAbilManaCost;
@@ -558,7 +564,7 @@ namespace CreatingCharacters.Abilities
                     //THIS WAS SUPER BAD DONT WAIT!!!                                       
                     // yield return new WaitForSeconds(CooldownHandler.alreadyCasting);
 
-
+                  //  yield return new WaitForSeconds(globalCooldown); //TODO THIS WAS NOT HERE AND ONLY EDITED IN 14-12-2022, can delete 
                     Debug.Log("casted");
 
                     //casting ability
@@ -607,7 +613,7 @@ namespace CreatingCharacters.Abilities
                     if (this.abilityType == 3)
                     {
                         // implicatie
-                        if (energy >= thresholdrequirement && (!(this.AbilityName == avalancheabil) || Gun.fromCenterPLayerDistance < 80))
+                        if (energy >= thresholdrequirement )
                         {
                             Cast();
                             energy -= thresholdAbilManaCost;

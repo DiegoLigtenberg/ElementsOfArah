@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CreatingCharacters.Player;
+using System.Linq;
 
 namespace CreatingCharacters.Abilities
 {
@@ -20,7 +21,7 @@ namespace CreatingCharacters.Abilities
         public AudioSource[] aus;
         private bool afterpyramid;
 
-        public static int rapidFireHits;
+        public static int rapidFireHits; //this variable does the logic
         public static int rapidFireHitsDMG;//copy of rapidFireHits but will act for dmg purposes
         public bool isFiring;
         public static bool isFiring_BowEffect; //works also when mana is low
@@ -30,6 +31,7 @@ namespace CreatingCharacters.Abilities
         public Image abilityImage;   //the hidden image in canvas
         public GameObject textobjectcd;
         public GameObject nomana;
+        private bool manaactive;
 
         [HideInInspector] public bool onlyoncerfc;
         private float minimum_active; //removes bug that you aa + rapid fire, but loose ability key too fast resulting in no 2 shot rapid fire 
@@ -39,6 +41,8 @@ namespace CreatingCharacters.Abilities
 
         public Image abil_img;
         public Image img;
+
+        public GameObject violated_ui;
 
         private bool once;
         private void Awake()
@@ -50,8 +54,18 @@ namespace CreatingCharacters.Abilities
             isFiring_BowEffect = false;
             rapidFireHitsDMG = 0;
 
+            abilityKey = InputManager.instance.getKeyCode("rapidfire");
+
         }
         private bool remove_anim;
+
+        private bool getAbilityConditions()
+        {
+            //if at least 1 condition isn't met, then there is a violation thus this function should return false
+            bool condition_1 = (FrictionMarco.friction_stacks >= 0 || FrictionMarco.friction_active) ; // friction stacks moet groter dan tien zijn wanneeer je niet ult om rapid fire te knne doen
+            bool[] conditions = { condition_1, };
+            return !conditions.All(x => x); //  not all <=> at least one not -> we return true if at least 1 condition is not met, aka violated
+        }
 
         //this function works if you manually let loose of rapid fire ability key, in basic attack 'bow event' function -> there is rapidfire active bool set to false, for visual clarity at low mana quit without leaving abil key
         public IEnumerator remove_firing()
@@ -86,7 +100,8 @@ namespace CreatingCharacters.Abilities
             base.Update();
             CooldownData();
 
-            
+            abilityConditionsViolated = getAbilityConditions();
+
 
             if (Ability.energy > 10f) { isFiring_BowEffect = isFiring; }
             else { isFiring_BowEffect = false; }
@@ -111,10 +126,25 @@ namespace CreatingCharacters.Abilities
             if (Ability.energy < thresholdrequirement && AbilityCooldownLeft <= 0)
             {
                 nomana.SetActive(true);
+                manaactive = true;
             }
             else
             {
+                manaactive = false;
                 nomana.SetActive(false);
+                violated_ui.SetActive(false);
+            }
+            //outrange AND from cd
+            if (abilityConditionsViolated)
+            {
+                if (manaactive == false)
+                {
+                    violated_ui.SetActive(true);
+                }
+            }
+            else
+            {
+                violated_ui.SetActive(false);
             }
 
             getdmg = AbilityDamage;
@@ -131,13 +161,13 @@ namespace CreatingCharacters.Abilities
         
             if (isFiring)
             {
-                if (Input.GetKey(abilityKey) && energy >= 7.5f || first_hit_timer>0f || minimum_active >=0)
+                if (Input.GetKey(abilityKey) && energy >= 7.5f && (GetComponent<BasicAttackMarco>().remaining_enhanced_rfc_hits >=1||FrictionMarco.friction_active)  || first_hit_timer>0f || minimum_active >=0)
                 {
                     if (!onlyoncerfc && minimum_active>0) { anim.SetBool("rapidFireActive", true); onlyoncerfc = true;  }
                   
-                    if (Ability.globalCooldown <= 1.6f)
+                    if (Ability.globalCooldown <= 0.9f)
                     {
-                        Ability.globalCooldown = 1.6f;
+                        Ability.globalCooldown = 0.6f; // was 1.6 pre ability gcd add to regular recast ("casted")
 
                     }
                         
@@ -152,7 +182,7 @@ namespace CreatingCharacters.Abilities
                 else
                 {
 
-                    if (Ability.globalCooldown <= 1.6f && !once)
+                    if (Ability.globalCooldown <= 0.9f && !once)
                     {
                         once = true;
                         Ability.globalCooldown = 0.6f;
@@ -191,9 +221,14 @@ namespace CreatingCharacters.Abilities
             minimum_active_time_ability = 1.5f; 
 
             anim.SetBool("bug_rfc", false);
-            Ability.globalCooldown = 0.8f;
+            if (Ability.globalCooldown < 0.8f)
+            {
+                Ability.globalCooldown = 0.8f;
+            }
+            
 
-            GetComponent<BasicAttackMarco>().remaining_enhanced_rfc_hits = GetComponent<DashAbilityMarco>().remainingDashes;
+            GetComponent<BasicAttackMarco>().remaining_enhanced_rfc_hits = FrictionMarco.friction_stacks/10; //GetComponent<DashAbilityMarco>().remainingDashes;
+
 
             latecast = true;
             rapidFireHits = 1;
@@ -237,8 +272,8 @@ namespace CreatingCharacters.Abilities
             //Debug.Log(AbilityCooldown);
             //Debug.Log(abilityCooldownLeft);
             //Debug.Log(reduction_value);
-           // Debug.Log((AbilityCooldown - (abilityCooldownLeft - reduction_value)) / AbilityCooldown);
-
+            // Debug.Log((AbilityCooldown - (abilityCooldownLeft - reduction_value)) / AbilityCooldown);
+            textobjectcd.SetActive(true);
 
             //abilityImage.fillAmount -=   1- ((AbilityCooldown - (abilityCooldownLeft - reduction_value))/AbilityCooldown);
             AbilityCooldownLeft = reduction_value;

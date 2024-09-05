@@ -13,12 +13,14 @@ public class WendigoController : MonoBehaviour
     Transform targetPlayer;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = 8;
         player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
         // target =   GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
+        target = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
+
 
     }
 
@@ -29,7 +31,7 @@ public class WendigoController : MonoBehaviour
 
         SetTargetPosition(targetPlayer);
         //  agent.SetDestination(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position);
-        targetPlayer = PlayerManager.instance.player.transform;
+        targetPlayer = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform; // PlayerManager.instance.player.transform;
 
         FaceTarget();
 
@@ -45,7 +47,7 @@ public class WendigoController : MonoBehaviour
 
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 500);
         transform.rotation = lookRotation;
     }
 }

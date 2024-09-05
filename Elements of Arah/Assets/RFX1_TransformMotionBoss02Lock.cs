@@ -59,7 +59,8 @@ public class RFX1_TransformMotionBoss02Lock : MonoBehaviour
     private void Awake()
     {
         //Target = GameObject.Find("heraklios_a_dizon@Jumping (2)");
-        Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss02");
+        //Target = GameObject.Find("heraklios_a_dizon@Jumping (2)/targetforBoss02");
+        Target = GameObject.Find(ActivePlayerManager.ActivePlayerName + "/targetforBoss01");
 
 
         // DeactivatedObjectsOnCollision[0] = GameObject.Find("Enemy (1)");
