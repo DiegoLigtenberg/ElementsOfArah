@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CopyYPlayerheigt : MonoBehaviour
 {
-    public Transform player;
+    private Transform player;
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = ActivePlayerManager.ActivePlayerGameObj.transform;
     }
 
     // Update is called once per frame

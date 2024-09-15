@@ -46,6 +46,7 @@ namespace CreatingCharacters.Abilities
             dam = GetComponent<DashAbilityMarco>();
             rfm = GetComponent<RapidFireMarco>();
             lerp_duration = 0.22f;
+            rfc_enhanced = 1;
         }
 
         // Update is called once per frame
@@ -150,9 +151,10 @@ namespace CreatingCharacters.Abilities
 
         public void BowReAim()
         {
-            oldCamTransform = curCamTransform.position;
-            oldCamRotation = curCamTransform.rotation;
-            jumpCamTransform = curCamTransform.position;
+                oldCamTransform = curCamTransform.position;
+                oldCamRotation = curCamTransform.rotation;
+                jumpCamTransform = curCamTransform.position;
+            
         }
 
         //function runs at begin of bow animation
@@ -292,7 +294,7 @@ namespace CreatingCharacters.Abilities
          
         }
 
-        public void remove_mana_delay(int attack)
+        public void remove_mana_delay(int attack) //attack == 0 (aa), attack == 1 (rf)
         {
             //yield return new WaitForSeconds(0.25f);
             if ((RapidFireMarco.rapidFireHits >= 2 || RapidFireMarco.rapidFireHits == -1) && rfm.isFiring && rfm.first_hit_timer <= 0)
@@ -316,7 +318,7 @@ namespace CreatingCharacters.Abilities
                 RapidFireMarco.rapidFireHits += 1;
             }
 
-            if (attack == 1) { StartCoroutine(potential_reset(remaining_enhanced_rfc_hits)); }
+            if (attack == 1) { StartCoroutine(potential_reset(Mathf.Max(remaining_enhanced_rfc_hits,1))); } // Max 1 -> means so that on 0 stacks you also just have a 4 escond cd
             
        
         }
@@ -327,12 +329,16 @@ namespace CreatingCharacters.Abilities
             if (CooldownHandler.casted > 0)
             {
                 CooldownHandler.casted -= 1;
-                aa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
-
-                //if (FrictionMarco.friction_active)
+                if (!FrictionMarco.friction_active && FrictionMarco.friction_stacks >0 )
                 {
-                    FrictionMarco.friction_stacks += 1;
+                    aa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
+
+                    //if (FrictionMarco.friction_active)
+                    {
+                        FrictionMarco.friction_stacks -= 1;
+                    }
                 }
+               
             }
 
        
@@ -352,8 +358,8 @@ namespace CreatingCharacters.Abilities
                 }
                 else
                 { 
-                    eaa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
-                    FrictionMarco.friction_stacks += 2;
+                    //eaa.GetComponentInChildren<AE_PhysicsMotion>().buff_next_basic_attack = true;
+                    FrictionMarco.friction_stacks += 4;
                     
                 }
                
@@ -367,10 +373,11 @@ namespace CreatingCharacters.Abilities
         {
 
             // logic for when ulting
-           // if (FrictionMarco.friction_active || GetComponent<ChargeShotMarco>().activated_during_friction) { CooldownHandler.casted = 1; remaining_enhanced_rfc_hits = 1; }
+            if (FrictionMarco.friction_active || GetComponent<ChargeShotMarco>().activated_during_friction) 
+            { CooldownHandler.casted = 1; remaining_enhanced_rfc_hits = 1; }
 
             remove_mana_delay(animationEvent.intParameter);
-
+        
 
             // attacks when not jumping OR when jumping and camera is not looking in air (then don't need to reposition arrow for jump position)
             if (GetComponent<MarcoMovementController>().jumptimer > 0 && Gun.offsetcamera > 7)
@@ -386,6 +393,7 @@ namespace CreatingCharacters.Abilities
                 // rapid fire attack
                 else
                 {
+                    BowReAim();
                     GameObject eaaj = Instantiate(effect[rfc_enhanced], new Vector3(curCamTransform.position.x, jumpCamTransform.y, curCamTransform.position.z), oldCamRotation);
                     consume_enhanced_rfc(eaaj);
                 }                
@@ -403,6 +411,7 @@ namespace CreatingCharacters.Abilities
                 // rapid fire attack
                 else
                 {
+                    BowReAim();
                     GameObject eaa = Instantiate(effect[rfc_enhanced], curCamTransform.position, oldCamRotation); //als we wel rfc firen -> al1 bonus met 3 stacks!
                     consume_enhanced_rfc(eaa);
                 }
@@ -426,6 +435,7 @@ namespace CreatingCharacters.Abilities
                 // no_sound = true;
                 no_sound = true;
                 rfm.isFiring = false;
+                rfm.isFiring_Hotfix = false;
 
 
                 RapidFireMarco.rapidFireHits = -1;

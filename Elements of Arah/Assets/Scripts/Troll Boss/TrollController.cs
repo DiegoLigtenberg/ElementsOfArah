@@ -8,7 +8,7 @@ public class TrollController : MonoBehaviour
     //instantiated variables
     public float lookRadius = 50f;
     Transform target;
-    Transform targetPlayer;
+    public Transform targetPlayer;
     Transform targetMiddle;
     Transform targetNorth;
     Transform targetSouth;
@@ -17,7 +17,8 @@ public class TrollController : MonoBehaviour
     Transform targetNorthWest;
     public Animator anim;
     public GameObject checkrange;
-
+    public bool tcIsStoning;
+    public Transform currentOpenLookGap;
 
     NavMeshAgent agent;
 
@@ -38,6 +39,8 @@ public class TrollController : MonoBehaviour
         targetSouthEast = PlayerManager.instance.southeast.transform;
         targetSouthWest = PlayerManager.instance.southwest.transform;
         targetNorthWest = PlayerManager.instance.northwest.transform;
+
+        currentOpenLookGap = null;
 
     }
 
@@ -493,7 +496,7 @@ public class TrollController : MonoBehaviour
 
 
 
-            if (onMiddleFacingPlayer) { target = targetPlayer; FaceTarget(); }
+            if (onMiddleFacingPlayer && !tcIsStoning) { target = targetPlayer; FaceTarget(); }
             if (hasstartedcoroutine)
             {
                 WalkPlayer();
@@ -757,7 +760,7 @@ public class TrollController : MonoBehaviour
             startwalkingSouthEast = false;
             startwalkingSouthWest = false;
             startwalkingNorthWest = false;
-            if (!phasingToMiddle.transition_contact_TC)
+            if (!phasingToMiddle.transition_contact_TC && (! anim.GetInteger("Phase").Equals(2)))
             {
                 IdleOnPlace();
             }
@@ -787,10 +790,10 @@ public class TrollController : MonoBehaviour
     //deze method kunnen we uit zetten als we zn rug moeten raken!!!
     public void FaceTarget()
     {
-
+        Debug.Log(target.gameObject.name);
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 1);
         transform.rotation = lookRotation;
     }
 

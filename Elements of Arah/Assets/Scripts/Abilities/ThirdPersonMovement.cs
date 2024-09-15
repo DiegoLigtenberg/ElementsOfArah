@@ -147,7 +147,10 @@ namespace CreatingCharacters.Player
             {
                 if (!HealthPlayer.playerisdeath)
                 {
-                    movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+                    if (!DashAbilityMarco.isDashing) //or arah dash
+                    { 
+                        movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
+                    }
                     movementInput = transform.TransformDirection(movementInput);
                     velocity = movementInput.normalized * movementspeed + Vector3.up * velocityY;
                 }

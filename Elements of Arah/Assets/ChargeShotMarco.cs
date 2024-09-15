@@ -90,7 +90,13 @@ namespace CreatingCharacters.Abilities
                 activated_during_friction = true;
             }
 
-        }  
+        }
+
+        public void BowReAim()
+        {
+            oldCamRotation = curCamTransform.rotation;
+
+        }
 
 
 
@@ -189,6 +195,7 @@ namespace CreatingCharacters.Abilities
         public IEnumerator ChargeShot() //this is the animation based dmg hit -> don't change name
         {
             yield return new WaitForSeconds(0.25f);
+           // BowReAim(); dont want reaim its awkward for minion tagging
 
             Debug.Log(Ability.animationCooldown);
             if (Ability.animationCooldown <= 0.7f)

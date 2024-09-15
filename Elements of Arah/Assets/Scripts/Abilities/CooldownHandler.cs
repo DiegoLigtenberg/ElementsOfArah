@@ -165,7 +165,7 @@ public class CooldownHandler : MonoBehaviour
             CooldownData cooldownData = abilitiesOnCooldown[i];
             if (cooldownData.ability == ability)
             {
-                cooldownData.cooldown -= value;
+                cooldownData.cooldown = Mathf.Max(0.5f,cooldownData.cooldown - value); // cant go lower than 0 cd
                 Debug.Log("set to value");
             }
         }

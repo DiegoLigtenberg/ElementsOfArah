@@ -43,6 +43,7 @@ namespace CreatingCharacters.Abilities
         public Image img;
 
         public GameObject violated_ui;
+        public static bool TRUE_CHANNEL_HOTFIX; // fixes animation after letting loose of rapid fire early
 
         private bool once;
         private void Awake()
@@ -53,7 +54,7 @@ namespace CreatingCharacters.Abilities
             TRUE_CHANNEL = false;
             isFiring_BowEffect = false;
             rapidFireHitsDMG = 0;
-
+            TRUE_CHANNEL_HOTFIX = false;
             abilityKey = InputManager.instance.getKeyCode("rapidfire");
 
         }
@@ -70,19 +71,22 @@ namespace CreatingCharacters.Abilities
         //this function works if you manually let loose of rapid fire ability key, in basic attack 'bow event' function -> there is rapidfire active bool set to false, for visual clarity at low mana quit without leaving abil key
         public IEnumerator remove_firing()
         {
-            isFiring = false;
-            var old_rf_hits = rapidFireHits;
-            if (old_rf_hits <= 2) { Ability.animationCooldown = 1.3f; yield return new WaitForSeconds(0.3f); remove_anim = true; } // double hit
-            else { Ability.animationCooldown = 0.4f; yield return new WaitForSeconds(0.2f); remove_anim = true; } // 3 or more hits
-            yield return new WaitForEndOfFrame();
+            if (!onlyoncerfc && isFiring)
+            {
+                isFiring_Hotfix = false;
+                TRUE_CHANNEL_HOTFIX = false;
+                var old_rf_hits = rapidFireHits;
+                if (old_rf_hits <= 2) { Ability.animationCooldown = 0.3f; yield return new WaitForSeconds(0.3f); remove_anim = true; } // double hit
+                else { Ability.animationCooldown = 0.05f; yield return new WaitForSeconds(0.2f); remove_anim = true; } // 3 or more hits
+                yield return new WaitForEndOfFrame();
 
+                yield return new WaitForSeconds(0.05f);
+                isFiring = false;
+                rapidFireHits = -1;
 
-            rapidFireHits = -1;
+                fire_once = false;
+            }
 
-     
-        
-
-            fire_once = false;
         }
 
         public void reset_anim_to_zero()
@@ -106,12 +110,16 @@ namespace CreatingCharacters.Abilities
             if (Ability.energy > 10f) { isFiring_BowEffect = isFiring; }
             else { isFiring_BowEffect = false; }
 
-            if (minimum_active_dmg>0.5f) { rapidFireHitsDMG = 1; }
-            else if (minimum_active_dmg  <0.5f && minimum_active_dmg > 0) { rapidFireHitsDMG = 2; }
-            else { rapidFireHitsDMG = rapidFireHits; }
+           // if (minimum_active_dmg>0.5f) { rapidFireHitsDMG = 1; }
+            //else if (minimum_active_dmg  <0.5f && minimum_active_dmg > 0) { rapidFireHitsDMG = 2; } // min_active not needed for dmg calculations
+            //else
+            { rapidFireHitsDMG = rapidFireHits; }
 
             if (isFiring || minimum_active_time_ability > 0) { TRUE_CHANNEL = true; }
             else { TRUE_CHANNEL = false; }
+            //added for hotfix
+            if (isFiring_Hotfix || minimum_active_time_ability > 0) { TRUE_CHANNEL_HOTFIX = true; }
+            else { TRUE_CHANNEL_HOTFIX = false; }
 
             // resets animation_cooldown to zero when ending rapid fire hits 
             reset_anim_to_zero();
@@ -170,6 +178,10 @@ namespace CreatingCharacters.Abilities
                         Ability.globalCooldown = 0.6f; // was 1.6 pre ability gcd add to regular recast ("casted")
 
                     }
+                    else
+                    {
+
+                    }
                         
                     
                     if (Ability.animationCooldown <= 1.0f)
@@ -185,7 +197,7 @@ namespace CreatingCharacters.Abilities
                     if (Ability.globalCooldown <= 0.9f && !once)
                     {
                         once = true;
-                        Ability.globalCooldown = 0.6f;
+                        Ability.globalCooldown = 0.6f; // magic fix 
 
                     }
                    
@@ -208,10 +220,13 @@ namespace CreatingCharacters.Abilities
                     }
                     onlyoncerfc = false;
                 }
+
             }
+     
         }
 
         [HideInInspector] public bool fire_once;
+        public bool isFiring_Hotfix;
       
         public override void Cast()
         {
@@ -233,7 +248,7 @@ namespace CreatingCharacters.Abilities
             latecast = true;
             rapidFireHits = 1;
 
-            if (!fire_once) { isFiring = true; fire_once = true; }
+            if (!fire_once) { isFiring = true; fire_once = true; isFiring_Hotfix = true; }
 
  
 

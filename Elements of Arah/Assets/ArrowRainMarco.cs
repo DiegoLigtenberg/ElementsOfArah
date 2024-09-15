@@ -51,8 +51,6 @@ namespace CreatingCharacters.Abilities
             maxRange = 60;
 
             abilityKey = InputManager.instance.getKeyCode("arrowrain");
-          
-            Debug.Log(abilityKey);
         }
 
         private Vector3 spawnpos;

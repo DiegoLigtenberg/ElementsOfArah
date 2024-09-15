@@ -40,6 +40,7 @@ public class Health : MonoBehaviour
     public static float transformmover;
 
     public Transform splatspawn;
+    public GameObject splatspawstatic;
 
     public static bool phasedKillMinion;
     public AudioSource aus;
@@ -59,6 +60,10 @@ public class Health : MonoBehaviour
     public GameObject wendigo;
 
     private Color[] hitSplatColors;
+
+    private GameObject player;
+    private GameObject previousPlayer; // To store the last known player
+    private Vector3 playerpos;
 
 
     private void OnEnable()
@@ -84,6 +89,14 @@ public class Health : MonoBehaviour
 
         instantiateColors();
 
+
+
+    }
+
+
+    private void Start()
+    {
+      
     }
 
     private bool miniondeathonce;
@@ -107,6 +120,31 @@ public class Health : MonoBehaviour
     private bool removeinvuln;
     private void Update()
     {
+        try
+        {
+            if (ActivePlayerManager.ActivePlayerGameObj != previousPlayer)
+            {
+                player = ActivePlayerManager.ActivePlayerGameObj;
+                previousPlayer = player;
+            }
+            // Get the player position
+            Vector3 playerpos = player.transform.position;
+
+            // Calculate the direction from splatspawnold to playerpos (XZ plane)
+            Vector3 directionPlayer = new Vector3(playerpos.x - splatspawstatic.transform.position.x, 0.0094f, playerpos.z - splatspawstatic.transform.position.z).normalized;
+
+            // Make splatspawn look towards the player position
+            splatspawn.rotation = Quaternion.LookRotation(directionPlayer);
+
+            // Set splatspawn's position to splatspawnold plus 0.0189f units towards the player
+            splatspawn.transform.position = splatspawstatic.transform.position + (directionPlayer * 3.189f);
+        }
+        catch
+        {
+            // this game object is probably not containing Warrior or Healing minion. this should only work for enemies with intended values for s
+            // platspawn and splatspawstatic
+        }
+
 
 
         //kan niet meer dan max hp van phase krijgen
@@ -452,7 +490,7 @@ public class Health : MonoBehaviour
                        
                 //reests dash when starting fight for both arah and marco
                 if (ActivePlayerManager.ActivePlayerNum == 0) { ActivePlayerManager.ActivePlayerGameObj.GetComponent<DashAbility>().ResetDashes(); }
-                if (ActivePlayerManager.ActivePlayerNum == 1) { ActivePlayerManager.ActivePlayerGameObj.GetComponent<DashAbilityMarco>().ResetDashes(); }
+                if (ActivePlayerManager.ActivePlayerNum == 1) { ActivePlayerManager.ActivePlayerGameObj.GetComponent<DashAbilityMarco>().ResetDashes();  ActivePlayerManager.ActivePlayerGameObj.GetComponent<FrictionMarco>().ResetStacks(); }
                 startfightonce = true;
                 StartCoroutine(setStartFightTrue());
             }
@@ -824,7 +862,8 @@ public class Health : MonoBehaviour
         anim.SetBool("isDeath", false);
         anim.ResetTrigger("Die");
         gameObject.SetActive(false);
-
+        yield return new WaitForSeconds(10f);
+        Destroy(this);
         yield return null;
     }
     #endregion 

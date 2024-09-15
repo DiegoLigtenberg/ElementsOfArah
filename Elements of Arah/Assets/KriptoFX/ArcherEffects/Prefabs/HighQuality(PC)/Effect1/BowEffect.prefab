@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 4330076835377286}
   - component: {fileID: 114531444581461168}
   - component: {fileID: 114079618106495734}
+  - component: {fileID: 7736752404149422305}
   m_Layer: 0
   m_Name: BowEffect
   m_TagString: Untagged
@@ -266,6 +267,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxParticles: 15000
   MaxParticlesForAllEffects: 20000
+--- !u!114 &7736752404149422305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1522756039735234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c48eb6ca95c5bb4d99819cb01faf523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 15
+  spawned: 0
 --- !u!1 &1631055445558386
 GameObject:
   m_ObjectHideFlags: 0

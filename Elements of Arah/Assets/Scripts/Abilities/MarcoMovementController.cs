@@ -111,12 +111,12 @@ namespace CreatingCharacters.Abilities
             if(distanceToGround < 2.75 && distanceToGround > 0.3f && !isGrounded)
             {
                 anim.SetBool("landGround",true);
-                anim.ResetTrigger("isDoubleJump");
+                //anim.ResetTrigger("isDoubleJump");
             }
             else
             {
                 anim.SetBool("landGround", false);
-                anim.ResetTrigger("isDoubleJump");
+                //anim.ResetTrigger("isDoubleJump");
             }
 
         }
@@ -157,6 +157,7 @@ namespace CreatingCharacters.Abilities
                         }
                         else
                         {
+                            /* dont want a double jump on marco
                             if (Ability.energy > 0)
                             {
                                 // Debug.Log("this WORKS");
@@ -168,6 +169,7 @@ namespace CreatingCharacters.Abilities
                                 AddForce(Vector3.up, 3f * jumpForce);
                                 jumpCount = 2;
                             }
+                            */
                         }
                     }
 

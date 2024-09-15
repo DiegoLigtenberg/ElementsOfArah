@@ -57,7 +57,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1679276321574454}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c48eb6ca95c5bb4d99819cb01faf523, type: 3}
   m_Name: 
@@ -4919,7 +4919,6 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3d9ce45152a6e66439dc4a5b28d14a4e, type: 2}
   - {fileID: 2100000, guid: 3d9ce45152a6e66439dc4a5b28d14a4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -32742,7 +32741,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: ab9442558fc0e0847ba190538776b0c8, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

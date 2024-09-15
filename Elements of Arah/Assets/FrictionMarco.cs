@@ -43,15 +43,26 @@ namespace CreatingCharacters.Abilities
             friction_active = false;
             friction_stacks = 0;
             stored_friction_stacks = 0;
+            isInFrictionTimer = 0f;
 
             abilityKey = InputManager.instance.getKeyCode("friction");
-            //friction_stacks = 50;
+            //friction_stacks = 30;
         }
 
         public IEnumerator remove_firing()
         {
             yield return new WaitForSeconds(0.3f);
             isFiring = false;
+        }
+
+
+        private float isInFrictionTimer;
+        private CapsuleCollider playerCollider;
+        private CapsuleCollider frictionOverlapCollider;
+
+        public void ResetStacks()
+        {
+            friction_stacks = 0;
         }
 
         // Update is called once per frame
@@ -65,6 +76,41 @@ namespace CreatingCharacters.Abilities
                 timer -= Time.deltaTime;
                 //Debug.Log(timer);
             }
+
+            if (isInFrictionTimer > 0f)
+            {
+                isInFrictionTimer -= Time.deltaTime;
+            }
+
+            if (isInFrictionTimer > 0)
+            {
+                // Initialize playerCollider if it is null
+                if (playerCollider == null)
+                {
+                    playerCollider = ActivePlayerManager.ActivePlayerGameObj.GetComponentInChildren<CapsuleCollider>();
+                }
+
+                // Initialize frictionOverlapCollider if it is null
+                if (frictionOverlapCollider == null)
+                {
+                    GameObject frictionOverlapObj = GameObject.Find("FrictionOverLap");
+                    if (frictionOverlapObj != null)
+                    {
+                        frictionOverlapCollider = frictionOverlapObj.GetComponent<CapsuleCollider>();
+                    }
+                }
+
+                // Check for overlap between the two CapsuleColliders
+                friction_active = playerCollider && frictionOverlapCollider &&
+                                  playerCollider.bounds.Intersects(frictionOverlapCollider.bounds);
+            }
+            else
+            {
+                friction_active = false;
+                playerCollider = null;
+                frictionOverlapCollider = null;
+            }
+
 
             if (Ability.energy < 75 && AbilityCooldownLeft <= 0)
             {
@@ -111,18 +157,27 @@ namespace CreatingCharacters.Abilities
         private void CooldownData()
         {
             textUnleash.text = FrictionMarco.friction_stacks.ToString();
+
+            // If the ability is cast and off cooldown, reset the ability cooldown
             if (Input.GetKeyDown(abilityKey) && abilityCooldownLeft == 0 && latecast || latecast)
             {
                 latecast = false;
                 abilityImage.fillAmount = 1;
+                abilityCooldownLeft = AbilityCooldown;  // Set the cooldown time to the full ability cooldown
             }
 
-            if (abilityCooldownLeft != 0)
+            // If the ability is on cooldown
+            if (abilityCooldownLeft > 0)
             {
                 textobjectcd.SetActive(true);
-                abilityImage.fillAmount -= 1 / AbilityCooldown * Time.deltaTime;
-                if (abilityImage.fillAmount <= 0.05f)
+
+                // Update the fill amount based on remaining cooldown
+                abilityImage.fillAmount = abilityCooldownLeft / AbilityCooldown;
+
+                // Clamp abilityImage fill to zero to avoid negative values
+                if (abilityCooldownLeft <= 0)
                 {
+                    abilityCooldownLeft = 0;
                     abilityImage.fillAmount = 0;
                 }
             }
@@ -130,8 +185,8 @@ namespace CreatingCharacters.Abilities
             {
                 textobjectcd.SetActive(false);
             }
-          
         }
+
 
         public IEnumerator CrownOfFire()
         {
@@ -147,8 +202,9 @@ namespace CreatingCharacters.Abilities
 
             Instantiate(effect[0], effectTransform[0].position - new Vector3(0, 1.7f, 0), Quaternion.identity);
 
-            friction_active = true;
-            timer = 13f;
+           // friction_active = true;
+            isInFrictionTimer = 13.5f;
+            //timer = 13f;
 
             if (Ability.globalCooldown <= 1.0f) 
             { 
@@ -160,15 +216,16 @@ namespace CreatingCharacters.Abilities
                 Ability.animationCooldown = 1.6f;
             }
 
-            yield return new WaitForSeconds(14.0f);
-            friction_active = false;
+            yield return new WaitForSeconds(13.0f);
+            //friction_active = false;
+            isInFrictionTimer = 0f;
             
 
             yield return new WaitForSeconds(1f); // add one second delay such that long hits can still travel towards target and don't lose their dmg
             if (GetComponent<ChargeShotMarco>().activated_during_friction)
             {
                 GetComponent<ChargeShotMarco>().activated_during_friction = false;
-               // friction_stacks = 0;
+                friction_stacks = 0;
                 //friction_stacks += stored_friction_stacks;
                 yield return new WaitForSeconds(0f);
                 stored_friction_stacks = 0;

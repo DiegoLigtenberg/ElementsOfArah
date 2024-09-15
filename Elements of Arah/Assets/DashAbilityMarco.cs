@@ -85,6 +85,7 @@ namespace CreatingCharacters.Abilities
         void Start()
         {
             dashtransform = transform.position;
+            isDashing = false;
 
         }
 
@@ -188,12 +189,29 @@ namespace CreatingCharacters.Abilities
                 nomana.SetActive(false);
             }
 
+            if (isDashing)
+            {
+
+            }
+
+                // doesnt work -> attempt to not be able to aa when in air from dash
+                /*
+                if (isDashing)
+                {
+                    if (Ability.globalCooldown <= 1.0f)
+                    {
+                        Ability.globalCooldown = 1.0f;
+
+                        if (!charController.isGrounded) { isDashing = false; CooldownHandler.Instance.ReduceAbilityCooldownToValue(GetComponent<BasicAttackMarco>(), 0.9f); }
+                    }
+                }
+                */
 
 
 
 
 
-            if (remainingDashes == 0)
+                if (remainingDashes == 0)
             {
                 orbCount = 0;
             }
@@ -214,11 +232,20 @@ namespace CreatingCharacters.Abilities
 
 
         }
-
+        public static bool isDashing;
         public IEnumerator Dash()
         {
-            if (remainingDashes <= 0) { yield break; }
 
+            // set global cd early so we cant hit aftrer dashing
+            if (Ability.globalCooldown <= 0.74f)
+            {
+                Ability.globalCooldown = 1.35f;
+            }
+
+            if (remainingDashes <= 0) { yield break; }
+            if (GetComponent<RapidFireMarco>().isFiring) { yield break; } //less strict than true channel
+
+            isDashing = true;
             anim.SetTrigger("Teleport");
             quickfix = true;
 
@@ -226,13 +253,13 @@ namespace CreatingCharacters.Abilities
             thirdPersonPlayer.ResetImpactY();
             thirdPersonPlayer.gravity = 0;
             dashtransform = GameObject.Find("dashcampos").transform.position;
-
+            Ability.animationCooldown = 0.8f;  //je kan al iets eerder loop input geven dan dat je weer ability kan doen!
             yield return new WaitForSeconds(0.091f);
 
 
-            //  remainingDashes--;
+            remainingDashes--;
 
-            Ability.animationCooldown = 0.8f;  //je kan al iets eerder loop input geven dan dat je weer ability kan doen!
+            Ability.animationCooldown = 1.0f;  //je kan al iets eerder loop input geven dan dat je weer ability kan doen!
 
             if (Ability.globalCooldown <= 0.74f)
             {
@@ -240,21 +267,29 @@ namespace CreatingCharacters.Abilities
             }
 
 
+           // charController.enabled = false;
+            //thirdPersonPlayer.enabled = false;
+            yield return new WaitForSeconds(0.2f);
+            
             thirdPersonPlayer.gravity = -9.81f;
             thirdPersonPlayer.gravity = thirdPersonPlayer.gravity * 2;
-            //   charController.enabled = false;
-            yield return new WaitForSeconds(0.2f);
             GetComponent<MarcoMovementController>().jumptimer = 2f; //this is a jump
             fl.m_Priority = 11;
 
             yield return new WaitForSeconds(0.1f);
 
             float magnitude = 0;
-            // charController.enabled = true;
+      
             thirdPersonPlayer.ResetImpactY();
             thirdPersonPlayer.AddForce(dashdir, dashForce);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
+            //charController.enabled = true;
+            //thirdPersonPlayer.enabled = true;
+            yield return new WaitForSeconds(0.2f);
             fl.m_Priority = 9;
+            yield return new WaitForSeconds(0.4f);
+            isDashing = false;
+  
 
             quickfix = false;
             /*

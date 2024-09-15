@@ -129,6 +129,7 @@ public class HealthPlayer : MonoBehaviour
 
 
             anim.SetTrigger("isDeath");
+          //  anim.GetComponent<AudioManager>().StarPlayerDied();
             yield return new WaitForSeconds(2.15f);
             anim.ResetTrigger("isDeath");
             SceneManager.LoadScene("Saved");

@@ -254,7 +254,7 @@ public class AE_PhysicsMotion : MonoBehaviour
                                     {
                                         if (health.currentHealth <= 0)
                                         {                                            
-                                            FrictionMarco.friction_stacks += 5;
+                                            FrictionMarco.friction_stacks += 10;
 
                                             /*
                                             FrictionMarco friction = player_obj.GetComponent<FrictionMarco>();
@@ -283,9 +283,9 @@ public class AE_PhysicsMotion : MonoBehaviour
                                             //FrictionMarco.stored_friction_stacks += 10;
                                             Ability.energy += ActivePlayerManager.ActivePlayerGameObj.GetComponent<Ability>().basicrequirement; // regain mana cost
                                             FrictionMarco friction = player_obj.GetComponent<FrictionMarco>();
-                                           // float reduction_value = 5; // friction.AbilityCooldownLeft / 2 ;
-
-                                            //CooldownHandler.Instance.ReduceAbilityCooldownByValue(friction, reduction_value);
+                                           
+                                            float reduction_value = 15; // friction.AbilityCooldownLeft / 2 ; 
+                                            CooldownHandler.Instance.ReduceAbilityCooldownByValue(friction, reduction_value); //could also be 5 per kill
                                         }
                                     }
                                     Debug.Log("killed target");

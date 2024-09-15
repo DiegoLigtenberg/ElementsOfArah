@@ -11465,6 +11465,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1850103746497842474}
+  - component: {fileID: 1461868271005639849}
   m_Layer: 0
   m_Name: KnivesMarco_new
   m_TagString: Untagged
@@ -11490,6 +11491,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1461868271005639849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351212514714637885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c48eb6ca95c5bb4d99819cb01faf523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 10
+  spawned: 0
 --- !u!1 &6491171870504993604
 GameObject:
   m_ObjectHideFlags: 0
@@ -18631,15 +18646,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5af16a2ad0481154f9531eb37cf791e0, type: 3}
---- !u!4 &4112135461132487267 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4692492331961232, guid: 5af16a2ad0481154f9531eb37cf791e0,
-    type: 3}
-  m_PrefabInstance: {fileID: 4107729975780049395}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4108884175860105111 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1168529248583268, guid: 5af16a2ad0481154f9531eb37cf791e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 4107729975780049395}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4112135461132487267 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4692492331961232, guid: 5af16a2ad0481154f9531eb37cf791e0,
     type: 3}
   m_PrefabInstance: {fileID: 4107729975780049395}
   m_PrefabAsset: {fileID: 0}
@@ -19183,15 +19198,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5af16a2ad0481154f9531eb37cf791e0, type: 3}
---- !u!4 &7086077735918488521 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4692492331961232, guid: 5af16a2ad0481154f9531eb37cf791e0,
-    type: 3}
-  m_PrefabInstance: {fileID: 7081459495065813081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7080295374609612349 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1168529248583268, guid: 5af16a2ad0481154f9531eb37cf791e0,
+    type: 3}
+  m_PrefabInstance: {fileID: 7081459495065813081}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7086077735918488521 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4692492331961232, guid: 5af16a2ad0481154f9531eb37cf791e0,
     type: 3}
   m_PrefabInstance: {fileID: 7081459495065813081}
   m_PrefabAsset: {fileID: 0}

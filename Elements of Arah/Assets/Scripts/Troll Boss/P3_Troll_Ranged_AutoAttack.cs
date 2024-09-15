@@ -30,6 +30,8 @@ public class P3_Troll_Ranged_AutoAttack : StateMachineBehaviour
         // P2_Troll_Idle.lookAtplayer = true;
         //tc.FaceTarget();
 
+        tc.SetTargetPosition(tc.targetPlayer);
+        tc.FaceTarget();
         P2_Troll_Idle.lookAtplayer = true;
     }
 

@@ -877,7 +877,6 @@ public class Phase01AA : MonoBehaviour
     #endregion
     public static List<int> alreadygot;
 
-    
     private IEnumerator P2StoneFromAir()
     {
         //hij cast deze abil 3x dus moet met static   
@@ -885,22 +884,28 @@ public class Phase01AA : MonoBehaviour
         {
             //probeer nieuwe waarde
             isoff = getRandom();
+
+            if (isoff == 1) { trollMovement.currentOpenLookGap = GameObject.Find("wooden table sw look").transform; } //sw
+            if (isoff == 2) { trollMovement.currentOpenLookGap = GameObject.Find("wooden table se look").transform; } //se
+            if (isoff == 3) { trollMovement.currentOpenLookGap = GameObject.Find("wooden table ne look").transform; } //ne
+            if (isoff == 4) { trollMovement.currentOpenLookGap = GameObject.Find("wooden table nw look").transform; } //nw
         }
 
 
         amntstones++;
+        if (amntstones == 3) { trollMovement.tcIsStoning = false; }
         yield return new WaitForSeconds(1.1f);
         rock5 = Instantiate(effectP2[0], effectTransformP2[0].position, effectTransformP2[0].rotation);
         rock6 = Instantiate(effectP2[1], effectTransformP2[1].position, effectTransformP2[1].rotation);
-
+        
         if (amntstones == 3)
         {
 
             yield return new WaitForSeconds(1.07f);
-            if (isoff != 1) { indicatorrock1 = Instantiate(effectP2[8], effectTransformP2[2].position, effectTransformP2[8].rotation); }
-            if (isoff != 2) { indicatorrock2 = Instantiate(effectP2[8], effectTransformP2[3].position, effectTransformP2[8].rotation); }
-            if (isoff != 3) { indicatorrock3 = Instantiate(effectP2[8], effectTransformP2[4].position, effectTransformP2[8].rotation); }
-            if (isoff != 4) { indicatorrock4 = Instantiate(effectP2[8], effectTransformP2[5].position, effectTransformP2[8].rotation); }
+            if (isoff != 1) { indicatorrock1 = Instantiate(effectP2[8], effectTransformP2[2].position, effectTransformP2[8].rotation);  } //sw
+            if (isoff != 2) { indicatorrock2 = Instantiate(effectP2[8], effectTransformP2[3].position, effectTransformP2[8].rotation);  } //se
+            if (isoff != 3) { indicatorrock3 = Instantiate(effectP2[8], effectTransformP2[4].position, effectTransformP2[8].rotation);  } //ne
+            if (isoff != 4) { indicatorrock4 = Instantiate(effectP2[8], effectTransformP2[5].position, effectTransformP2[8].rotation);  } //nw
 
         }
 
@@ -995,6 +1000,7 @@ public class Phase01AA : MonoBehaviour
             }
 
         }
+    
         yield return null;
     }
 

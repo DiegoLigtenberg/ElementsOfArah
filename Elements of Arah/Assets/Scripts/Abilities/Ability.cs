@@ -83,9 +83,10 @@ namespace CreatingCharacters.Abilities
         public void check_if_channeling()
         {
             // list of all channeled abilities -> if one active, can't use recast for basic attack
-            if (BeamAbility.Beam_is_channeling || RapidFireMarco.TRUE_CHANNEL ) {channel_ability_active = true; }
+            if (BeamAbility.Beam_is_channeling || RapidFireMarco.TRUE_CHANNEL_HOTFIX  ) {channel_ability_active = true; }
             else { channel_ability_active = false; }
         }
+
 
         protected virtual void Update()
         {

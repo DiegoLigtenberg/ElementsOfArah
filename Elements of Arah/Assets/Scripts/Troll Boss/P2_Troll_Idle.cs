@@ -72,6 +72,7 @@ public class P2_Troll_Idle : StateMachineBehaviour
         Phase01AA.onlyonceInstaKill = false;
         // Debug.Log(Phase01AA.onlyonceInstaKill);
 
+ 
     }
 
 
@@ -79,8 +80,13 @@ public class P2_Troll_Idle : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        tc.FaceTarget();
-        P2_Troll_Idle.lookAtplayer = true;
+        if (!tc.tcIsStoning)
+        {
+            tc.SetTargetPosition(player);
+            tc.FaceTarget();
+            //P2_Troll_Idle.lookAtplayer = true;
+        }
+      
         if (animator.GetInteger("Phase") != 2)
         {
             animator.SetBool("Phasing", false);

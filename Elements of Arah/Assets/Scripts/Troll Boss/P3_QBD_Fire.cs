@@ -21,6 +21,7 @@ public class P3_QBD_Fire : StateMachineBehaviour
         tc.startwalkingPlayer = true;
         tc.stopwalkingIdle = true;
 
+      
         P2_Troll_Idle.lookAtplayer = true;
 
     }
@@ -29,6 +30,8 @@ public class P3_QBD_Fire : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         P2_Troll_Idle.lookAtplayer = true;
+        tc.SetTargetPosition(tc.targetPlayer);
+        tc.FaceTarget();
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
