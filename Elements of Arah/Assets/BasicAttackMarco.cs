@@ -160,7 +160,7 @@ namespace CreatingCharacters.Abilities
         //function runs at begin of bow animation
         public void StopRapidFire()
         {
-            rfm.minimum_active_time_ability= 0.45f;
+            rfm.minimum_active_time_ability= 0.50f; //was 0.45 but 0.50 makes it so that even in long range and tight, last rapid fire hit still deals full dmg
         }
         public void BowEvent()
         {

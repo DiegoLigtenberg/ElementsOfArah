@@ -65,6 +65,8 @@ namespace CreatingCharacters.Abilities
             friction_stacks = 0;
         }
 
+        bool hasLeftFriction = false;
+
         // Update is called once per frame
         protected override void Update()
         {
@@ -103,12 +105,31 @@ namespace CreatingCharacters.Abilities
                 // Check for overlap between the two CapsuleColliders
                 friction_active = playerCollider && frictionOverlapCollider &&
                                   playerCollider.bounds.Intersects(frictionOverlapCollider.bounds);
+
+
+                // Check for overlap between the two CapsuleColliders -> the intersection logic is to reset elemental purple dmg after an ability when its in ult
+                bool isIntersecting = playerCollider && frictionOverlapCollider &&
+                                      playerCollider.bounds.Intersects(frictionOverlapCollider.bounds);
+                if (isIntersecting)
+                {
+                    hasLeftFriction = false;
+                }
+                else
+                {
+                    // If the player has left the friction area and hasn't already triggered the cooldown reset
+                    if (!hasLeftFriction)
+                    {
+                        CooldownHandler.casted = 0; // this removes 'just used ability extra hit' when leaving ult after doing ability in ult -> because in ult, we dont want elemental dmg, we only get stacks in ult
+                        hasLeftFriction = true; // Prevents triggering multiple times
+                    }
+                }
             }
             else
             {
                 friction_active = false;
                 playerCollider = null;
                 frictionOverlapCollider = null;
+                hasLeftFriction = false; // Reset flag if friction timer ends
             }
 
 
