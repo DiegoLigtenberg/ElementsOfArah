@@ -42,33 +42,23 @@ public class CollisionDamageFireBreath : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // FuriousHit.damageonce = true;
-        // werkt niet meer voor eigen ability -> nu is het enemy ability door healthplayer
+        //FuriousHit.damageonce = true;
+        //werkt niet meer voor eigen ability -> nu is het enemy ability door healthplayer
+        var health = collision.collider.GetComponent<Health>();
 
-        if (collision.collider.TryGetComponent<Health>(out var health))
+        if (health != null)
         {
+
             Debug.Log("dealt " + damage + " damage");
-            CallTakeDamage(health, damage, damageType);
-            this.gameObject.SetActive(false);
-        }
-        else if (collision.collider.TryGetComponent<HealthWendigo>(out var healthWendigo))
-        {
-            Debug.Log("dealt " + damage + " damage");
-            CallTakeDamage(healthWendigo, damage, damageType);
+            health.takeDamage(damage, damageType);
+
             this.gameObject.SetActive(false);
         }
         else
         {
             this.gameObject.SetActive(false);
         }
-    }
 
-    void CallTakeDamage(object health, int dmg, DamageTypes dmgType)
-    {
-        if (health is Health h)
-            h.takeDamage(dmg, dmgType);
-        else if (health is HealthWendigo hw)
-            hw.takeDamage(dmg, dmgType);
     }
     /*
     private void OnTriggerEnter(Collider other)
