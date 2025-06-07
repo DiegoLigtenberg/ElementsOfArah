@@ -32,7 +32,7 @@ public class WendigoController : MonoBehaviour
         SetTargetPosition(targetPlayer);
         //  agent.SetDestination(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position);
         targetPlayer = ActivePlayerManager.ActivePlayerGameObj.transform; // PlayerManager.instance.player.transform;
-
+        target = ActivePlayerManager.ActivePlayerGameObj.transform.Find("targetforBossWendigoAA").transform;
         FaceTarget();
 
     }

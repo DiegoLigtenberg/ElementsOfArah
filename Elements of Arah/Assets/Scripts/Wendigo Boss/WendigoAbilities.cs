@@ -164,19 +164,19 @@ public class WendigoAbilities : MonoBehaviour
             this.transform.position = platformPositionsP1[5].transform.position;
             platformcount = 0;
         }
-       
+        staffOrbP1.enabled = true;
+        meshColP1.enabled = true;
+        sphereColP1.enabled = true;
         yield return new WaitForSeconds(3.3f);
 
         //particleEffectP1[0].gameObject.SetActive(false);
         // particleEffectP1[1].gameObject.SetActive(false);
-       // this.transform.position = platformPositionsP1[randomplatform].transform.position; //the old spot
+        // this.transform.position = platformPositionsP1[randomplatform].transform.position; //the old spot
 
 
         //start particle system
         yield return new WaitForSeconds(0.9f);
-        staffOrbP1.enabled = true;
-        meshColP1.enabled = true;
-        sphereColP1.enabled = true;
+
         particlesystemP1.enableEmission = true;
        
         particleEffectP1[0].gameObject.SetActive(true);
