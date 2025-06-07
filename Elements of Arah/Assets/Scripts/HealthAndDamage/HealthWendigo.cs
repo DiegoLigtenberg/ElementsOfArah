@@ -159,14 +159,14 @@ public class HealthWendigo : MonoBehaviour
             currentHealth = phaseMaxHealth;
         }
 
-        if (CheckRangeArea1.OutRange && this.gameObject.name.Contains("Warrior"))
+        if (CheckRangeArea1.OutRange && this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
             isinvulnerable = true;
             removeinvuln = false;
         }
         else
         {
-            if (!removeinvuln && this.gameObject.name.Contains("Warrior"))
+            if (!removeinvuln && this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
             {
                 removeinvuln = true;
                 isinvulnerable = false;
@@ -236,7 +236,7 @@ public class HealthWendigo : MonoBehaviour
             transformmover = 0;
         }
 
-        if (this.gameObject.name.Contains("Warrior"))
+        if (this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
 
             if (basicSplat != null)
@@ -332,7 +332,7 @@ public class HealthWendigo : MonoBehaviour
 
     public void ShowFloatingTextHeal()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
             healSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             healSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -350,7 +350,7 @@ public class HealthWendigo : MonoBehaviour
 
     public void ShowFloatingTextFire()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
             basicSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             basicSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -368,7 +368,7 @@ public class HealthWendigo : MonoBehaviour
 
     public void ShowFloatingTextWater()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
             basicSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             basicSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -385,7 +385,7 @@ public class HealthWendigo : MonoBehaviour
 
     public void ShowFloatingTextAOE()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
             abilitySplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0f), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             abilitySplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -402,7 +402,7 @@ public class HealthWendigo : MonoBehaviour
 
     public void ShowFloatingTextElemental()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (this.gameObject.name.Contains("Wendigo@Ninja Idle 1"))
         {
             elementalSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0f), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             elementalSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -472,7 +472,7 @@ public class HealthWendigo : MonoBehaviour
 
         }
 
-        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") && this.name == "Warrior Idle" && ActivePlayerManager.ActivePlayerNum == 0) //AND ONLY IF IT IS A BOSS -> change also to wendigo later
+        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") && this.name == ActiveBossManager.ActiveBossName && ActivePlayerManager.ActivePlayerNum == 0) //AND ONLY IF IT IS A BOSS -> change also to wendigo later
         {
             // this solves the problem that when Arah ults with stacks stored from being afk in combat, the stacks are 'reset' to 1, thus dealing only 10 damage
             if (damageType == DamageTypes.Elemental)
@@ -482,7 +482,7 @@ public class HealthWendigo : MonoBehaviour
             }
         }
 
-        if (this.name == "Warrior Idle" && currentHealthPCT < 9999f)
+        if (this.name == ActiveBossManager.ActiveBossName && currentHealthPCT < 9999f)
         {
 
             if (!startfightonce)
@@ -498,7 +498,7 @@ public class HealthWendigo : MonoBehaviour
 
         }
 
-        if (this.name == "Warrior Idle" && currentHealthPCT < .6666666f && phasingToMiddle.Phasecount == 0)
+        if (this.name == ActiveBossManager.ActiveBossName && currentHealthPCT < .6666666f && phasingToMiddle.Phasecount == 0)
         {
 
             if (currentHealth > 0)
@@ -509,7 +509,7 @@ public class HealthWendigo : MonoBehaviour
 
         }
 
-        if (this.name == "Warrior Idle" && currentHealthPCT < .3333333f && phasingToMiddle.Phasecount == 1)
+        if (this.name == ActiveBossManager.ActiveBossName && currentHealthPCT < .3333333f && phasingToMiddle.Phasecount == 1)
         {
             if (currentHealth > 0)
             {
@@ -650,110 +650,8 @@ public class HealthWendigo : MonoBehaviour
 
         //object specific triggers
         // if (this.name == "Warrior Idle" && currentHealthPCT < .5f) { anim.SetInteger("Phase", 1); }
-        if (this.name == "Warrior Idle" && currentHealthPCT < .6666666f) { anim.SetInteger("Phase", 1); if (!phaseonce) { anim.SetBool("Phasing", true); phaseonce = true; } }
-        if (this.name == "Warrior Idle" && currentHealthPCT < .33333333f) { anim.SetInteger("Phase", 2); if (!phasetwice) { anim.SetBool("Phasing", true); } phasetwice = true; }
-
-
-
-
-
-        //if glass box is killed -> start function that sets p2 enter true
-        if (this.name == "GlassBoxG")
-        {
-            if (anim.GetInteger("Phase") == 1)
-            {
-                if (currentHealthPCT <= .9999f)
-                {
-                    //start charging fire blast
-                    firetotems1[0].SetActive(true);
-                    dragonhead[0].SetActive(true); //dragonhead fire glow
-                    dragonhead[2].SetActive(true); //basket
-                }
-
-                if (currentHealthPCT <= .66666f)
-                {
-                    //spawn fire
-                    firetotems1[1].SetActive(true);
-                    firetotems1[2].SetActive(true);
-                }
-
-                if (currentHealthPCT <= .33333f)
-                {
-                    //spawn fire
-                    firetotems1[3].SetActive(true);
-                    firetotems1[4].SetActive(true);
-
-                }
-            }
-
-            if (anim.GetInteger("Phase") == 2)
-            {
-                if (currentHealthPCT <= .9999f)
-                {
-                    //start charging fire blast
-                    firetotems2[0].SetActive(true);
-                    firetotems1[0].GetComponent<ChaneLightIntensityReduce>().enabled = true;
-                    dragonhead[1].SetActive(true); //dragonhead fire glow
-                    dragonhead[3].SetActive(true); //basket
-                }
-
-                if (currentHealthPCT <= .66666f)
-                {
-                    //spawn fire
-                    firetotems2[1].SetActive(true);
-                    firetotems2[2].SetActive(true);
-                }
-
-                if (currentHealthPCT <= .33333f)
-                {
-                    //spawn fire
-                    firetotems2[3].SetActive(true);
-                    firetotems2[4].SetActive(true);
-
-                }
-            }
-
-
-            if (currentHealthPCT <= 0f)
-            {
-                if (anim.GetInteger("Phase") == 1)
-                {
-
-                    for (int i = 1; i <= 4; i++) { firetotems1[i].SetActive(false); }  //quickly put out fire
-                    for (int i = 5; i < 7; i++) { firetotems1[i].SetActive(false); } //remove double sound
-                    for (int i = 1; i <= 4; i++) { firetotems1[i].SetActive(true); } //double fire
-
-                    Phase01AA functioncaller = GameObject.Find("Warrior Idle").GetComponent<Phase01AA>();
-                    functioncaller.StartDelayDragonShineOff();
-
-                }
-
-                if (anim.GetInteger("Phase") == 2)
-                {
-
-                    for (int i = 1; i <= 4; i++) { firetotems2[i].SetActive(false); }  //quickly put out fire
-                    for (int i = 5; i < 7; i++) { firetotems2[i].SetActive(false); } //remove double sound
-                    for (int i = 1; i <= 4; i++) { firetotems2[i].SetActive(true); } //double fire
-                    Phase01AA functioncaller = GameObject.Find("Warrior Idle").GetComponent<Phase01AA>();
-                    functioncaller.StartDelayDragonShineOff();
-                }
-
-
-                tpl.StartBeam();
-
-                if (anim.GetInteger("Phase") == 1)
-                {
-
-                    Invoke("delayp2instakill", 0.25f);
-                }
-                if (anim.GetInteger("Phase") == 2)
-                {
-                    Invoke("delayp3instakill", 0.25f);
-
-                }
-
-            }
-        }
+        if (this.name == ActiveBossManager.ActiveBossName && currentHealthPCT < .6666666f) { anim.SetInteger("Phase", 1); if (!phaseonce) { anim.SetBool("Phasing", true); phaseonce = true; } }
+        if (this.name == ActiveBossManager.ActiveBossName && currentHealthPCT < .33333333f) { anim.SetInteger("Phase", 2); if (!phasetwice) { anim.SetBool("Phasing", true); } phasetwice = true; }
 
         if (currentHealth <= 0)
         {
@@ -774,7 +672,7 @@ public class HealthWendigo : MonoBehaviour
     {
 
 
-        if (gameObject.name.Contains("Warrior")) // || gameObject.name == "Healing Minion(Clone)")
+        if (this.name == ActiveBossManager.ActiveBossName) // || gameObject.name == "Healing Minion(Clone)")
         {
             TextMeshProStopWatchSecond.counting = false;
 
@@ -782,7 +680,7 @@ public class HealthWendigo : MonoBehaviour
             Debug.Log("SHOULD START COROuTINE");
             Canvashpboss.SetActive(false);
             StartCoroutine(DieBoss());
-            this.gameObject.GetComponent<TrollController>().enabled = false;
+            this.gameObject.GetComponent<WendigoController>().enabled = false;
             //wendigo.SetActive(true);
 
         }
@@ -814,7 +712,7 @@ public class HealthWendigo : MonoBehaviour
         }
         else
         {
-            if (!gameObject.name.Contains("Warrior"))
+            if (!gameObject.name.Contains("Wendigo@Ninja Idle 1"))
             {
                 gameObject.SetActive(false);
             }

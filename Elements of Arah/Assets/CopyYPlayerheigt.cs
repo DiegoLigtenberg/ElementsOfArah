@@ -15,6 +15,6 @@ public class CopyYPlayerheigt : MonoBehaviour
     void Update()
     {
        
-        this.transform.position = new Vector3(this.transform.position.x,  Mathf.Clamp(  player.transform.position.y , 0, 0.4f* player.transform.position.y +40)  , this.transform.position.z);
+        this.transform.position = new Vector3(this.transform.position.x,  Mathf.Clamp(player.transform.position.y , 0, 0.4f* player.transform.position.y +40)  , this.transform.position.z);
     }
 }

@@ -18,6 +18,7 @@ public class CheckRangeArea1 : MonoBehaviour
         i = 7;
         OutRange = false;
         staying = false;
+        
         anim.ResetTrigger("Outrange");
         anim.SetBool("outofrange", false);
         anim.SetBool("instakilling", false);
@@ -62,7 +63,7 @@ public class CheckRangeArea1 : MonoBehaviour
 
     private void Update()
     {
-       
+        anim = ActiveBossManager.ActiveBossGameObj.GetComponent<Animator>();
         if (timeleft > 0 && anim.GetBool("StartFight"))
         {
             timeleft -= Time.deltaTime;

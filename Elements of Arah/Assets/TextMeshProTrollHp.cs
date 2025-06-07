@@ -9,28 +9,31 @@ using CreatingCharacters.Abilities;
 
 public class TextMeshProTrollHp : MonoBehaviour
 {
-
     public Health hp;
+    public HealthWendigo hpw;
     public TMP_Text textHpNumber;
-    
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
         textHpNumber = GetComponent<TMP_Text>();
-
-        hp =  GetComponentInParent<Health>();
-
-   
+        hp = GetComponentInParent<Health>();
+        hpw = GetComponentInParent<HealthWendigo>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-
-        textHpNumber.text = hp.currentHealth.ToString();
-
+        // Show health for whichever component exists
+        if (hp != null)
+        {
+            textHpNumber.text = hp.currentHealth.ToString();
+        }
+        else if (hpw != null)
+        {
+            textHpNumber.text = hpw.currentHealth.ToString();
+        }
+        else
+        {
+            textHpNumber.text = "0";
+        }
     }
 }

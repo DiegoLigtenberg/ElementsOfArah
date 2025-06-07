@@ -206,59 +206,17 @@ public class AE_PhysicsMotionTagShot : MonoBehaviour
                     }
                 }
 
-                if (collision.collider.GetComponent<Health>() != null)
+                if (collision.collider.TryGetComponent<Health>(out var foundHealth))
                 {
-                    var health = collision.collider.GetComponent<Health>();
-
-                    if (health != null)
-                    {
-                        Debug.Log("dealt " + damage + " damage");
-
-
-                        if (!this.gameObject.name.Contains("CollisionAvalanche"))
-                        {
-
-                            if (this.gameObject.name.Contains("Collision basicattack"))
-                            {
-                                health.takeDamage(damage, damageType);
-
-                                if (!this.gameObject.name.Contains("Collision NODAMAGE"))
-                                {
-
-                                    /*
-                                        if (dashability.orbCount == 0) { health.takeDamage(damage, damageType); }
-                                        if (dashability.orbCount == 1) { health.takeDamage(damage, damageType); }
-                                        if (dashability.orbCount == 2) { health.takeDamage(damage, damageType); }
-                                        if (dashability.orbCount == 3) { health.takeDamage(damage, damageType); }
-                                    */
-                                }
-
-                            }
-
-                            if (!this.gameObject.name.Contains("Collision basicattack"))
-                            {
-                                health.takeDamage(damage, damageType);
-                            }
-
-                        }
-
-                        if (this.gameObject.name.Contains("Collision basicattack"))
-                        {
-                            //   if (dashability.orbCount == 0) { health.takeDamage(0, DamageTypes.Fire); }
-                            /*
-                            if (SunShine.SunShineActive)
-                            {
-                                if (dashability.orbCount == 1) { health.takeDamage(10, DamageTypes.Elemental); }
-                                if (dashability.orbCount == 2) { health.takeDamage(20, DamageTypes.Elemental); }
-                                if (dashability.orbCount == 3) { health.takeDamage(30, DamageTypes.Elemental); }
-                            }
-                            */
-                        }
-
-                    }
-
-
+                    ApplyDamageLogic(foundHealth);
                 }
+                else if (collision.collider.TryGetComponent<HealthWendigo>(out var foundHealthWendigo))
+                {
+                    ApplyDamageLogic(foundHealthWendigo);
+                }
+
+              
+
                 var handler = CollisionEnter;
                 if (handler != null)
                     handler(this, new AE_CollisionInfo { ContactPoint = contact });
@@ -300,7 +258,56 @@ public class AE_PhysicsMotionTagShot : MonoBehaviour
         }
     }
 
+    private void ApplyDamageLogic(object health)
+    {
+        if (health == null) return;
 
+        Debug.Log("dealt " + damage + " damage");
+
+        if (!this.gameObject.name.Contains("CollisionAvalanche"))
+        {
+            if (this.gameObject.name.Contains("Collision basicattack"))
+            {
+                CallTakeDamage(health, damage, damageType);
+
+                if (!this.gameObject.name.Contains("Collision NODAMAGE"))
+                {
+                    /*
+                        if (dashability.orbCount == 0) { CallTakeDamage(health, damage, damageType); }
+                        if (dashability.orbCount == 1) { CallTakeDamage(health, damage, damageType); }
+                        if (dashability.orbCount == 2) { CallTakeDamage(health, damage, damageType); }
+                        if (dashability.orbCount == 3) { CallTakeDamage(health, damage, damageType); }
+                    */
+                }
+            }
+
+            if (!this.gameObject.name.Contains("Collision basicattack"))
+            {
+                CallTakeDamage(health, damage, damageType);
+            }
+        }
+
+        if (this.gameObject.name.Contains("Collision basicattack"))
+        {
+            //   if (dashability.orbCount == 0) { CallTakeDamage(health, 0, DamageTypes.Fire); }
+            /*
+            if (SunShine.SunShineActive)
+            {
+                if (dashability.orbCount == 1) { CallTakeDamage(health, 10, DamageTypes.Elemental); }
+                if (dashability.orbCount == 2) { CallTakeDamage(health, 20, DamageTypes.Elemental); }
+                if (dashability.orbCount == 3) { CallTakeDamage(health, 30, DamageTypes.Elemental); }
+            }
+            */
+        }
+    }
+
+    private void CallTakeDamage(object health, int dmg, DamageTypes dmgType)
+    {
+        if (health is Health h)
+            h.takeDamage(dmg, dmgType);
+        else if (health is HealthWendigo hw)
+            hw.takeDamage(dmg, dmgType);
+    }
 
     private void Update()
     {
