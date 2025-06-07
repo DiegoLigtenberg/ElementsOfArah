@@ -17,9 +17,9 @@ public class WendigoController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.stoppingDistance = 8;
-        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
+        player = ActivePlayerManager.ActivePlayerGameObj.transform;
         // target =   GameObject.Find("heraklios_a_dizon@Jumping (2)").transform;
-        target = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
+        target = ActivePlayerManager.ActivePlayerGameObj.transform;
 
 
     }
@@ -27,11 +27,11 @@ public class WendigoController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        player = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform;
+        player = ActivePlayerManager.ActivePlayerGameObj.transform;
 
         SetTargetPosition(targetPlayer);
         //  agent.SetDestination(GameObject.Find("heraklios_a_dizon@Jumping (2)").transform.position);
-        targetPlayer = GameObject.Find(ActivePlayerManager.ActivePlayerName).transform; // PlayerManager.instance.player.transform;
+        targetPlayer = ActivePlayerManager.ActivePlayerGameObj.transform; // PlayerManager.instance.player.transform;
 
         FaceTarget();
 
