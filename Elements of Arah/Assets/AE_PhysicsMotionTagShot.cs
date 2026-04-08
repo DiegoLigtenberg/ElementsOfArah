@@ -65,7 +65,7 @@ public class AE_PhysicsMotionTagShot : MonoBehaviour
 
         arrowstick = GetComponentInChildren<ArrowStick>();
         arrow_indicator = arrowstick.gameObject;
-     
+
     }
 
     void InitializeRigid()
@@ -116,7 +116,7 @@ public class AE_PhysicsMotionTagShot : MonoBehaviour
 
 
 
-       
+
         try
         {
             GameObject impact = arrowstick.ExplosionDamage(arrow_indicator.transform.position, 3f);
@@ -125,10 +125,10 @@ public class AE_PhysicsMotionTagShot : MonoBehaviour
             this.transform.SetParent(ActivePlayerManager.ActivePlayerGameObj.GetComponent<TagShotMarco>().boss_attach_transform[rng]);
             Debug.Log(ActivePlayerManager.ActivePlayerGameObj.GetComponent<TagShotMarco>().boss_attach_transform[rng]);
 
-            if (impact.gameObject.name.Contains("Spine")  )
+            if (impact.gameObject.name.Contains("Spine"))
             {
                 //bomb.transform.localPosition += new Vector3(Random.RandomRange(-.5f,.5f), 0, 0f); // z was -1.5f
-           
+
             }
             //   bomb.transform.position = GameObject.Find(impact.name).transform.GetChild(0).transform.position;
             //note that boss shoudl be warrior -> change boss

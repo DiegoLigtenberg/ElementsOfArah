@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System;
 using TMPro;
 using CreatingCharacters.Abilities;
+using System.Linq;
 
 public class Health : MonoBehaviour
 {
@@ -65,7 +66,7 @@ public class Health : MonoBehaviour
     private GameObject previousPlayer; // To store the last known player
     private Vector3 playerpos;
 
-
+    private bool nameIsBoss;
     private void OnEnable()
     {
         currentHealth = startingHealth;
@@ -96,7 +97,7 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-      
+ 
     }
 
     private bool miniondeathonce;
@@ -120,6 +121,7 @@ public class Health : MonoBehaviour
     private bool removeinvuln;
     private void Update()
     {
+        // player logic
         try
         {
             if (ActivePlayerManager.ActivePlayerGameObj != previousPlayer)
@@ -145,6 +147,16 @@ public class Health : MonoBehaviour
             // platspawn and splatspawstatic
         }
 
+        // check if boss is active for health considerations
+        if (ActiveBossManager.ActiveBossNames.Contains(ActiveBossManager.ActiveBossName))
+        {
+            nameIsBoss = true;
+        }
+        else
+        {
+            nameIsBoss = false;
+        }
+
 
 
         //kan niet meer dan max hp van phase krijgen
@@ -159,14 +171,14 @@ public class Health : MonoBehaviour
             currentHealth = phaseMaxHealth;
         }
 
-        if (CheckRangeArea1.OutRange && this.gameObject.name.Contains("Warrior"))
+        if (CheckRangeArea1.OutRange && nameIsBoss) //this.gameObject.name.Contains("Warrior"))
         {
             isinvulnerable = true;
             removeinvuln = false;
         }
         else
         {
-            if (!removeinvuln && this.gameObject.name.Contains("Warrior"))
+            if (!removeinvuln && nameIsBoss) //this.gameObject.name.Contains("Warrior"))
             {
                 removeinvuln = true;
                 isinvulnerable = false;
@@ -236,7 +248,7 @@ public class Health : MonoBehaviour
             transformmover = 0;
         }
 
-        if (this.gameObject.name.Contains("Warrior"))
+        if (nameIsBoss) // (this.gameObject.name.Contains("Warrior"))
         {
 
             if (basicSplat != null)
@@ -332,7 +344,7 @@ public class Health : MonoBehaviour
 
     public void ShowFloatingTextHeal()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (nameIsBoss) //(this.gameObject.name.Contains("Warrior"))
         {
             healSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             healSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -350,7 +362,7 @@ public class Health : MonoBehaviour
 
     public void ShowFloatingTextFire()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (nameIsBoss) //(this.gameObject.name.Contains("Warrior"))
         {
             basicSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             basicSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -368,7 +380,7 @@ public class Health : MonoBehaviour
 
     public void ShowFloatingTextWater()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (nameIsBoss)//(this.gameObject.name.Contains("Warrior"))
         {
             basicSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             basicSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -385,7 +397,7 @@ public class Health : MonoBehaviour
 
     public void ShowFloatingTextAOE()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (nameIsBoss)// (this.gameObject.name.Contains("Warrior"))
         {
             abilitySplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0f), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             abilitySplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -402,7 +414,7 @@ public class Health : MonoBehaviour
 
     public void ShowFloatingTextElemental()
     {
-        if (this.gameObject.name.Contains("Warrior"))
+        if (nameIsBoss) //if (this.gameObject.name.Contains("Warrior"))
         {
             elementalSplat = Instantiate(floatingTextPrefab, splatspawn.position + new Vector3(0, 2, 0f), new Quaternion(Quaternion.identity.w * 1, Quaternion.identity.x * 1, Quaternion.identity.y * 1, Quaternion.identity.z * 1));
             elementalSplat.GetComponentInChildren<TextMesh>().text = tookThisDmg.ToString();
@@ -472,7 +484,9 @@ public class Health : MonoBehaviour
 
         }
 
-        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") && this.name == "Warrior Idle" && ActivePlayerManager.ActivePlayerNum == 0) //AND ONLY IF IT IS A BOSS -> change also to wendigo later
+        if (damageType == DamageTypes.Elemental && !anim.GetBool("StartFight") &&
+            nameIsBoss &&
+            ActivePlayerManager.ActivePlayerNum == 0) //AND ONLY IF IT IS A BOSS -> change also to wendigo later
         {
             // this solves the problem that when Arah ults with stacks stored from being afk in combat, the stacks are 'reset' to 1, thus dealing only 10 damage
             if (damageType == DamageTypes.Elemental)
@@ -482,7 +496,7 @@ public class Health : MonoBehaviour
             }
         }
 
-        if (this.name == "Warrior Idle" && currentHealthPCT < 9999f)
+        if (nameIsBoss && currentHealthPCT < 9999f)
         {
 
             if (!startfightonce)

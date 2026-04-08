@@ -52,11 +52,11 @@ public class Vanish : MonoBehaviour
             this.gameObject.name == "g Staff_grp_adjustable Wrabs" ||
             this.gameObject.name == "g Staff_Jaw Staff_grp_adjustable"   ))
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1.0f);
         }
         else
         {
-            yield return new WaitForSeconds(2.2f);
+            yield return new WaitForSeconds(1.7f);
         }
 
       
@@ -82,14 +82,14 @@ public class Vanish : MonoBehaviour
         {
             if (t < 2)
             {
-                t += 0.01f;
+                t += 0.02f;
             }
         }
         if (startvanishing == 2)
         {
             if (t > 0)
             {
-                t -= 0.01f;
+                t -= 0.02f;
             }
         }
 
