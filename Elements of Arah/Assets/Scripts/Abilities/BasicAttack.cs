@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,9 +39,14 @@ namespace CreatingCharacters.Abilities
             CooldownData();
             getdmg = AbilityDamage;
             
-            if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
-            {            
-                StartCoroutine(removePyramid());
+            if (ActiveBossManager.ActiveBossNum == 0 && ActiveBossManager.ActiveBossGameObj != null)
+            {
+                animboss = ActiveBossManager.ActiveBossGameObj.GetComponent<Animator>();
+                if (animboss != null && animboss.runtimeAnimatorController != null
+                    && animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
+                {
+                    StartCoroutine(removePyramid());
+                }
             }
         }
 

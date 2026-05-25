@@ -92,7 +92,7 @@ public class AE_PhysicsMotionFireRain : MonoBehaviour
     {
         rigid = gameObject.AddComponent<Rigidbody>();
         rigid.mass = Mass;
-        rigid.drag = AirDrag;
+        rigid.linearDamping = AirDrag;
         rigid.useGravity = UseGravity;
         // if (FreezeRotation) rigid.constraints = RigidbodyConstraints.FreezeRotation;
         rigid.collisionDetectionMode = CollisionDetectionMode.Continuous;

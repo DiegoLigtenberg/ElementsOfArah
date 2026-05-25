@@ -586,7 +586,7 @@ namespace CreatingCharacters.Abilities
                 {
 
 
-                    rb.velocity = Vector3.zero;
+                    rb.linearVelocity = Vector3.zero;
                     rb.transform.position = beginningPoint.transform.position;
                     if (characterController.isGrounded)
                     {
@@ -723,7 +723,7 @@ namespace CreatingCharacters.Abilities
                 {
 
 
-                    rb.velocity = Vector3.zero;
+                    rb.linearVelocity = Vector3.zero;
                     rb.transform.position = beginningPoint.transform.position;
                     if (characterController.isGrounded)
                     {
@@ -858,7 +858,7 @@ namespace CreatingCharacters.Abilities
                 {
                     reducedcooldown = false;
                     StartCoroutine(reducestate());
-                    rb.velocity = Vector3.zero;
+                    rb.linearVelocity = Vector3.zero;
                     rb.transform.position = beginningPoint.transform.position;
                     if (characterController.isGrounded)
                     {

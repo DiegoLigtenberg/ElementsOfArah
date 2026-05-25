@@ -148,14 +148,8 @@ public class Health : MonoBehaviour
         }
 
         // check if boss is active for health considerations
-        if (ActiveBossManager.ActiveBossNames.Contains(ActiveBossManager.ActiveBossName))
-        {
-            nameIsBoss = true;
-        }
-        else
-        {
-            nameIsBoss = false;
-        }
+        // Only the active boss object should use boss splat/invuln logic — not minions or GlassBoxG
+        nameIsBoss = ActiveBossManager.ActiveBossGameObj == gameObject;
 
 
 

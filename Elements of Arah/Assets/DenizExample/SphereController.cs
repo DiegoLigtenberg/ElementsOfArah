@@ -58,7 +58,7 @@ public class SphereController : MonoBehaviour
         }
 
 
-            if (rb.velocity.z < 35)
+            if (rb.linearVelocity.z < 35)
         {
             rb.AddForce(new Vector3(0, 0, 3));
         }
@@ -69,9 +69,9 @@ public class SphereController : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             rb.AddForce(new Vector3(-15, 0, 0) );
-            if (rb.velocity.x >= 0.05f)
+            if (rb.linearVelocity.x >= 0.05f)
             {
-                rb.AddForce(new Vector3(-5 -(Mathf.Pow(rb.velocity.x, 1.2f)), 0, 0));
+                rb.AddForce(new Vector3(-5 -(Mathf.Pow(rb.linearVelocity.x, 1.2f)), 0, 0));
             }
 
 
@@ -82,10 +82,10 @@ public class SphereController : MonoBehaviour
         {
             rb.AddForce(new Vector3(15, 0, 0));
            // Debug.Log(rb.velocity.x);
-            if (rb.velocity.x <= -0.05f)
+            if (rb.linearVelocity.x <= -0.05f)
             {
                 Debug.Log("true");
-                rb.AddForce(5 + Mathf.Abs( rb.velocity.x  )   , 0, 0);
+                rb.AddForce(5 + Mathf.Abs( rb.linearVelocity.x  )   , 0, 0);
             }
         }
 

@@ -12,6 +12,21 @@ public class TriggerCheatSpot : MonoBehaviour
     public Animator anim;
     public static bool CheatSpot;
 
+    private bool IsWarriorIdleBoss()
+    {
+        return ActiveBossManager.ActiveBossNum == 0
+            && ActiveBossManager.ActiveBossGameObj != null;
+    }
+
+    private bool TryRefreshAnim()
+    {
+        if (!IsWarriorIdleBoss())
+            return false;
+
+        anim = ActiveBossManager.ActiveBossGameObj.GetComponent<Animator>();
+        return anim != null && anim.runtimeAnimatorController != null;
+    }
+
     private void Awake()
     {
         i = 7;
@@ -24,6 +39,8 @@ public class TriggerCheatSpot : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
+        if (!TryRefreshAnim())
+            return;
 
         if (anim.GetBool("StartFight"))
         {
@@ -40,6 +57,9 @@ public class TriggerCheatSpot : MonoBehaviour
   
     private void OnTriggerExit(Collider other)
     {
+        if (!TryRefreshAnim())
+            return;
+
         if (other.tag == "PlayerTrigger" && !anim.GetBool("Phasing"))
         {
          
@@ -65,7 +85,12 @@ public class TriggerCheatSpot : MonoBehaviour
 
     private void Update()
     {
-        
+        if (!TryRefreshAnim())
+        {
+            CheatSpot = false;
+            return;
+        }
+
         if (timeleft > 0 && anim.GetBool("StartFight"))
         {
             timeleft -= Time.deltaTime;
@@ -86,3 +111,4 @@ public class TriggerCheatSpot : MonoBehaviour
     }
 
 }
+
