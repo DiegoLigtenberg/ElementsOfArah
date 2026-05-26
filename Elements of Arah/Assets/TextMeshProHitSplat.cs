@@ -80,8 +80,8 @@ public class TextMeshProHitSplat : MonoBehaviour
         if (textHpNumber != null)
         {
             this.transform.localScale = new Vector3(0.2205f * scaler, 0.2205f * scaler, 0.2205f * scaler);
-            textHpNumber.fontMaterial.SetFloat("_OutlineWidth", 0.26f + closeBoost * 0.16f);
-            textHpNumber.fontMaterial.SetFloat("_FaceDilate", 0.22f + closeBoost * 0.14f);
+            textHpNumber.fontMaterial.SetFloat("_OutlineWidth", 0.31f + closeBoost * 0.16f);
+            textHpNumber.fontMaterial.SetFloat("_FaceDilate", 0.27f + closeBoost * 0.14f);
         }
 
     }
