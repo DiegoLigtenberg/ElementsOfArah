@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
@@ -26,11 +26,10 @@ public class TextMeshProHitSplat : MonoBehaviour
         // hp = GameObject.Find("Warrior Idle").GetComponent<Health>();
         // hp = GameObject.FindGameObjectWithTag("Enemy").GetComponent<Health>();
 
-        this.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        this.transform.localScale = new Vector3(0.2205f, 0.2205f, 0.2205f);
         //this.transform.localPosition = new Vector3(this.transform.localPosition.x + Health.transformmover, this.transform.localPosition.y, this.transform.localPosition.z);
 
         textHpNumber.text = Mathf.Abs(Health.tookThisDmg).ToString();
-
 
 
 
@@ -65,13 +64,24 @@ public class TextMeshProHitSplat : MonoBehaviour
                 this.transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
-        float scaler = (Gun.TrueDistanceOfCrosshair / 30) + 0.6f;
-        scaler = Mathf.Clamp(scaler, 0.6f, 1.4f);
+
+        float dist = 30f;
+        Camera cam = Camera.main;
+        if (cam != null)
+            dist = Vector3.Distance(cam.transform.position, transform.position);
+
+        float scaler = (dist / 30f) + 0.6f;
+        scaler = Mathf.Clamp(scaler, 0.6f, 1.45f);
+
+        float closeBoost = 0f;
+        if (dist < 12f)
+            closeBoost = Mathf.Clamp((12f - dist) / 6f, 0f, 1f);
 
         if (textHpNumber != null)
         {
-            this.transform.localScale = new Vector3(0.2f * scaler, 0.2f * scaler, 0.2f * scaler);
-
+            this.transform.localScale = new Vector3(0.2205f * scaler, 0.2205f * scaler, 0.2205f * scaler);
+            textHpNumber.fontMaterial.SetFloat("_OutlineWidth", 0.26f + closeBoost * 0.16f);
+            textHpNumber.fontMaterial.SetFloat("_FaceDilate", 0.22f + closeBoost * 0.14f);
         }
 
     }
