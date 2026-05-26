@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
@@ -30,7 +30,6 @@ public class TextMeshProHitSplat : MonoBehaviour
         //this.transform.localPosition = new Vector3(this.transform.localPosition.x + Health.transformmover, this.transform.localPosition.y, this.transform.localPosition.z);
 
         textHpNumber.text = Mathf.Abs(Health.tookThisDmg).ToString();
-
 
 
 
