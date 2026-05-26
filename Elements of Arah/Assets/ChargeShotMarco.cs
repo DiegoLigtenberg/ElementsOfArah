@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -64,9 +64,14 @@ namespace CreatingCharacters.Abilities
             // Debug.Log(RapidFireMarco.rapidFireHits);
             //getdmg = AbilityDamage;
 
-            if (animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
+            if (ActiveBossManager.ActiveBossNum == 0 && ActiveBossManager.ActiveBossGameObj != null)
             {
-                StartCoroutine(removePyramid());
+                animboss = ActiveBossManager.ActiveBossGameObj.GetComponent<Animator>();
+                if (animboss != null && animboss.runtimeAnimatorController != null
+                    && animboss.GetBool("Phasing") && !pyramid && !afterpyramid)
+                {
+                    StartCoroutine(removePyramid());
+                }
             }          
         }
 

@@ -26,7 +26,7 @@ public class TextMeshProHitSplatMinion : MonoBehaviour
         hp = GameObject.Find("Healing Minion").GetComponent<Health>();
 
 
-        this.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+        this.transform.localScale = new Vector3(0.2205f, 0.2205f, 0.2205f);
         //this.transform.localPosition = new Vector3(this.transform.localPosition.x + Health.transformmover, this.transform.localPosition.y, this.transform.localPosition.z);
 
         textHpNumber.text = Mathf.Abs(Health.tookThisDmg).ToString();
@@ -59,13 +59,24 @@ public class TextMeshProHitSplatMinion : MonoBehaviour
                 this.transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
-        float scaler = (Gun.fromCenterPLayerDistance / 30) + 0.6f;
-        scaler = Mathf.Clamp(scaler, 0.6f, 1.4f);
+
+        float dist = 30f;
+        Camera cam = Camera.main;
+        if (cam != null)
+            dist = Vector3.Distance(cam.transform.position, transform.position);
+
+        float scaler = (dist / 30f) + 0.6f;
+        scaler = Mathf.Clamp(scaler, 0.6f, 1.45f);
+
+        float closeBoost = 0f;
+        if (dist < 12f)
+            closeBoost = Mathf.Clamp((12f - dist) / 6f, 0f, 1f);
 
         if (textHpNumber != null)
         {
-            this.transform.localScale = new Vector3(0.2f * scaler, 0.2f * scaler, 0.2f * scaler);
-
+            this.transform.localScale = new Vector3(0.2205f * scaler, 0.2205f * scaler, 0.2205f * scaler);
+            textHpNumber.fontMaterial.SetFloat("_OutlineWidth", 0.31f + closeBoost * 0.16f);
+            textHpNumber.fontMaterial.SetFloat("_FaceDilate", 0.27f + closeBoost * 0.14f);
         }
 
     }

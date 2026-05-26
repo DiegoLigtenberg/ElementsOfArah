@@ -112,7 +112,7 @@ public class Health : MonoBehaviour
     public void instantiateColors()
     {
         hitSplatColors = new Color[4];
-        hitSplatColors[0] = new Color32(231, 24, 0, 255); //orannje
+        hitSplatColors[0] = new Color32(255, 98, 5, 255); // orange
         hitSplatColors[1] = new Color32(32, 162, 231, 255); //blue
         hitSplatColors[2] = Color.magenta;                 //purple       
         hitSplatColors[3] = Color.green; //green
@@ -148,14 +148,8 @@ public class Health : MonoBehaviour
         }
 
         // check if boss is active for health considerations
-        if (ActiveBossManager.ActiveBossNames.Contains(ActiveBossManager.ActiveBossName))
-        {
-            nameIsBoss = true;
-        }
-        else
-        {
-            nameIsBoss = false;
-        }
+        // Only the active boss object should use boss splat/invuln logic — not minions or GlassBoxG
+        nameIsBoss = ActiveBossManager.ActiveBossGameObj == gameObject;
 
 
 

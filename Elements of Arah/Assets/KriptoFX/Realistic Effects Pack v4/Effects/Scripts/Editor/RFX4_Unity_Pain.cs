@@ -55,7 +55,7 @@ public static class RFX4_Unity_Pain
 
     static FX_RenderingType GetRenderingType()
     {
-        var rpa = GraphicsSettings.renderPipelineAsset;
+        var rpa = GraphicsSettings.defaultRenderPipeline;
         if (rpa == null) return FX_RenderingType.Old;
         if (rpa.name.ToUpper().Contains("LWR")) return FX_RenderingType.LWRP;
         if (rpa.name.ToUpper().Contains("HDR")) return FX_RenderingType.HDRP;
